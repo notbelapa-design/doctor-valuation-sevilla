@@ -1,0 +1,45 @@
+{
+  "meta": { "province": "Sevilla", "updated": "2025-08-22" },
+  "specialties": [
+    {
+      "key": "cardiology",
+      "name": "Cardiology",
+      "gross_base": 85000,
+      "gross_p90": 120000,
+      "hours_per_week": 40,
+      "doctors_est": 300,
+      "sector_mix": { "public": 0.7, "private": 0.3 },
+      "notes": "Based on high‑demand cardiac specialists in Seville hospitals"
+    },
+    {
+      "key": "dermatology",
+      "name": "Dermatology",
+      "gross_base": 98000,
+      "gross_p90": 130000,
+      "hours_per_week": 38,
+      "doctors_est": 180,
+      "sector_mix": { "public": 0.4, "private": 0.6 },
+      "notes": "High private sector representation"
+    },
+    {
+      "key": "family",
+      "name": "Family Medicine",
+      "gross_base": 38000,
+      "gross_p90": 52000,
+      "hours_per_week": 42,
+      "doctors_est": 2407,
+      "sector_mix": { "public": 0.9, "private": 0.1 },
+      "notes": "Largest specialty group"
+    },
+    {
+      "key": "surgery",
+      "name": "General Surgery",
+      "gross_base": 60000,
+      "gross_p90": 90000,
+      "hours_per_week": 45,
+      "doctors_est": 500,
+      "sector_mix": { "public": 0.8, "private": 0.2 },
+      "notes": "Includes trauma surgery"
+    }
+  ]
+}
