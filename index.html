@@ -1,198 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Doctor Marketcap Analysis – Seville</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f0f4f8; font-family: Arial, sans-serif; }
-    .hero { background-color: #0066cc; color: #fff; padding: 40px 30px; border-radius: 10px; margin-bottom: 30px; }
-    .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
-    .section { background-color: #fff; border-radius: 10px; padding: 25px 30px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .table-striped tbody tr:nth-of-type(odd) { background-color: #f9fcff; }
-    .notes { font-size: 0.85rem; color: #555; }
-  </style>
+<meta charset="UTF-8">
+<title>Doctor Marketcap Analysis – Seville</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+ body { background-color: #f0f4f8; font-family: Arial, sans-serif; }
+ .hero { background-color: #0066cc; color: #fff; padding: 40px 30px; margin-bottom: 30px; border-radius: 10px; }
+ .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
+ .section { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+ .table-striped tbody tr:nth-of-type(odd) { background-color: #f9f9f9; }
+ .notes { font-size: 0.85rem; color: #555; }
+ details summary { cursor: pointer; font-weight: bold; margin-top: 10px; }
+</style>
 </head>
 <body>
 <div class="container my-4">
-  <div class="hero">
-    <h1>Doctor Marketcap Analysis – Seville</h1>
-    <p class="lead mb-0">A data-driven insight into the medical labour market of Seville.</p>
-  </div>
+ <div class="hero">
+  <h1>Doctor Marketcap Analysis – Seville</h1>
+  <p class="lead mb-0">A data-driven insight into the medical labour market of Seville.</p>
+ </div>
 
-  <div class="section">
-    <h2>Overview</h2>
-    <p>Seville has about <strong>9,631</strong> active doctors. The province hosts 13 public hospitals and 10 private hospitals, providing roughly 4,464 beds. Public hospitals account for about 80 % of all beds, while private hospitals focus on high-value specialties.</p>
-  </div>
+ <div class="section">
+  <h2>Overview</h2>
+  <p>Seville has about <strong>9 631</strong> active doctors. The province hosts 13 public hospitals and 10 private hospitals, providing roughly 4 464 beds. Private hospitals account for about 20 % of hospital beds.</p>
+ </div>
 
-  <div class="section">
-    <h2>Salary Distribution</h2>
-    <p>The salary distribution among doctors is skewed by speciality and experience. Top earners (elite specialties) capture a disproportionate share of total payroll, while family and early-career doctors earn considerably less.</p>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Share of doctors</th>
-            <th>Approx. doctors</th>
-            <th>Avg. salary (€/yr)</th>
-            <th>Total payroll (M€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Top 5 % – elite specialties</td>
-            <td>5 %</td>
-            <td>482</td>
-            <td>110 k</td>
-            <td>53.0</td>
-          </tr>
-          <tr>
-            <td>High‑mid 20 % – anaesthesiology, cardiology, traumatology</td>
-            <td>20 %</td>
-            <td>1 926</td>
-            <td>70 k</td>
-            <td>134.8</td>
-          </tr>
-          <tr>
-            <td>Middle 50 % – most specialities</td>
-            <td>50 %</td>
-            <td>4 816</td>
-            <td>48 k</td>
-            <td>231.2</td>
-          </tr>
-          <tr>
-            <td>Bottom 25 % – family medicine, early‑career</td>
-            <td>25 %</td>
-            <td>2 407</td>
-            <td>35 k</td>
-            <td>84.2</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+ <div class="section">
+  <h2>Salary Distribution</h2>
+  <p>The salary distribution among doctors is skewed by specialty and experience. Top earners capture a disproportionate share of total payroll, while family and early‑career doctors fall near the lower end.</p>
+  <div class="table-responsive">
+   <table class="table table-striped">
+    <thead>
+     <tr>
+      <th>Category</th><th>Doctors</th><th>Avg. salary (€)</th><th>Payroll (M €)</th>
+     </tr>
+    </thead>
+    <tbody>
+     <tr><td>Top 5 %</td><td>482</td><td>110 k</td><td>53.0</td></tr>
+     <tr><td>High‑mid 20 %</td><td>1 926</td><td>70 k</td><td>134.8</td></tr>
+     <tr><td>Middle 50 %</td><td>4 816</td><td>48 k</td><td>231.2</td></tr>
+     <tr><td>Bottom 25 %</td><td>2 407</td><td>35 k</td><td>84.2</td></tr>
+    </tbody>
+   </table>
   </div>
+ </div>
 
-  <div class="section">
-    <h2>Speciality Mix (approximate)</h2>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Specialty group</th>
-            <th>Approx. doctors</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Family Medicine (primary care)</td><td>2 407</td></tr>
-          <tr><td>Internal Medicine & subspecialties</td><td>1 084</td></tr>
-          <tr><td>Surgery & surgical specialties</td><td>722</td></tr>
-          <tr><td>Paediatrics & neonatology</td><td>722</td></tr>
-          <tr><td>Gynaecology & obstetrics</td><td>722</td></tr>
-          <tr><td>Anaesthesiology & critical care</td><td>722</td></tr>
-          <tr><td>Other specialties (cardiology, radiology, psychiatry, etc.)</td><td>3 252</td></tr>
-        </tbody>
-      </table>
-    </div>
+ <div class="section">
+  <h2>Speciality Mix</h2>
+  <p>Family medicine comprises around 25 % of practitioners. The remainder spans internal medicine, surgery, paediatrics, gynaecology, anaesthesiology and other specialities.</p>
+  <div class="table-responsive">
+   <table class="table table-striped">
+    <thead>
+     <tr><th>Speciality group</th><th>Approx. doctors</th></tr>
+    </thead>
+    <tbody>
+     <tr><td>Internal Medicine & subspecialties</td><td>1 084</td></tr>
+     <tr><td>Surgery & surgical specialties</td><td>722</td></tr>
+     <tr><td>Paediatrics & neonatology</td><td>722</td></tr>
+     <tr><td>Gynaecology & obstetrics</td><td>722</td></tr>
+     <tr><td>Anaesthesiology & critical care</td><td>722</td></tr>
+     <tr><td>Other specialties</td><td>3 252</td></tr>
+     <tr><td>Family medicine</td><td>2 407</td></tr>
+    </tbody>
+   </table>
   </div>
+ </div>
 
-  <div class="section">
-    <h2>Private Hospitals in Seville</h2>
-    <p>Private hospitals account for about 20 % of the province’s beds but generate high revenues through elective surgeries and specialties. The table below estimates staffing and revenue based on bed counts and sector‑wide revenue per bed.</p>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Hospital (private)</th>
-            <th>Beds</th>
-            <th>Approx. doctors</th>
-            <th>Est. revenue (M€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Quirónsalud Sagrado Corazón</td><td>147</td><td>322</td><td>93.3</td></tr>
-          <tr><td>Quirónsalud Infanta Luisa</td><td>139</td><td>305</td><td>88.2</td></tr>
-          <tr><td>Quirónsalud Materno‑Infantil</td><td>32</td><td>70</td><td>20.3</td></tr>
-          <tr><td>Vithas Sevilla</td><td>148</td><td>324</td><td>60.0</td></tr>
-          <tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39.0</td></tr>
-          <tr><td>San Agustín</td><td>93</td><td>203</td><td>34.0</td></tr>
-          <tr><td>Hospital Fátima</td><td>73</td><td>160</td><td>27.0</td></tr>
-          <tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17.0</td></tr>
-          <tr><td>Hospital Victoria Eugenia (Cruz Roja)</td><td>39</td><td>85</td><td>14.0</td></tr>
-        </tbody>
-      </table>
-    </div>
+ <div class="section">
+  <h2>Private Hospitals</h2>
+  <p>Approximate staffing and revenue for private hospitals in Seville (doctors estimated at ~2.19 per bed; revenue scaled from group‑level figures).</p>
+  <div class="table-responsive">
+   <table class="table table-striped">
+    <thead>
+     <tr><th>Hospital (private)</th><th>Beds</th><th>Approx. doctors</th><th>Est. revenue (M €)</th></tr>
+    </thead>
+    <tbody>
+     <tr><td>Vithas Sevilla</td><td>148</td><td>324</td><td>60</td></tr>
+     <tr><td>Quirónsalud Sagrado Corazón</td><td>147</td><td>322</td><td>93</td></tr>
+     <tr><td>Quirónsalud Infanta Luisa</td><td>139</td><td>305</td><td>88</td></tr>
+     <tr><td>Quirónsalud Materno‑Infantil</td><td>32</td><td>70</td><td>20</td></tr>
+     <tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39</td></tr>
+     <tr><td>San Agustín</td><td>93</td><td>203</td><td>34</td></tr>
+     <tr><td>Hospital Fátima</td><td>73</td><td>160</td><td>27</td></tr>
+     <tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17</td></tr>
+     <tr><td>Hospital Victoria Eugenia (Cruz Roja)</td><td>39</td><td>85</td><td>14</td></tr>
+    </tbody>
+   </table>
   </div>
+ </div>
 
-  <div class="section">
-    <h2>Lifetime Earnings & Affordability</h2>
-    <p>Assuming a 35‑year career, we estimate lifetime earnings and affordability for each salary bracket. Net salary is approximated at 75 % of gross. Savings are what remain after annual living expenses of €30,000. House purchase assumes a €275,000 property with 20 % deposit and a 30‑year mortgage at 3 %. Car cost is estimated at €26,000.</p>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Category</th>
-            <th>Avg. salary (€/yr)</th>
-            <th>Net salary (€/yr)</th>
-            <th>Lifetime net (35 yrs, €)</th>
-            <th>Years to save deposit</th>
-            <th>Years to buy a car</th>
-            <th>Net after mortgage (€/yr)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Top 5 %</td>
-            <td>110 k</td>
-            <td>82.5 k</td>
-            <td>2.89 M</td>
-            <td>1.05</td>
-            <td>0.50</td>
-            <td>41.4 k</td>
-          </tr>
-          <tr>
-            <td>High‑mid 20 %</td>
-            <td>70 k</td>
-            <td>52.5 k</td>
-            <td>1.84 M</td>
-            <td>2.44</td>
-            <td>1.16</td>
-            <td>11.4 k</td>
-          </tr>
-          <tr>
-            <td>Middle 50 %</td>
-            <td>48 k</td>
-            <td>36 k</td>
-            <td>1.26 M</td>
-            <td>9.17</td>
-            <td>4.33</td>
-            <td>-5.1 k</td>
-          </tr>
-          <tr>
-            <td>Bottom 25 %</td>
-            <td>35 k</td>
-            <td>26.3 k</td>
-            <td>0.92 M</td>
-            <td>—</td>
-            <td>—</td>
-            <td>-3.8 k</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+ <div class="section">
+  <h2>Lifetime Earnings & Affordability</h2>
+  <p>Assuming a 35‑year career, we estimate lifetime earnings and affordability for each salary bracket. Net salary is approximated at 75 % of gross. Savings are what remain after annual living expenses of €30 000. House purchase assumes a €275 000 property with 20 % deposit and a 30‑year mortgage at 3 %. Car cost is estimated at €26 000.</p>
+  <div class="table-responsive">
+   <table class="table table-striped">
+    <thead>
+     <tr><th>Category</th><th>Avg. salary (€/yr)</th><th>Net salary (€/yr)</th><th>Lifetime net (35 yrs, €)</th><th>Years to save deposit</th><th>Years to buy a car</th><th>Net after mortgage (€/yr)</th></tr>
+    </thead>
+    <tbody>
+     <tr><td>Top 5 %</td><td>110 k</td><td>82.5 k</td><td>2.89 M</td><td>1.05</td><td>0.50</td><td>41.4 k</td></tr>
+     <tr><td>High‑mid 20 %</td><td>70 k</td><td>52.5 k</td><td>1.84 M</td><td>2.44</td><td>1.16</td><td>11.4 k</td></tr>
+     <tr><td>Middle 50 %</td><td>48 k</td><td>36 k</td><td>1.26 M</td><td>9.17</td><td>4.33</td><td>−5.1 k</td></tr>
+     <tr><td>Bottom 25 %</td><td>35 k</td><td>26.3 k</td><td>0.92 M</td><td>—</td><td>—</td><td>−3.8 k</td></tr>
+    </tbody>
+   </table>
   </div>
+ </div>
 
-  <div class="section notes">
-    <h4>Notes & Assumptions</h4>
-    <ul>
-      <li>Data are approximate and based on demographic reports, salary surveys and industry news. Exact figures will vary by individual and institution.</li>
-      <li>Revenue estimates for private hospitals are scaled from national revenue per bed; actual earnings may differ.</li>
-      <li>The affordability analysis assumes constant salaries and expenses over a 35‑year career, which may not reflect real wage progression or inflation.</li>
-      <li>This site is intended for informational purposes and not financial or investment advice.</li>
-    </ul>
-    <p><a href="doctor_marketcap_analysis.py">Download analysis script</a> | <a href="doctor_marketcap_summary.csv">Download summary data</a></p>
-  </div>
+ <div class="section">
+  <h2>Speciality Insights</h2>
+  <p>Select a salary band to view estimated net salary, typical hours and net‑worth growth over a 35‑year career. Charts show projected net worth in thousands of euros assuming a 20 % savings rate on residual income and 3 % annual returns.</p>
 
+  <details>
+   <summary>Elite specialities (Top 5 %)</summary>
+   <p>
+    • Gross salary ≈ €110 000/year<br>
+    • Effective income tax ≈ 18.3 %<br>
+    • Net salary ≈ €90 000/year<br>
+    • Typical hours per week ≈ 50–55<br>
+    • Annual savings (20 % of residual) ≈ €10 500<br>
+    • Estimated net worth after 35 years ≈ €634 000
+   </p>
+   <canvas id="eliteChart" height="200"></canvas>
+  </details>
+
+  <details>
+   <summary>High‑mid specialities (Next 20 %)</summary>
+   <p>
+    • Gross salary ≈ €70 000/year<br>
+    • Effective income tax ≈ 15.9 %<br>
+    • Net salary ≈ €58 500/year<br>
+    • Typical hours per week ≈ 45<br>
+    • Annual savings ≈ €4 500<br>
+    • Estimated net worth after 35 years ≈ €272 000
+   </p>
+   <canvas id="highChart" height="200"></canvas>
+  </details>
+
+  <details>
+   <summary>Middle specialities (Middle 50 %)</summary>
+   <p>
+    • Gross salary ≈ €48 000/year<br>
+    • Effective income tax ≈ 13.9 %<br>
+    • Net salary ≈ €41 300/year<br>
+    • Typical hours per week ≈ 40<br>
+    • Annual savings ≈ €1 200<br>
+    • Estimated net worth after 35 years ≈ €72 000
+   </p>
+   <canvas id="midChart" height="200"></canvas>
+  </details>
+
+  <details>
+   <summary>Family medicine & early‑career (Bottom 25 %)</summary>
+   <p>
+    • Gross salary ≈ €35 000/year<br>
+    • Effective income tax ≈ 12.3 %<br>
+    • Net salary ≈ €30 700/year<br>
+    • Typical hours per week ≈ 38<br>
+    • Annual savings ≈ 0 (net earnings barely cover living expenses)<br>
+    • Estimated net worth after 35 years ≈ €0
+   </p>
+   <canvas id="bottomChart" height="200"></canvas>
+  </details>
+ </div>
+
+ <div class="section">
+  <h2>Notes & Assumptions</h2>
+  <ul class="notes">
+   <li>Data are approximate and based on demographic reports, salary surveys and industry news. Exact figures will vary by individual and institution.</li>
+   <li>Revenue estimates for private hospitals are scaled from national revenue per bed; actual earnings may differ.</li>
+   <li>The affordability analysis assumes constant salaries and expenses over a 35‑year career, which may not reflect real wage progression or inflation.</li>
+   <li>This site is intended for informational purposes and not financial or investment advice.</li>
+  </ul>
+  <p><a href="doctor_marketcap_analysis.py" download>Download analysis script</a> | <a href="doctor_marketcap_summary.csv" download>Download summary data</a></p>
+ </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+function futureValues(payment, r, n) {
+    const values = [];
+    let balance = 0;
+    for (let i = 0; i <= n; i++) {
+        values.push((balance / 1000).toFixed(1));
+        balance = (balance + payment) * (1 + r);
+    }
+    return values;
+}
+const years = [];
+for (let i = 0; i <= 35; i++) { years.push(i); }
+const eliteData = futureValues(10500, 0.03, 35);
+const highData  = futureValues(4500, 0.03, 35);
+const midData   = futureValues(1200, 0.03, 35);
+const bottomData = futureValues(0, 0.03, 35);
+function buildChart(id, data) {
+    new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+            labels: years,
+            datasets: [{
+                data: data,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                x: { title: { display: true, text: 'Years' } },
+                y: { title: { display: true, text: 'Net worth (k€)' } }
+            },
+            plugins: { legend: { display: false } }
+        }
+    });
+}
+window.addEventListener('load', function() {
+    buildChart('eliteChart', eliteData);
+    buildChart('highChart',  highData);
+    buildChart('midChart',   midData);
+    buildChart('bottomChart', bottomData);
+});
+</script>
 </body>
 </html>
