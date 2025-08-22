@@ -1,0 +1,49 @@
+{
+  "meta": { "updated": "2025-08-22", "notes": "Curated job postings for Seville" },
+  "jobs": [
+    {
+      "title": "Cardiologist",
+      "employer": "Centro de Rehabilitación Cardíaca Bihotz",
+      "location": "Sevilla",
+      "salary_gross_min": 54000,
+      "salary_gross_max": 54000,
+      "contract": "Indefinite, no on‑call",
+      "specialty_key": "cardiology",
+      "source": "https://www.comsevilla.es/oferta-empleo-cardiologo-a/",
+      "posted": "2025-07-01"
+    },
+    {
+      "title": "Occupational Physician (Company doctor)",
+      "employer": "Mercadona",
+      "location": "Sevilla",
+      "salary_gross_min": 53170,
+      "salary_gross_max": 80715,
+      "contract": "Indefinite",
+      "specialty_key": "occupational",
+      "source": "https://www.comsevilla.es/medico-en-mercadona/",
+      "posted": "2025-05-15"
+    },
+    {
+      "title": "Physician in nursing home",
+      "employer": "Residencia de mayores (Doméstiko)",
+      "location": "Sevilla",
+      "salary_gross_min": 25000,
+      "salary_gross_max": 30000,
+      "contract": "Indefinite",
+      "specialty_key": "family",
+      "source": "https://es.jooble.org/jdp/3581309344961133486",
+      "posted": "2025-06-20"
+    },
+    {
+      "title": "Medical sales representative",
+      "employer": "Proage by LFL",
+      "location": "Sevilla",
+      "salary_gross_min": 36000,
+      "salary_gross_max": 60000,
+      "contract": "Full‑time",
+      "specialty_key": "sales",
+      "source": "https://es.jooble.org/trabajo-medico/Sevilla",
+      "posted": "2025-08-20"
+    }
+  ]
+}
