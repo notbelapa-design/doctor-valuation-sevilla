@@ -1,18 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Doctor Market Cap Analysis - Seville</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Marketcap Analysis – Sevilla</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container py-5">
-  <h1>Doctor Market Cap Analysis &mdash; Seville</h1>
-  <p>This simple site summarises the estimation of the total annual payroll (“market cap”) for doctors in Seville based on public data.</p>
-  <ul>
-    <li><strong>Total active doctors:</strong> 9,631</li>
-    <li><strong>Baseline average salary:</strong> &euro;48,000</li>
-    <li><strong>Estimated market cap:</strong> &euro;492.1 million</li>
-  </ul>
-  <p>The full analysis script (<code>doctor_marketcap_analysis.py</code>) and data (<code>doctor_marketcap_summary.csv</code>) are available in this repository.</p>
+<body>
+<div class="container my-4">
+<h1 class="mb-4">Doctor Marketcap Analysis – Sevilla</h1>
+<p>This page provides a deeper analysis of the doctor labour market in Seville using the latest demographic reports, salary benchmarks and hospital data. All figures are estimates and should be interpreted as broad indicators rather than exact counts.</p>
+<h2>Overview</h2>
+<p>Seville has 9 631 active doctors【282232789000643†L212-L223】, across 13 public hospitals and 10 private hospitals【496329393683654†L194-L215】. Around 79.9 % of registered doctors in Andalusia are in active practice【282232789000643†L212-L223】. Private hospitals provide ~20 % of beds but generate considerable revenue.</p>
+<h2>Salary Distribution</h2>
+<p>The salary distribution is heavily skewed by speciality and experience. <em>Top earners</em> – such as dermatologists, gynaecologists and interventional cardiologists – typically earn 100 k–120 k €/year【738407194350164†L596-L604】. Mid‑range specialties like anaesthesiology and traumatology average ~70 k €/year【738407194350164†L596-L604】. The median doctor in Seville earns about 48 k €/year【93213640509497†L20-L36】.</p>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+<tr>
+<th>Category</th>
+<th>% Doctors</th>
+<th>Approx. doctors</th>
+<th>Avg. salary (€/yr)</th>
+<th>Total payroll (M€)</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Top 5 % – elite specialties</td><td>5%</td><td>482</td><td>110 k</td><td>53.0</td></tr>
+<tr><td>High‑mid 20 % – anaesthesiology, traumatology, etc.</td><td>20%</td><td>1 926</td><td>70 k</td><td>134.8</td></tr>
+<tr><td>Middle 50 % – most specialties</td><td>50%</td><td>4 816</td><td>48 k</td><td>231.2</td></tr>
+<tr><td>Bottom 25 % – family medicine, early‑career</td><td>25%</td><td>2 407</td><td>35 k</td><td>84.2</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Speciality Mix (approximate)</h2>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+<tr><th>Specialty group</th><th>Approx. doctors</th></tr>
+</thead>
+<tbody>
+<tr><td>Internal Medicine &amp; subspecialties</td><td>1 084</td></tr>
+<tr><td>Surgery &amp; surgical specialties</td><td>722</td></tr>
+<tr><td>Paediatrics &amp; neonatology</td><td>722</td></tr>
+<tr><td>Gynaecology &amp; obstetrics</td><td>722</td></tr>
+<tr><td>Anaesthesiology &amp; critical care</td><td>722</td></tr>
+<tr><td>Other specialties</td><td>3 252</td></tr>
+<tr><td>Family medicine (primary care)</td><td>2 407</td></tr>
+</tbody>
+</table>
+</div>
+<h2>Private Hospitals – Beds, Doctor Estimates &amp; Approx. Revenue</h2>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+<tr><th>Hospital</th><th>Beds</th><th>Approx. doctors</th><th>Approx. revenue (M€)</th></tr>
+</thead>
+<tbody>
+<tr><td>Quirónsalud Sagrado Corazón</td><td>147</td><td>322</td><td>93.3</td></tr>
+<tr><td>Quirónsalud Infanta Luisa</td><td>139</td><td>305</td><td>88.2</td></tr>
+<tr><td>Quirónsalud Materno‑Infantil</td><td>32</td><td>70</td><td>20.3</td></tr>
+<tr><td>Vithas Sevilla</td><td>148</td><td>324</td><td>60.0</td></tr>
+<tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39.0</td></tr>
+<tr><td>San Agustín</td><td>93</td><td>203</td><td>34.4</td></tr>
+<tr><td>Hospital Fátima</td><td>73</td><td>160</td><td>27.0</td></tr>
+<tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17.4</td></tr>
+<tr><td>Hospital Victoria Eugenia</td><td>39</td><td>85</td><td>14.4</td></tr>
+</tbody>
+</table>
+</div>
+<h2>Notes</h2>
+<p>These figures are estimates derived from public data on doctor demographics, salary ranges, hospital bed counts and revenue per bed for hospital groups. Active doctors total 9 631【282232789000643†L212-L223】 and 79.9 % of registered doctors are in practice【282232789000643†L212-L223】. Private hospitals provide about 20 % of beds but generate substantial revenue【496329393683654†L194-L215】. Salary and specialty distributions rely on benchmarks from Glassdoor【93213640509497†L20-L36】, medical labour market reports【738407194350164†L596-L604】 and hospital group revenues【747226151008069†L74-L114】【833693750968912†L470-L472】.</p>
+<p>You can download the analysis script <code>doctor_marketcap_analysis.py</code> and data <code>doctor_marketcap_summary.csv</code> from this repository. Feel free to explore the code and adjust parameters for custom scenarios.</p>
+</div>
 </body>
 </html>
