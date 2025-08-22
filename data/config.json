@@ -1,0 +1,29 @@
+
+  "inflation_salary": 0.02,
+  "inflation_cpi": 0.02,
+  "investment_return": 0.03,
+  "tax_brackets_andalucia_2025": [
+    { "up_to": 12450,  "rate": 0.19 },
+    { "up_to": 20200,  "rate": 0.24 },
+    { "up_to": 35200,  "rate": 0.30 },
+    { "up_to": 60000,  "rate": 0.37 },
+    { "up_to": 300000, "rate": 0.45 },
+    { "up_to": null,   "rate": 0.47 }
+  ],
+  "ss_employee_rate": 0.064,
+  "career_years": 35,
+  "mortgage": {
+    "deposit_pct": 0.20,
+    "rate": 0.03,
+    "term_years": 30,
+    "one_off_purchase_cost_pct": 0.09
+  },
+  "car": {
+    "price": 26000,
+    "loan_rate": 0.05,
+    "term_years": 5
+  },
+  "family": {
+    "annual_cost": 8000
+  }
+}
