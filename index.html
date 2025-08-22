@@ -11,14 +11,19 @@
  .section { background-color: #fff; border-radius: 10px; padding: 25px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
  .table-striped tbody tr:nth-of-type(odd) { background-color: #f9f9f9; }
  .notes { font-size: 0.85rem; color: #555; }
- details summary { cursor: pointer; font-weight: bold; margin-top: 10px; }
+ details { margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 5px; background-color: #fafafa; padding: 0.5rem; }
+ details summary { font-size: 1.1rem; font-weight: 600; cursor: pointer; list-style: none; }
+ details summary::before { content: "\25BA"; display: inline-block; margin-right: 8px; transition: transform 0.2s; }
+ details[open] summary::before { transform: rotate(90deg); }
+ .controls { margin-bottom: 20px; }
+ .controls label { margin-right: 15px; }
 </style>
 </head>
 <body>
 <div class="container my-4">
  <div class="hero">
   <h1>Doctor Marketcap Analysis – Seville</h1>
-  <p class="lead mb-0">A data-driven insight into the medical labour market of Seville.</p>
+  <p class="lead mb-0">An interactive dashboard exploring doctor salaries, specialties and long‑term affordability.</p>
  </div>
 
  <div class="section">
@@ -31,11 +36,7 @@
   <p>The salary distribution among doctors is skewed by specialty and experience. Top earners capture a disproportionate share of total payroll, while family and early‑career doctors fall near the lower end.</p>
   <div class="table-responsive">
    <table class="table table-striped">
-    <thead>
-     <tr>
-      <th>Category</th><th>Doctors</th><th>Avg. salary (€)</th><th>Payroll (M €)</th>
-     </tr>
-    </thead>
+    <thead><tr><th>Category</th><th>Doctors</th><th>Avg. salary (€)</th><th>Payroll (M €)</th></tr></thead>
     <tbody>
      <tr><td>Top 5 %</td><td>482</td><td>110 k</td><td>53.0</td></tr>
      <tr><td>High‑mid 20 %</td><td>1 926</td><td>70 k</td><td>134.8</td></tr>
@@ -51,9 +52,7 @@
   <p>Family medicine comprises around 25 % of practitioners. The remainder spans internal medicine, surgery, paediatrics, gynaecology, anaesthesiology and other specialities.</p>
   <div class="table-responsive">
    <table class="table table-striped">
-    <thead>
-     <tr><th>Speciality group</th><th>Approx. doctors</th></tr>
-    </thead>
+    <thead><tr><th>Speciality group</th><th>Approx. doctors</th></tr></thead>
     <tbody>
      <tr><td>Internal Medicine & subspecialties</td><td>1 084</td></tr>
      <tr><td>Surgery & surgical specialties</td><td>722</td></tr>
@@ -72,19 +71,17 @@
   <p>Approximate staffing and revenue for private hospitals in Seville (doctors estimated at ~2.19 per bed; revenue scaled from group‑level figures).</p>
   <div class="table-responsive">
    <table class="table table-striped">
-    <thead>
-     <tr><th>Hospital (private)</th><th>Beds</th><th>Approx. doctors</th><th>Est. revenue (M €)</th></tr>
-    </thead>
+    <thead><tr><th>Hospital (private)</th><th>Beds</th><th>Approx. doctors</th><th>Est. revenue (M €)</th></tr></thead>
     <tbody>
      <tr><td>Vithas Sevilla</td><td>148</td><td>324</td><td>60</td></tr>
      <tr><td>Quirónsalud Sagrado Corazón</td><td>147</td><td>322</td><td>93</td></tr>
      <tr><td>Quirónsalud Infanta Luisa</td><td>139</td><td>305</td><td>88</td></tr>
      <tr><td>Quirónsalud Materno‑Infantil</td><td>32</td><td>70</td><td>20</td></tr>
-     <tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39</td></tr>
+     <tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39</td></tr>
      <tr><td>San Agustín</td><td>93</td><td>203</td><td>34</td></tr>
      <tr><td>Hospital Fátima</td><td>73</td><td>160</td><td>27</td></tr>
-     <tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17</td></tr>
-     <tr><td>Hospital Victoria Eugenia (Cruz Roja)</td><td>39</td><td>85</td><td>14</td></tr>
+     <tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17</td></tr>
+     <tr><td>Hospital Victoria Eugenia (Cruz Roja)</td><td>39</td><td>85</td><td>14</td></tr>
     </tbody>
    </table>
   </div>
@@ -95,13 +92,11 @@
   <p>Assuming a 35‑year career, we estimate lifetime earnings and affordability for each salary bracket. Net salary is approximated at 75 % of gross. Savings are what remain after annual living expenses of €30 000. House purchase assumes a €275 000 property with 20 % deposit and a 30‑year mortgage at 3 %. Car cost is estimated at €26 000.</p>
   <div class="table-responsive">
    <table class="table table-striped">
-    <thead>
-     <tr><th>Category</th><th>Avg. salary (€/yr)</th><th>Net salary (€/yr)</th><th>Lifetime net (35 yrs, €)</th><th>Years to save deposit</th><th>Years to buy a car</th><th>Net after mortgage (€/yr)</th></tr>
-    </thead>
+    <thead><tr><th>Category</th><th>Avg. salary (€/yr)</th><th>Net salary (€/yr)</th><th>Lifetime net (35 yrs, €)</th><th>Years to save deposit</th><th>Years to buy a car</th><th>Net after mortgage (€/yr)</th></tr></thead>
     <tbody>
-     <tr><td>Top 5 %</td><td>110 k</td><td>82.5 k</td><td>2.89 M</td><td>1.05</td><td>0.50</td><td>41.4 k</td></tr>
-     <tr><td>High‑mid 20 %</td><td>70 k</td><td>52.5 k</td><td>1.84 M</td><td>2.44</td><td>1.16</td><td>11.4 k</td></tr>
-     <tr><td>Middle 50 %</td><td>48 k</td><td>36 k</td><td>1.26 M</td><td>9.17</td><td>4.33</td><td>−5.1 k</td></tr>
+     <tr><td>Top 5 %</td><td>110 k</td><td>82.5 k</td><td>2.89 M</td><td>1.0</td><td>0.50</td><td>41.4 k</td></tr>
+     <tr><td>High‑mid 20 %</td><td>70 k</td><td>52.5 k</td><td>1.84 M</td><td>2.4</td><td>1.2</td><td>11.4 k</td></tr>
+     <tr><td>Middle 50 %</td><td>48 k</td><td>36 k</td><td>1.26 M</td><td>9.2</td><td>4.3</td><td>−5.1 k</td></tr>
      <tr><td>Bottom 25 %</td><td>35 k</td><td>26.3 k</td><td>0.92 M</td><td>—</td><td>—</td><td>−3.8 k</td></tr>
     </tbody>
    </table>
@@ -110,116 +105,173 @@
 
  <div class="section">
   <h2>Speciality Insights</h2>
-  <p>Select a salary band to view estimated net salary, typical hours and net‑worth growth over a 35‑year career. Charts show projected net worth in thousands of euros assuming a 20 % savings rate on residual income and 3 % annual returns.</p>
-
+  <p>Use the toggles below to include major life expenses. The charts show estimated net worth (in €k) over a 35‑year career, assuming a 20 % savings rate on residual income and 3 % annual returns. Net salary is calculated after progressive income tax and social security.</p>
+  <div class="controls">
+    <label><input type="checkbox" id="houseToggle"> Include house purchase (€275k, 20 % deposit, 3 % 30‑yr mortgage)</label>
+    <label><input type="checkbox" id="carToggle"> Include car purchase (€26k upfront)</label>
+    <label><input type="checkbox" id="familyToggle"> Include family costs (€10k/yr)</label>
+  </div>
   <details>
-   <summary>Elite specialities (Top 5 %)</summary>
-   <p>
-    • Gross salary ≈ €110 000/year<br>
-    • Effective income tax ≈ 18.3 %<br>
-    • Net salary ≈ €90 000/year<br>
-    • Typical hours per week ≈ 50–55<br>
-    • Annual savings (20 % of residual) ≈ €10 500<br>
-    • Estimated net worth after 35 years ≈ €634 000
-   </p>
-   <canvas id="eliteChart" height="200"></canvas>
+    <summary>Elite specialities (Top 5 %)</summary>
+    <p>
+      • Gross salary ≈ €110 000/year<br>
+      • Effective income tax ≈ 43 % (progressive + social contributions)【226860511555268†L60-L67】<br>
+      • Net salary ≈ €62 700/year<br>
+      • Typical hours per week ≈ 50–55【920465131104645†L60-L63】<br>
+      • Annual savings ≈ €10 500<br>
+      • Estimated net worth after 35 years (no major purchases) ≈ €395 k
+    </p>
+    <canvas id="eliteChart" height="200"></canvas>
   </details>
-
   <details>
-   <summary>High‑mid specialities (Next 20 %)</summary>
-   <p>
-    • Gross salary ≈ €70 000/year<br>
-    • Effective income tax ≈ 15.9 %<br>
-    • Net salary ≈ €58 500/year<br>
-    • Typical hours per week ≈ 45<br>
-    • Annual savings ≈ €4 500<br>
-    • Estimated net worth after 35 years ≈ €272 000
-   </p>
-   <canvas id="highChart" height="200"></canvas>
+    <summary>High‑mid specialities (Next 20 %)</summary>
+    <p>
+      • Gross salary ≈ €70 000/year<br>
+      • Effective income tax ≈ 38 %【226860511555268†L60-L67】<br>
+      • Net salary ≈ €43 200/year<br>
+      • Typical hours per week ≈ 45【920465131104645†L60-L63】<br>
+      • Annual savings ≈ €4 500<br>
+      • Estimated net worth after 35 years (no major purchases) ≈ €160 k
+    </p>
+    <canvas id="highChart" height="200"></canvas>
   </details>
-
   <details>
-   <summary>Middle specialities (Middle 50 %)</summary>
-   <p>
-    • Gross salary ≈ €48 000/year<br>
-    • Effective income tax ≈ 13.9 %<br>
-    • Net salary ≈ €41 300/year<br>
-    • Typical hours per week ≈ 40<br>
-    • Annual savings ≈ €1 200<br>
-    • Estimated net worth after 35 years ≈ €72 000
-   </p>
-   <canvas id="midChart" height="200"></canvas>
+    <summary>Middle specialities (Middle 50 %)</summary>
+    <p>
+      • Gross salary ≈ €48 000/year<br>
+      • Effective income tax ≈ 34 %【226860511555268†L60-L67】<br>
+      • Net salary ≈ €31 600/year<br>
+      • Typical hours per week ≈ 40<br>
+      • Annual savings ≈ €1 200<br>
+      • Estimated net worth after 35 years (no major purchases) ≈ €19 k
+    </p>
+    <canvas id="midChart" height="200"></canvas>
   </details>
-
   <details>
-   <summary>Family medicine & early‑career (Bottom 25 %)</summary>
-   <p>
-    • Gross salary ≈ €35 000/year<br>
-    • Effective income tax ≈ 12.3 %<br>
-    • Net salary ≈ €30 700/year<br>
-    • Typical hours per week ≈ 38<br>
-    • Annual savings ≈ 0 (net earnings barely cover living expenses)<br>
-    • Estimated net worth after 35 years ≈ €0
-   </p>
-   <canvas id="bottomChart" height="200"></canvas>
+    <summary>Family medicine & early‑career (Bottom 25 %)</summary>
+    <p>
+      • Gross salary ≈ €35 000/year<br>
+      • Effective income tax ≈ 31 %【226860511555268†L60-L67】<br>
+      • Net salary ≈ €24 200/year<br>
+      • Typical hours per week ≈ 38<br>
+      • Annual savings ≈ 0 (net earnings barely cover living expenses)<br>
+      • Estimated net worth after 35 years (no major purchases) ≈ €0
+    </p>
+    <canvas id="bottomChart" height="200"></canvas>
   </details>
  </div>
 
  <div class="section">
   <h2>Notes & Assumptions</h2>
   <ul class="notes">
-   <li>Data are approximate and based on demographic reports, salary surveys and industry news. Exact figures will vary by individual and institution.</li>
-   <li>Revenue estimates for private hospitals are scaled from national revenue per bed; actual earnings may differ.</li>
-   <li>The affordability analysis assumes constant salaries and expenses over a 35‑year career, which may not reflect real wage progression or inflation.</li>
-   <li>This site is intended for informational purposes and not financial or investment advice.</li>
+    <li>The income tax brackets used here combine Andalusian and national rates: 19 % up to €12 450, 21.5 % up to €13 000, 24 % up to €20 200, 30 % up to €35 200, 37 % up to €60 000 and 45 % above【226860511555268†L60-L67】.</li>
+    <li>Working hours estimates reflect survey data in which 55 % of doctors report working over 40 hours per week【920465131104645†L60-L63】.</li>
+    <li>Salary ranges by speciality group are based on published salary surveys and job listings; individual earnings vary widely.</li>
+    <li>Charts assume a constant annual living expense of €30 000 and a 20 % savings rate on residual income. When the house/car/family options are selected, these expenses are deducted from net income before savings are calculated.</li>
+    <li>The figures are for illustrative purposes and do not constitute financial advice.</li>
   </ul>
   <p><a href="doctor_marketcap_analysis.py" download>Download analysis script</a> | <a href="doctor_marketcap_summary.csv" download>Download summary data</a></p>
  </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-function futureValues(payment, r, n) {
-    const values = [];
-    let balance = 0;
-    for (let i = 0; i <= n; i++) {
-        values.push((balance / 1000).toFixed(1));
-        balance = (balance + payment) * (1 + r);
+const years = Array.from({length: 36}, (_, i) => i);
+const salaries = { elite: 110000, high: 70000, mid: 48000, bottom: 35000 };
+const livingExpenses = 30000;
+function computeTax(income) {
+  const brackets = [
+    {from: 0, to: 12450, rate: 0.19},
+    {from: 12450, to: 13000, rate: 0.215},
+    {from: 13000, to: 20200, rate: 0.24},
+    {from: 20200, to: 21100, rate: 0.24},
+    {from: 21100, to: 35200, rate: 0.30},
+    {from: 35200, to: 60000, rate: 0.37},
+    {from: 60000, to: 300000, rate: 0.45}
+  ];
+  let tax = 0;
+  for (const b of brackets) {
+    if (income > b.from) {
+      const taxable = Math.min(income, b.to) - b.from;
+      tax += taxable * b.rate;
     }
-    return values;
+  }
+  return tax;
 }
-const years = [];
-for (let i = 0; i <= 35; i++) { years.push(i); }
-const eliteData = futureValues(10500, 0.03, 35);
-const highData  = futureValues(4500, 0.03, 35);
-const midData   = futureValues(1200, 0.03, 35);
-const bottomData = futureValues(0, 0.03, 35);
-function buildChart(id, data) {
-    new Chart(document.getElementById(id), {
-        type: 'line',
-        data: {
-            labels: years,
-            datasets: [{
-                data: data,
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                x: { title: { display: true, text: 'Years' } },
-                y: { title: { display: true, text: 'Net worth (k€)' } }
-            },
-            plugins: { legend: { display: false } }
-        }
-    });
+function netSalary(gross) {
+  const tax = computeTax(gross);
+  const social = gross * 0.0635;
+  return gross - tax - social;
 }
-window.addEventListener('load', function() {
-    buildChart('eliteChart', eliteData);
-    buildChart('highChart',  highData);
-    buildChart('midChart',   midData);
-    buildChart('bottomChart', bottomData);
+function mortgageAnnualPayment(principal) {
+  const r = 0.03/12;
+  const n = 30 * 12;
+  const m = principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  return m * 12;
+}
+function computeNetWorth(gross, includeHouse, includeCar, includeFamily) {
+  const net = netSalary(gross);
+  const deposit = includeHouse ? 275000 * 0.20 : 0;
+  const mortgage = includeHouse ? mortgageAnnualPayment(275000 * 0.80) : 0;
+  const carCost = includeCar ? 26000 : 0;
+  const family = includeFamily ? 10000 : 0;
+  const arr = [];
+  let wealth = 0;
+  for (let year = 0; year <= 35; year++) {
+    if (year === 0) {
+      wealth -= deposit + carCost;
+    } else {
+      const expenses = livingExpenses + mortgage + family;
+      const residual = net - expenses;
+      const save = Math.max(residual * 0.20, 0);
+      wealth = wealth * 1.03 + save;
+    }
+    arr.push(parseFloat((wealth / 1000).toFixed(1)));
+  }
+  return arr;
+}
+let eliteChart, highChart, midChart, bottomChart;
+function buildCharts() {
+  const eliteData = computeNetWorth(salaries.elite, false, false, false);
+  const highData  = computeNetWorth(salaries.high,  false, false, false);
+  const midData   = computeNetWorth(salaries.mid,   false, false, false);
+  const bottomData= computeNetWorth(salaries.bottom,false, false, false);
+  eliteChart = new Chart(document.getElementById('eliteChart'), {
+    type: 'line',
+    data: { labels: years, datasets: [{ data: eliteData, borderColor: 'rgba(54,162,235,1)', borderWidth: 2, fill: false }] },
+    options: { scales: { x: { title: { display: true, text: 'Years' } }, y: { title: { display: true, text: 'Net worth (k€)' } }}, plugins: { legend: { display: false } } }
+  });
+  highChart = new Chart(document.getElementById('highChart'), {
+    type: 'line',
+    data: { labels: years, datasets: [{ data: highData, borderColor: 'rgba(255,99,132,1)', borderWidth: 2, fill: false }] },
+    options: { scales: { x: { title: { display: true, text: 'Years' } }, y: { title: { display: true, text: 'Net worth (k€)' } }}, plugins: { legend: { display: false } } }
+  });
+  midChart = new Chart(document.getElementById('midChart'), {
+    type: 'line',
+    data: { labels: years, datasets: [{ data: midData, borderColor: 'rgba(75,192,192,1)', borderWidth: 2, fill: false }] },
+    options: { scales: { x: { title: { display: true, text: 'Years' } }, y: { title: { display: true, text: 'Net worth (k€)' } }}, plugins: { legend: { display: false } } }
+  });
+  bottomChart = new Chart(document.getElementById('bottomChart'), {
+    type: 'line',
+    data: { labels: years, datasets: [{ data: bottomData, borderColor: 'rgba(255,206,86,1)', borderWidth: 2, fill: false }] },
+    options: { scales: { x: { title: { display: true, text: 'Years' } }, y: { title: { display: true, text: 'Net worth (k€)' } }}, plugins: { legend: { display: false } } }
+  });
+}
+function updateCharts() {
+  const includeHouse = document.getElementById('houseToggle').checked;
+  const includeCar = document.getElementById('carToggle').checked;
+  const includeFamily = document.getElementById('familyToggle').checked;
+  eliteChart.data.datasets[0].data = computeNetWorth(salaries.elite, includeHouse, includeCar, includeFamily);
+  highChart.data.datasets[0].data  = computeNetWorth(salaries.high,  includeHouse, includeCar, includeFamily);
+  midChart.data.datasets[0].data   = computeNetWorth(salaries.mid,   includeHouse, includeCar, includeFamily);
+  bottomChart.data.datasets[0].data= computeNetWorth(salaries.bottom,includeHouse, includeCar, includeFamily);
+  eliteChart.update(); highChart.update(); midChart.update(); bottomChart.update();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildCharts();
+  document.getElementById('houseToggle').addEventListener('change', updateCharts);
+  document.getElementById('carToggle').addEventListener('change', updateCharts);
+  document.getElementById('familyToggle').addEventListener('change', updateCharts);
 });
 </script>
 </body>
