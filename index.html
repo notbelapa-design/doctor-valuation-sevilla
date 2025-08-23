@@ -105,7 +105,7 @@
           <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
           <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
           <li>Living expenses are set at €30 000/year; optional costs (house, car, family) apply when selected.</li>
-          <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
+          <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat – typical of mid‑range apartments in central districts like Nervión or Triana – therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
           <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
         </ul>
       </footer>
@@ -356,7 +356,14 @@
           const avg = filtered.reduce((sum, j) => sum + ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2, 0) / filtered.length;
           const summaryDiv = document.createElement('div');
           summaryDiv.className = 'col-12 mb-2';
-          summaryDiv.innerHTML = `<div class="alert alert-info">Average salary: ${fmtEuro(avg)} (based on ${filtered.length} posting${filtered.length > 1 ? 's' : ''})</div>`;
+          // compute average number of job postings per specialty across entire dataset
+          const uniqueSpecs = Array.from(new Set(jobs.map(j => j.specialty_key)));
+          const avgCount = (jobs.length / uniqueSpecs.length).toFixed(1);
+          summaryDiv.innerHTML =
+            `<div class="alert alert-info">` +
+            `Average salary: <strong>${fmtEuro(avg)}</strong> (based on ${filtered.length} posting${filtered.length > 1 ? 's' : ''})` +
+            `<br><small>Average postings per specialty in this dataset: ${avgCount}</small>` +
+            `</div>`;
           list.appendChild(summaryDiv);
         }
         filtered.forEach(job => {
