@@ -88,7 +88,26 @@
       <!-- Job postings -->
       <section id="jobs" class="mb-4">
         <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
+        <!-- Dropdown to filter job postings by specialty -->
+        <div class="row mb-2">
+          <div class="col-md-4">
+            <label for="jobSpecialtySelect" class="form-label">Select specialty (jobs)</label>
+            <select id="jobSpecialtySelect" class="form-select"></select>
+          </div>
+        </div>
         <div id="jobList" class="row"></div>
+      </section>
+
+      <!-- Hospital overview -->
+      <section id="hospitals" class="mb-4">
+        <h2 class="h5 mb-3">Hospital Overview</h2>
+        <div id="hospitalTable"></div>
+      </section>
+
+      <!-- Specialty salary ranking -->
+      <section id="ranking" class="mb-4">
+        <h2 class="h5 mb-3">Specialty Salary Ranking</h2>
+        <div id="rankingTable"></div>
       </section>
 
       <!-- Market cap summary -->
@@ -181,6 +200,30 @@
         { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: '#' },
         { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: '#' }
       ];
+
+      // Hospitals in Seville (public & private) with bed counts and revenue (where available)
+      const hospitals = [
+        { name: 'Virgen del Rocío', sector: 'public', beds: 1278, revenue: null },
+        { name: 'Macarena', sector: 'public', beds: 777, revenue: null },
+        { name: 'Valme', sector: 'public', beds: 617, revenue: null },
+        { name: 'Muñoz Cariñanos', sector: 'public', beds: 276, revenue: null },
+        { name: 'San Juan de Dios del Aljarafe', sector: 'public', beds: 200, revenue: null },
+        { name: 'Hospital de La Merced (Osuna)', sector: 'public', beds: 225, revenue: null },
+        { name: 'Vithas Sevilla', sector: 'private', beds: 148, revenue: 60000000 },
+        { name: 'Quirónsalud Sagrado Corazón', sector: 'private', beds: 147, revenue: 93300000 },
+        { name: 'Quirónsalud Infanta Luisa', sector: 'private', beds: 139, revenue: 88200000 },
+        { name: 'Viamed Santa Ángela de la Cruz', sector: 'private', beds: 105, revenue: 39000000 },
+        { name: 'San Agustín', sector: 'private', beds: 93, revenue: 34000000 },
+        { name: 'Hospital Fátima', sector: 'private', beds: 73, revenue: 27000000 },
+        { name: 'San Juan de Dios (Sevilla)', sector: 'private', beds: 47, revenue: 17000000 },
+        { name: 'Hospital Victoria Eugenia (Cruz Roja)', sector: 'private', beds: 39, revenue: 14000000 }
+      ];
+
+      // Doctors-per-bed ratio used to estimate staffing at each hospital.  We assume
+      // approximately 9,631 active doctors in Seville across about 4,464 hospital beds,
+      // yielding a ratio of around 2.16 doctors per bed.  This constant allows us
+      // to estimate how many doctors work in each hospital based on its bed count.
+      const doctorsPerBed = 9631 / 4464;
       const config = {
         inflation_salary: 0.02,
         inflation_cpi: 0.02,
@@ -199,6 +242,13 @@
         car: { price: 26000, loan_rate: 0.05, term_years: 5 },
         family: { annual_cost: 8000 }
       };
+
+      // Add a separate state key for job listings; this allows users to filter
+      // job postings by a specialty that may be different from the one used in
+      // the earnings and wealth charts.  It will be initialised to the first
+      // specialty and updated when the user changes the dropdown in the job
+      // postings section.
+      state.jobSpecialtyKey = null;
 
       // Application state
       const state = {
@@ -325,6 +375,30 @@
           updateAll();
         });
       }
+
+      // Populate job specialty dropdown for filtering job postings.  It uses the
+      // same list of specialties.  When changed, it updates the state and
+      // re-renders the job postings list.  If there is no current value,
+      // defaults to the first specialty.
+      function populateJobSpecialties() {
+        const sel = document.getElementById('jobSpecialtySelect');
+        if (!sel) return;
+        sel.innerHTML = '';
+        specialties.forEach(spec => {
+          const opt = document.createElement('option');
+          opt.value = spec.key;
+          opt.textContent = spec.name;
+          sel.appendChild(opt);
+        });
+        if (specialties.length > 0) {
+          state.jobSpecialtyKey = specialties[0].key;
+          sel.value = state.jobSpecialtyKey;
+        }
+        sel.addEventListener('change', () => {
+          state.jobSpecialtyKey = sel.value;
+          renderJobCards();
+        });
+      }
       // Setup controls and event listeners
       function setupControls() {
         const real = document.getElementById('toggleReal');
@@ -367,23 +441,23 @@
       function renderJobCards() {
         const list = document.getElementById('jobList');
         list.innerHTML = '';
-        const filtered = jobs.filter(j => !state.specialtyKey || j.specialty_key === state.specialtyKey);
+        // If no job specialty is selected, default to first specialty in array
+        const specKey = state.jobSpecialtyKey || (specialties.length ? specialties[0].key : null);
+        if (!specKey) return;
+        const filtered = jobs.filter(j => j.specialty_key === specKey);
         // Display average salary and number of postings
         if (filtered.length > 0) {
-          // Compute average gross midpoint salary
-          const avgGross = filtered.reduce((sum, j) => {
+          let sumGross = 0;
+          let sumNet = 0;
+          filtered.forEach(j => {
             const mid = ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
-            return sum + mid;
-          }, 0) / filtered.length;
-          // Compute average net salary by applying tax and social security to each midpoint
-          const avgNet = filtered.reduce((sum, j) => {
-            const mid = ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
-            const net = mid - incomeTax(mid) - socialSecurity(mid);
-            return sum + net;
-          }, 0) / filtered.length;
+            sumGross += mid;
+            sumNet += mid - incomeTax(mid) - socialSecurity(mid);
+          });
+          const avgGross = sumGross / filtered.length;
+          const avgNet = sumNet / filtered.length;
           const summaryDiv = document.createElement('div');
           summaryDiv.className = 'col-12 mb-2';
-          // compute average number of job postings per specialty across entire dataset
           const uniqueSpecs = Array.from(new Set(jobs.map(j => j.specialty_key)));
           const avgCount = (jobs.length / uniqueSpecs.length).toFixed(1);
           summaryDiv.innerHTML =
@@ -399,7 +473,10 @@
           const salaryPart = job.salary_gross_max && job.salary_gross_max !== job.salary_gross_min
             ? `${fmtEuro(job.salary_gross_min)}–${fmtEuro(job.salary_gross_max)}`
             : fmtEuro(job.salary_gross_min);
-          div.innerHTML = `<div class="card h-100"><div class="card-body"><h6 class="card-title">${job.title}</h6><p class="small text-muted mb-1">${job.employer}</p><p class="mb-1"><strong>Salary:</strong> ${salaryPart}</p><p class="mb-1"><strong>Contract:</strong> ${job.contract}</p><a href="${job.source}" target="_blank" class="small">Source</a></div></div>`;
+          // Compute net salary for this job posting
+          const mid = ((job.salary_gross_min || 0) + (job.salary_gross_max || job.salary_gross_min || 0)) / 2;
+          const netSal = mid - incomeTax(mid) - socialSecurity(mid);
+          div.innerHTML = `<div class="card h-100"><div class="card-body"><h6 class="card-title">${job.title}</h6><p class="small text-muted mb-1">${job.employer}</p><p class="mb-1"><strong>Salary:</strong> ${salaryPart}</p><p class="mb-1"><strong>Net:</strong> ${fmtEuro(netSal)}</p><p class="mb-1"><strong>Contract:</strong> ${job.contract}</p><a href="${job.source}" target="_blank" class="small">Source</a></div></div>`;
           list.appendChild(div);
         });
       }
@@ -417,6 +494,64 @@
           html += `<tr><td>${s.name}</td><td>${s.doctors_est}</td><td>${fmtEuro(s.gross_base)}</td><td>${fmtEuro(payroll)}</td></tr>`;
         });
         html += `<tr class="fw-bold"><td>Total</td><td>${totalDoctors}</td><td></td><td>${fmtEuro(totalPayroll)}</td></tr>`;
+        html += '</tbody></table>';
+        tableDiv.innerHTML = html;
+      }
+
+      // Render table of hospitals with estimated doctors and revenues.  Uses the
+      // doctorsPerBed constant to convert bed counts into approximate numbers of
+      // doctors.  Private hospitals list revenue where available; public
+      // hospitals leave revenue blank.  A total row sums beds and doctors.
+      function renderHospitals() {
+        const tableDiv = document.getElementById('hospitalTable');
+        if (!tableDiv) return;
+        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Revenue</th></tr></thead><tbody>';
+        let totalBeds = 0;
+        let totalDocs = 0;
+        hospitals.forEach(h => {
+          const estDocs = Math.round(h.beds * doctorsPerBed);
+          totalBeds += h.beds;
+          totalDocs += estDocs;
+          const revenue = h.revenue ? fmtEuro(h.revenue) : '—';
+          html += `<tr><td>${h.name}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${revenue}</td></tr>`;
+        });
+        html += `<tr class="fw-bold"><td>Total</td><td></td><td>${totalBeds}</td><td>${Math.round(totalDocs)}</td><td></td></tr>`;
+        html += '</tbody></table>';
+        tableDiv.innerHTML = html;
+      }
+
+      // Compute and render a ranking of specialties by average net salary based on
+      // available job postings.  For each specialty we calculate the midpoint
+      // salary of each posting, convert it to net by subtracting income tax and
+      // social security, then average across postings.  The table is sorted
+      // descending by average net salary.  If a specialty has no job postings,
+      // it is omitted from the ranking.  We also display the number of
+      // postings used for each specialty.
+      function renderRanking() {
+        const tableDiv = document.getElementById('rankingTable');
+        if (!tableDiv) return;
+        const rows = specialties.map(spec => {
+          const postings = jobs.filter(j => j.specialty_key === spec.key);
+          if (postings.length === 0) return null;
+          let sumGross = 0;
+          let sumNet = 0;
+          postings.forEach(j => {
+            const mid = ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
+            sumGross += mid;
+            sumNet += mid - incomeTax(mid) - socialSecurity(mid);
+          });
+          return {
+            name: spec.name,
+            posts: postings.length,
+            avgGross: sumGross / postings.length,
+            avgNet: sumNet / postings.length
+          };
+        }).filter(Boolean);
+        rows.sort((a, b) => b.avgNet - a.avgNet);
+        let html = '<table class="table table-striped"><thead><tr><th>Specialty</th><th>Postings</th><th>Avg Gross</th><th>Avg Net</th></tr></thead><tbody>';
+        rows.forEach(r => {
+          html += `<tr><td>${r.name}</td><td>${r.posts}</td><td>${fmtEuro(r.avgGross)}</td><td>${fmtEuro(r.avgNet)}</td></tr>`;
+        });
         html += '</tbody></table>';
         tableDiv.innerHTML = html;
       }
@@ -498,8 +633,12 @@
             scales: { x: { beginAtZero: true } }
           }
         });
-        // Render market cap table
+        // Populate job specialty dropdown
+        populateJobSpecialties();
+        // Render tables: market cap, hospitals and ranking
         renderMarketCap();
+        renderHospitals();
+        renderRanking();
 
         window.updateAll = updateCharts;
         updateCharts();
