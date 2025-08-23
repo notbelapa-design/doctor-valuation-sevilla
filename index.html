@@ -116,12 +116,14 @@
     const annualChart = makeAnnualChart(annualCtx);
     const wealthChart = makeWealthChart(wealthCtx);
 
-    const data = await loadData();
-    // populate specialty options
-    loadSpecialtyOptions(data.specialties);
-    setupControls();
+    // wrap the asynchronous initialization and chart setup in an async function
+    async function init() {
+      const data = await loadData();
+      // populate specialty options and set up controls
+      loadSpecialtyOptions(data.specialties);
+      setupControls();
 
-    function updateCharts() {
+      function updateCharts() {
       // find selected specialty
       const spec = data.specialties.find(s => s.key === state.specialtyKey);
       if (!spec) return;
@@ -157,10 +159,13 @@
       // update jobs
       renderJobs(data.jobs, state.specialtyKey);
     }
-    // expose updateAll globally
-    window.updateAll = updateCharts;
-    // initial render
-    updateCharts();
+      // expose updateAll globally
+      window.updateAll = updateCharts;
+      // initial render
+      updateCharts();
+    }
+    // kick off the initialization
+    init();
   </script>
 </body>
 </html>
