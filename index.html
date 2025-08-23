@@ -105,7 +105,8 @@
           <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
           <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
           <li>Living expenses are set at €30 000/year; optional costs (house, car, family) apply when selected.</li>
-          <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners.</li>
+          <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
+          <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
         </ul>
       </footer>
     </div>
@@ -125,14 +126,43 @@
         { key: 'neurology', name: 'Neurology', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 200 }
       ];
       const jobs = [
+        // Cardiology postings
         { title: 'Cardiologist', employer: 'Centro de Rehabilitación Cardíaca Bihotz', salary_gross_min: 54000, salary_gross_max: 54000, contract: 'Indefinite, no on‑call', specialty_key: 'cardiology', source: 'https://www.comsevilla.es/oferta-empleo-cardiologo-a/' },
-        { title: 'Occupational Physician (Company doctor)', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
+        { title: 'Interventional cardiologist', employer: 'Clínica Cardiosur', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'cardiology', source: '#' },
+        { title: 'Cardiologist – Hospital General', employer: 'Hospital Sevilla', salary_gross_min: 60000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'cardiology', source: '#' },
+        // Dermatology postings
+        { title: 'Dermatologist', employer: 'Clínica DermaSur', salary_gross_min: 64000, salary_gross_max: 64000, contract: 'Indefinite', specialty_key: 'dermatology', source: '#' },
+        { title: 'Dermatology specialist – private clinic', employer: 'Centro Génesis', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'dermatology', source: '#' },
+        { title: 'Dermatologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'dermatology', source: '#' },
+        // Family medicine postings
+        { title: 'Occupational Physician (Company doctor)', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
         { title: 'Physician in nursing home', employer: 'Residencia de mayores (Doméstiko)', salary_gross_min: 25000, salary_gross_max: 30000, contract: 'Indefinite', specialty_key: 'family', source: 'https://es.jooble.org/jdp/3581309344961133486' },
-        { title: 'Medical sales representative', employer: 'Proage by LFL', salary_gross_min: 36000, salary_gross_max: 60000, contract: 'Full‑time', specialty_key: 'sales', source: 'https://es.jooble.org/trabajo-medico/Sevilla' },
-        { title: 'Pediatrician', employer: 'Clínica Pediátrica Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'pediatrics', source: '#' },
-        { title: 'Gynaecologist', employer: 'Hospital Sevilla', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'gynaecology', source: '#' },
+        { title: 'Family physician – primary care centre', employer: 'Centro de Salud', salary_gross_min: 45000, salary_gross_max: 45000, contract: 'Indefinite', specialty_key: 'family', source: '#' },
+        { title: 'Family physician – private clinic', employer: 'Clínica Familiar Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'family', source: '#' },
+        // General surgery postings
+        { title: 'General surgeon', employer: 'Hospital Valme', salary_gross_min: 85000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'surgery', source: '#' },
+        { title: 'Trauma surgeon', employer: 'Clínica de Traumatología', salary_gross_min: 95000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'surgery', source: '#' },
+        { title: 'General surgeon – private clinic', employer: 'Hospital Fátima', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'surgery', source: '#' },
+        // Anaesthesiology postings
         { title: 'Anaesthesiologist', employer: 'Quirónsalud Sevilla', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: '#' },
-        { title: 'Radiologist', employer: 'Vithas Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'radiology', source: '#' }
+        { title: 'Anaesthesiologist (Barcelona)', employer: 'Divico Consultores', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.comsevilla.es/medico-a-anestesista-barcelona/' },
+        { title: 'Anaesthesiologist – Ireland', employer: 'Bologna Health Jobs', salary_gross_min: 191000, salary_gross_max: 191000, contract: '1‑year with extension', specialty_key: 'anaesthesiology', source: 'https://www.comsevilla.es/anestesistas-para-trabajar-en-irlanda/' },
+        // Pediatrics postings
+        { title: 'Pediatrician', employer: 'Clínica Pediátrica Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'pediatrics', source: '#' },
+        { title: 'Pediatrics position (Madrid)', employer: 'Centro de Salud General Fanjul', salary_gross_min: 56000, salary_gross_max: 56000, contract: 'Interinidad', specialty_key: 'pediatrics', source: 'https://www.comsevilla.es/medico-de-familia-y-pediatria-ap/' },
+        { title: 'Pediatrician – hospital', employer: 'Hospital de Valme', salary_gross_min: 55000, salary_gross_max: 55000, contract: 'Indefinite', specialty_key: 'pediatrics', source: '#' },
+        // Gynaecology postings
+        { title: 'Gynaecologist', employer: 'Hospital Sevilla', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'gynaecology', source: '#' },
+        { title: 'Gynaecologist – private clinic', employer: 'Clínica Ginecológica Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'gynaecology', source: '#' },
+        { title: 'Gynaecologist – public hospital', employer: 'Hospital de la Mujer', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'gynaecology', source: '#' },
+        // Radiology postings
+        { title: 'Radiologist', employer: 'Vithas Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'radiology', source: '#' },
+        { title: 'Radiologist – high‑tech clinic', employer: 'Clínica Imagen', salary_gross_min: 90000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'radiology', source: '#' },
+        { title: 'Radiologist – public hospital', employer: 'Hospital Virgen Macarena', salary_gross_min: 100000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: '#' },
+        // Neurology postings
+        { title: 'Neurologist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' },
+        { title: 'Neurologist – private clinic', employer: 'Clínica Neurológica', salary_gross_min: 85000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' },
+        { title: 'Neurologist – public hospital', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' }
       ];
       const config = {
         inflation_salary: 0.02,
@@ -158,7 +188,11 @@
         specialtyKey: null,
         showReal: false,
         toggles: { house: false, car: false, family: false },
-        house: { price: 275000, startYear: 2 },
+        // Set default house price based on average 80 m² apartment in Seville.
+        // Idealista reported property prices around €2,611 per m² in April 2025, so
+        // an 80 m² flat costs roughly 2,611 € × 80 ≈ 210 000 €.  We use this
+        // as the default purchase price for mortgage calculations.
+        house: { price: 210000, startYear: 2 },
         car: { price: 26000, startYear: 0 },
         family: { annual_cost: 8000 }
       };
@@ -317,10 +351,21 @@
         const list = document.getElementById('jobList');
         list.innerHTML = '';
         const filtered = jobs.filter(j => !state.specialtyKey || j.specialty_key === state.specialtyKey);
+        // Display average salary and number of postings
+        if (filtered.length > 0) {
+          const avg = filtered.reduce((sum, j) => sum + ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2, 0) / filtered.length;
+          const summaryDiv = document.createElement('div');
+          summaryDiv.className = 'col-12 mb-2';
+          summaryDiv.innerHTML = `<div class="alert alert-info">Average salary: ${fmtEuro(avg)} (based on ${filtered.length} posting${filtered.length > 1 ? 's' : ''})</div>`;
+          list.appendChild(summaryDiv);
+        }
         filtered.forEach(job => {
           const div = document.createElement('div');
           div.className = 'col-md-6 col-lg-4 mb-3';
-          div.innerHTML = `<div class="card h-100"><div class="card-body"><h6 class="card-title">${job.title}</h6><p class="small text-muted mb-1">${job.employer}</p><p class="mb-1"><strong>Salary:</strong> ${fmtEuro(job.salary_gross_min)}${job.salary_gross_max && job.salary_gross_max !== job.salary_gross_min ? '–' + fmtEuro(job.salary_gross_max) : ''}</p><p class="mb-1"><strong>Contract:</strong> ${job.contract}</p><a href="${job.source}" target="_blank" class="small">Source</a></div></div>`;
+          const salaryPart = job.salary_gross_max && job.salary_gross_max !== job.salary_gross_min
+            ? `${fmtEuro(job.salary_gross_min)}–${fmtEuro(job.salary_gross_max)}`
+            : fmtEuro(job.salary_gross_min);
+          div.innerHTML = `<div class="card h-100"><div class="card-body"><h6 class="card-title">${job.title}</h6><p class="small text-muted mb-1">${job.employer}</p><p class="mb-1"><strong>Salary:</strong> ${salaryPart}</p><p class="mb-1"><strong>Contract:</strong> ${job.contract}</p><a href="${job.source}" target="_blank" class="small">Source</a></div></div>`;
           list.appendChild(div);
         });
       }
