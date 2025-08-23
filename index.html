@@ -243,18 +243,15 @@
         family: { annual_cost: 8000 }
       };
 
-      // Add a separate state key for job listings; this allows users to filter
-      // job postings by a specialty that may be different from the one used in
-      // the earnings and wealth charts.  It will be initialised to the first
-      // specialty and updated when the user changes the dropdown in the job
-      // postings section.
-      state.jobSpecialtyKey = null;
 
       // Application state
       const state = {
         specialtyKey: null,
         showReal: false,
         toggles: { house: false, car: false, family: false },
+        // Key used to filter the job postings list.  Defaults to the first
+        // specialty and updated via the job dropdown.
+        jobSpecialtyKey: null,
         // Set default house price based on average 80 m² apartment in Seville.
         // Idealista reported property prices around €2,611 per m² in April 2025, so
         // an 80 m² flat costs roughly 2,611 € × 80 ≈ 210 000 €.  We use this
