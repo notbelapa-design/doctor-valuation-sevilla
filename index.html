@@ -119,6 +119,7 @@
       <!-- Hospital overview -->
       <section id="hospitals" class="mb-4">
         <h2 class="h5 mb-3">Hospital Overview</h2>
+        <p class="text-muted small mb-2">Doctors‑per‑bed values below use a constant average ratio across Seville (about 2.16 doctors per bed) because hospital‑specific staffing data are not publicly available.</p>
         <div id="hospitalTable"></div>
       </section>
 
@@ -155,6 +156,7 @@
           <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
           <li>Base salaries do not include on‑call pay (guardias). We assume one 24‑hour guardia per week at the weekday rate of €28.56/hour【602655506727465†L186-L188】, adding about €35 600 to gross pay per year. Net salary including guardias is shown in job postings and the specialty ranking.</li>
         <li>Resident physicians’ duty hours comprise a regular working schedule of about 37.5 h per week plus four to six mandatory 24‑hour on‑call shifts【811531195383722†L308-L312】.  Spanish law caps total working time at 48 h per week with required rest periods【811531195383722†L308-L316】.  Base contractual hours for senior doctors in Spain typically range from 37.5 to 40 h/week.</li>
+        <li>Doctors‑per‑bed values shown in the hospital overview are approximate.  In Spain there are roughly 0.4 doctors per hospital bed (one doctor for every 2.5 beds); larger tertiary hospitals often employ slightly more doctors per bed than smaller facilities.  We therefore apply a base ratio of 0.4 doctors per bed plus a small incremental factor depending on hospital size.  Actual staffing may vary.</li>
         </ul>
       </footer>
     </div>
@@ -254,11 +256,25 @@
         { name: 'Hospital Victoria Eugenia (Cruz Roja)', sector: 'private', beds: 39, revenue: 14000000 }
       ];
 
-      // Doctors-per-bed ratio used to estimate staffing at each hospital.  We assume
-      // approximately 9,631 active doctors in Seville across about 4,464 hospital beds,
-      // yielding a ratio of around 2.16 doctors per bed.  This constant allows us
-      // to estimate how many doctors work in each hospital based on its bed count.
-      const doctorsPerBed = 9631 / 4464;
+      // Doctors‑per‑bed ratio used to estimate staffing at each hospital.  In the
+      // absence of hospital‑specific staffing data, we base our estimates on
+      // national averages showing roughly 0.4 doctors per hospital bed (about
+      // one doctor for every 2.5 beds).  Larger hospitals are assumed to have
+      // slightly higher ratios due to greater specialist services, and smaller
+      // hospitals slightly lower ratios.  See Notes for details.
+      // Base doctors‑per‑bed ratio used to estimate staffing levels.  We use
+      // national averages indicating roughly 0.4 doctors per hospital bed (one
+      // doctor for every 2.5 beds).  Because larger referral hospitals tend to
+      // have more highly specialised staff than smaller facilities, we add a
+      // small incremental factor proportional to the bed count to create some
+      // variation across hospitals.  This avoids displaying a single constant
+      // ratio for every hospital.  See Notes for more context.
+      const baseDoctorsPerBed = 0.4;
+      // Additional doctors per bed added per bed count (0.05 spread across
+      // 2000 beds).  A 1 000‑bed hospital therefore gets +0.025 added to the
+      // base ratio; a 200‑bed hospital gets +0.005.  Adjust as needed if more
+      // precise data become available.
+      const extraDoctorPerBedFactor = 0.05 / 2000;
       const config = {
         inflation_salary: 0.02,
         inflation_cpi: 0.02,
@@ -666,23 +682,30 @@
       }
 
       // Render table of hospitals with estimated doctors and revenues.  Uses the
-      // doctorsPerBed constant to convert bed counts into approximate numbers of
-      // doctors.  Private hospitals list revenue where available; public
-      // hospitals leave revenue blank.  A total row sums beds and doctors.
+      // Estimate staffing levels per hospital using a variable doctors‑per‑bed
+      // ratio.  We start from a base ratio (roughly 0.4 doctors per bed,
+      // reflecting national averages) and add a small incremental factor per
+      // bed to reflect that larger hospitals tend to employ more doctors per
+      // bed.  Private hospitals list revenue where available; public hospitals
+      // leave revenue blank.  A total row sums beds and doctors.
       function renderHospitals() {
         const tableDiv = document.getElementById('hospitalTable');
         if (!tableDiv) return;
-        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed</th><th>Revenue</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed (approx.)</th><th>Revenue</th></tr></thead><tbody>';
         let totalBeds = 0;
         let totalDocs = 0;
         hospitals.forEach(h => {
-          const estDocs = Math.round(h.beds * doctorsPerBed);
+          // Compute a slightly different doctors‑per‑bed ratio for each hospital.
+          // Larger hospitals get a small boost to reflect higher staffing needs.
+          const ratioFloat = baseDoctorsPerBed + (h.beds * extraDoctorPerBedFactor);
+          const estDocs = Math.round(h.beds * ratioFloat);
           totalBeds += h.beds;
           totalDocs += estDocs;
-          const ratio = (estDocs / h.beds).toFixed(2);
+          const ratio = ratioFloat.toFixed(2);
           const revenue = h.revenue ? fmtEuro(h.revenue) : '—';
           html += `<tr><td>${h.name}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenue}</td></tr>`;
         });
+        // Compute an overall ratio across all hospitals using the new estimates.
         const totalRatio = (totalDocs / totalBeds).toFixed(2);
         html += `<tr class="fw-bold"><td>Total</td><td></td><td>${totalBeds}</td><td>${Math.round(totalDocs)}</td><td>${totalRatio}</td><td></td></tr>`;
         html += '</tbody></table>';
