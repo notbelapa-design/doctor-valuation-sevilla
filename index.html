@@ -78,10 +78,11 @@
         <canvas id="wealthChart" style="max-height: 300px;"></canvas>
       </section>
 
-      <!-- Specialty mix (future expansion) -->
+      <!-- Specialty mix chart -->
       <section id="mix" class="mb-4">
         <h2 class="h5 mb-3">Specialty Mix</h2>
-        <div id="mixChart" style="height: 300px;"></div>
+        <!-- Use a canvas for Chart.js instead of a div. A div has no getContext() method -->
+        <canvas id="mixChart" style="max-height: 300px;"></canvas>
       </section>
 
       <!-- Job postings -->
