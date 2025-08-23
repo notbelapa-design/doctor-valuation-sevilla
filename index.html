@@ -1,171 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doctor Market Insights — Sevilla</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-  <div class="container my-4">
-    <header class="hero">
-      <h1>Doctor Market Insights — Sevilla</h1>
-      <p class="sub">Per-specialty earnings, taxes, hours, and long‑term affordability</p>
-    </header>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Market Insights — Sevilla</title>
+    <!-- Bootstrap for layout and styling -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Chart.js library (classic script so Chart is on window) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container my-4">
+      <header class="hero mb-4 text-center">
+        <h1>Doctor Market Insights — Sevilla</h1>
+        <p class="sub">Per‑specialty earnings, taxes, hours and long‑term affordability</p>
+      </header>
 
-    <!-- Controls section -->
-    <div id="controls" class="section">
-      <h2 class="h5 mb-3">Configuration</h2>
-      <div class="row">
-        <div class="col-md-4 mb-3">
-          <label for="specialtySelect" class="form-label">Select specialty</label>
-          <select id="specialtySelect" class="form-select"></select>
-        </div>
-        <div class="col-md-8">
-          <div class="row">
-            <div class="col-md-3 form-check">
-              <input class="form-check-input" type="checkbox" id="toggleReal">
-              <label class="form-check-label" for="toggleReal">Show in real €</label>
+      <!-- Configuration controls -->
+      <section id="controls" class="mb-4">
+        <h2 class="h5 mb-3">Configuration</h2>
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            <label for="specialtySelect" class="form-label">Select specialty</label>
+            <select id="specialtySelect" class="form-select"></select>
+          </div>
+          <div class="col-md-8">
+            <div class="row g-2">
+              <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" id="toggleReal">
+                <label class="form-check-label" for="toggleReal">Show in real €</label>
+              </div>
+              <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" id="toggleHouse">
+                <label class="form-check-label" for="toggleHouse">Include house</label>
+              </div>
+              <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" id="toggleCar">
+                <label class="form-check-label" for="toggleCar">Include car</label>
+              </div>
+              <div class="col-md-3 form-check">
+                <input class="form-check-input" type="checkbox" id="toggleFamily">
+                <label class="form-check-label" for="toggleFamily">Include family</label>
+              </div>
             </div>
-            <div class="col-md-3 form-check">
-              <input class="form-check-input" type="checkbox" id="toggleHouse">
-              <label class="form-check-label" for="toggleHouse">Include house</label>
-            </div>
-            <div class="col-md-3 form-check">
-              <input class="form-check-input" type="checkbox" id="toggleCar">
-              <label class="form-check-label" for="toggleCar">Include car</label>
-            </div>
-            <div class="col-md-3 form-check">
-              <input class="form-check-input" type="checkbox" id="toggleFamily">
-              <label class="form-check-label" for="toggleFamily">Include family</label>
+            <div class="row g-2 mt-2">
+              <div class="col-md-4 input-group">
+                <span class="input-group-text">House €</span>
+                <input type="number" id="housePrice" class="form-control" min="0">
+              </div>
+              <div class="col-md-4 input-group">
+                <span class="input-group-text">Car €</span>
+                <input type="number" id="carPrice" class="form-control" min="0">
+              </div>
+              <div class="col-md-4 input-group">
+                <span class="input-group-text">Family €/yr</span>
+                <input type="number" id="familyCost" class="form-control" min="0">
+              </div>
             </div>
           </div>
-          <div class="row mt-3">
-            <div class="col-md-4 input-group">
-              <span class="input-group-text">House €</span>
-              <input type="number" id="housePrice" class="form-control" min="0">
-            </div>
-            <div class="col-md-4 input-group">
-              <span class="input-group-text">Car €</span>
-              <input type="number" id="carPrice" class="form-control" min="0">
-            </div>
-            <div class="col-md-4 input-group">
-              <span class="input-group-text">Family €/yr</span>
-              <input type="number" id="familyCost" class="form-control" min="0">
-            </div>
-          </div>
         </div>
-      </div>
+      </section>
+
+      <!-- Snapshot cards -->
+      <section id="snapshots" class="mb-4 row"></section>
+
+      <!-- Annual income vs free cash flow chart -->
+      <section class="mb-4">
+        <h2 class="h5 mb-3">Annual Income & Free Cash Flow</h2>
+        <canvas id="annualChart" style="max-height: 300px;"></canvas>
+      </section>
+
+      <!-- Cumulative net worth chart -->
+      <section class="mb-4">
+        <h2 class="h5 mb-3">Cumulative Net Worth</h2>
+        <canvas id="wealthChart" style="max-height: 300px;"></canvas>
+      </section>
+
+      <!-- Specialty mix (future expansion) -->
+      <section id="mix" class="mb-4">
+        <h2 class="h5 mb-3">Specialty Mix</h2>
+        <div id="mixChart" style="height: 300px;"></div>
+      </section>
+
+      <!-- Job postings -->
+      <section id="jobs" class="mb-4">
+        <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
+        <div id="jobList" class="row"></div>
+      </section>
+
+      <!-- Notes & sources -->
+      <footer id="notes" class="mb-4">
+        <h2 class="h5">Notes & Sources</h2>
+        <ul>
+          <li>Tax brackets combine Andalusian and national rates. See official sources for updates.</li>
+          <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
+          <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
+          <li>Living expenses are set at €30 000/year; optional costs (house, car, family) apply when selected.</li>
+          <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners.</li>
+        </ul>
+      </footer>
     </div>
 
-    <!-- Snapshot cards -->
-    <div id="snapshots" class="section">
-    </div>
-
-    <!-- Annual chart section -->
-    <div class="section">
-      <h2 class="h5 mb-3">Annual Income & Free Cash Flow</h2>
-      <div style="height:300px;">
-        <canvas id="annualChart"></canvas>
-      </div>
-    </div>
-
-    <!-- Wealth chart section -->
-    <div class="section">
-      <h2 class="h5 mb-3">Cumulative Net Worth</h2>
-      <div style="height:300px;">
-        <canvas id="wealthChart"></canvas>
-      </div>
-    </div>
-
-    <!-- Specialty mix bar chart placeholder -->
-    <div id="mix" class="section">
-      <h2 class="h5 mb-3">Specialty Mix</h2>
-      <div id="mixChart" style="height:300px;"></div>
-    </div>
-
-    <!-- Job postings -->
-    <div id="jobs" class="section">
-      <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
-      <div id="jobList" class="row"></div>
-    </div>
-
-    <!-- Notes & sources -->
-    <footer id="notes" class="section">
-      <h2 class="h5">Notes & Sources</h2>
-      <ul>
-        <li>Tax brackets combine Andalusian and national rates【226860511555268†L60-L67】.</li>
-        <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours【920465131104645†L60-L63】.</li>
-        <li>Salaries grow at an assumed 2 % annually to approximate inflation and seniority progression.</li>
-        <li>Living expenses are set at €30 000/year; optional costs (house, car, family) are applied when selected.</li>
-        <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners【422727991652910†L188-L196】【927188265911143†L176-L181】【827367782107712†L34-L37】.</li>
-      </ul>
-    </footer>
-  </div>
-
-  <script type="module">
-    import { loadData } from './js/data.js';
-    import { state, loadSpecialtyOptions, setupControls, updateSnapshots, renderJobs } from './js/ui.js';
-    import { buildSeries } from './js/calculations.js';
-    import { makeAnnualChart, makeWealthChart } from './js/charts.js';
-
-    const annualCtx = document.getElementById('annualChart').getContext('2d');
-    const wealthCtx = document.getElementById('wealthChart').getContext('2d');
-    const annualChart = makeAnnualChart(annualCtx);
-    const wealthChart = makeWealthChart(wealthCtx);
-
-    // wrap the asynchronous initialization and chart setup in an async function
-    async function init() {
-      const data = await loadData();
-      // populate specialty options and set up controls
-      loadSpecialtyOptions(data.specialties);
-      setupControls();
-
-      function updateCharts() {
-      // find selected specialty
-      const spec = data.specialties.find(s => s.key === state.specialtyKey);
-      if (!spec) return;
-      const params = {
-        baseGross: spec.gross_base,
-        years: data.config.career_years,
-        salaryInfl: data.config.inflation_salary,
-        taxBrackets: data.config.tax_brackets_andalucia_2025,
-        ssRate: data.config.ss_employee_rate,
-        mortgage: { ...data.config.mortgage, housePrice: state.house.price, startYear: state.house.startYear },
-        car: { ...data.config.car, price: state.car.price, startYear: state.car.startYear },
-        family: { annual_cost: state.family.annual_cost },
-        toggles: { ...state.toggles },
-        investReturn: data.config.investment_return,
-        realCPI: state.showReal ? data.config.inflation_cpi : 0
+    <!-- Embedded data and logic (no modules) -->
+    <script>
+      // Data definitions (embedded from JSON)
+      const specialties = [
+        { key: 'cardiology', name: 'Cardiology', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 300 },
+        { key: 'dermatology', name: 'Dermatology', gross_base: 98000, gross_p90: 130000, hours_per_week: 38, doctors_est: 180 },
+        { key: 'family', name: 'Family Medicine', gross_base: 38000, gross_p90: 52000, hours_per_week: 42, doctors_est: 2407 },
+        { key: 'surgery', name: 'General Surgery', gross_base: 60000, gross_p90: 90000, hours_per_week: 45, doctors_est: 500 }
+      ];
+      const jobs = [
+        { title: 'Cardiologist', employer: 'Centro de Rehabilitación Cardíaca Bihotz', salary_gross_min: 54000, salary_gross_max: 54000, contract: 'Indefinite, no on‑call', specialty_key: 'cardiology', source: 'https://www.comsevilla.es/oferta-empleo-cardiologo-a/' },
+        { title: 'Occupational Physician (Company doctor)', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
+        { title: 'Physician in nursing home', employer: 'Residencia de mayores (Doméstiko)', salary_gross_min: 25000, salary_gross_max: 30000, contract: 'Indefinite', specialty_key: 'family', source: 'https://es.jooble.org/jdp/3581309344961133486' },
+        { title: 'Medical sales representative', employer: 'Proage by LFL', salary_gross_min: 36000, salary_gross_max: 60000, contract: 'Full‑time', specialty_key: 'sales', source: 'https://es.jooble.org/trabajo-medico/Sevilla' }
+      ];
+      const config = {
+        inflation_salary: 0.02,
+        inflation_cpi: 0.02,
+        investment_return: 0.03,
+        tax_brackets: [
+          { up_to: 12450, rate: 0.19 },
+          { up_to: 20200, rate: 0.24 },
+          { up_to: 35200, rate: 0.30 },
+          { up_to: 60000, rate: 0.37 },
+          { up_to: 300000, rate: 0.45 },
+          { up_to: null, rate: 0.47 }
+        ],
+        ss_rate: 0.064,
+        career_years: 35,
+        mortgage: { deposit_pct: 0.20, rate: 0.03, term_years: 30, one_off_purchase_cost_pct: 0.09 },
+        car: { price: 26000, loan_rate: 0.05, term_years: 5 },
+        family: { annual_cost: 8000 }
       };
-      const series = buildSeries(params);
-      // update charts
-      // update x‑axis labels for both charts
-      annualChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
-      // Dataset 0 on the annual chart is the annual net income before expenses.
-      // Dataset 1 is the free cash flow after optional expenses.
-      annualChart.data.datasets[0].data = state.showReal ? series.net_real : series.net;
-      annualChart.data.datasets[1].data = state.showReal ? series.fcf_real : series.fcf;
-      annualChart.update();
-      // For the wealth chart, always show nominal and real cumulative net worth
-      wealthChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
-      wealthChart.data.datasets[0].data = series.cnw;
-      wealthChart.data.datasets[1].data = series.cnw_real;
-      wealthChart.update();
-      // update snapshots
-      updateSnapshots(spec, series);
-      // update jobs
-      renderJobs(data.jobs, state.specialtyKey);
-    }
-      // expose updateAll globally
-      window.updateAll = updateCharts;
-      // initial render
-      updateCharts();
-    }
-    // kick off the initialization
-    init();
-  </script>
-</body>
+
+      // Application state
+      const state = {
+        specialtyKey: null,
+        showReal: false,
+        toggles: { house: false, car: false, family: false },
+        house: { price: 275000, startYear: 2 },
+        car: { price: 26000, startYear: 0 },
+        family: { annual_cost: 8000 }
+      };
+
+      // Formatting helper
+      function fmtEuro(v) {
+        return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(v);
+      }
+      // Tax and salary helpers
+      function incomeTax(gross) {
+        let remaining = gross;
+        let lower = 0;
+        let tax = 0;
+        for (const b of config.tax_brackets) {
+          const upper = b.up_to === null ? Infinity : b.up_to;
+          if (remaining <= lower) break;
+          const amount = Math.min(remaining, upper) - lower;
+          tax += amount * b.rate;
+          lower = upper;
+        }
+        return tax;
+      }
+      function socialSecurity(gross) {
+        return Math.min(gross, Infinity) * config.ss_rate;
+      }
+      function salarySeries(base) {
+        const arr = [];
+        for (let y = 0; y < config.career_years; y++) {
+          arr.push(base * Math.pow(1 + config.inflation_salary, y));
+        }
+        return arr;
+      }
+      function annuityPayment(P, r, n) {
+        if (r === 0) return P / n;
+        return P * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+      }
+      function buildSeries(spec) {
+        const gross = salarySeries(spec.gross_base);
+        const net = gross.map(g => g - incomeTax(g) - socialSecurity(g));
+        const expenses = Array(config.career_years).fill(0);
+        // house
+        if (state.toggles.house) {
+          const H = state.house.price;
+          const dep = H * config.mortgage.deposit_pct;
+          const costs = H * config.mortgage.one_off_purchase_cost_pct;
+          const principal = H - dep;
+          const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
+          const y0 = state.house.startYear;
+          if (y0 < config.career_years) {
+            expenses[y0] += dep + costs;
+            for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
+              expenses[i] += pay;
+            }
+          }
+        }
+        // car
+        if (state.toggles.car) {
+          const P = state.car.price;
+          const pay = annuityPayment(P, config.car.loan_rate, config.car.term_years);
+          const y0 = state.car.startYear;
+          for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
+            expenses[i] += pay;
+          }
+        }
+        // family
+        if (state.toggles.family) {
+          for (let i = 0; i < config.career_years; i++) {
+            expenses[i] += state.family.annual_cost;
+          }
+        }
+        const fcf = net.map((n, i) => n - expenses[i]);
+        const cnw = [];
+        let acc = 0;
+        for (let i = 0; i < config.career_years; i++) {
+          acc = (acc + fcf[i]) * (1 + config.investment_return);
+          cnw.push(acc);
+        }
+        function deflate(arr) {
+          return arr.map((v, i) => v / Math.pow(1 + config.inflation_cpi, i));
+        }
+        return {
+          gross,
+          net,
+          expenses,
+          fcf,
+          cnw,
+          net_real: deflate(net),
+          fcf_real: deflate(fcf),
+          cnw_real: deflate(cnw)
+        };
+      }
+
+      // Global chart variables
+      let annualChart;
+      let wealthChart;
+
+      // Populate specialties dropdown
+      function populateSpecialties() {
+        const sel = document.getElementById('specialtySelect');
+        specialties.forEach(spec => {
+          const opt = document.createElement('option');
+          opt.value = spec.key;
+          opt.textContent = spec.name;
+          sel.appendChild(opt);
+        });
+        if (specialties.length > 0) {
+          state.specialtyKey = specialties[0].key;
+          sel.value = state.specialtyKey;
+        }
+        sel.addEventListener('change', () => {
+          state.specialtyKey = sel.value;
+          updateAll();
+        });
+      }
+      // Setup controls and event listeners
+      function setupControls() {
+        const real = document.getElementById('toggleReal');
+        const house = document.getElementById('toggleHouse');
+        const car = document.getElementById('toggleCar');
+        const family = document.getElementById('toggleFamily');
+        const housePrice = document.getElementById('housePrice');
+        const carPrice = document.getElementById('carPrice');
+        const familyCost = document.getElementById('familyCost');
+        // defaults
+        housePrice.value = state.house.price;
+        carPrice.value = state.car.price;
+        familyCost.value = state.family.annual_cost;
+        // toggles
+        real.addEventListener('change', () => { state.showReal = real.checked; updateAll(); });
+        house.addEventListener('change', () => { state.toggles.house = house.checked; updateAll(); });
+        car.addEventListener('change', () => { state.toggles.car = car.checked; updateAll(); });
+        family.addEventListener('change', () => { state.toggles.family = family.checked; updateAll(); });
+        // inputs
+        housePrice.addEventListener('input', () => { const v = parseFloat(housePrice.value); if (!isNaN(v)) state.house.price = v; updateAll(); });
+        carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
+        familyCost.addEventListener('input', () => { const v = parseFloat(familyCost.value); if (!isNaN(v)) state.family.annual_cost = v; updateAll(); });
+      }
+      // Update snapshot cards
+      function updateSnapshots(spec, series) {
+        const snap = document.getElementById('snapshots');
+        snap.innerHTML = '';
+        const card = (title, value) => {
+          const div = document.createElement('div');
+          div.className = 'col-md-3 mb-3';
+          div.innerHTML = `<div class="card shadow-sm"><div class="card-body"><h6 class="card-title text-muted">${title}</h6><p class="card-text fs-5 fw-semibold">${value}</p></div></div>`;
+          return div;
+        };
+        snap.appendChild(card('Gross (yr 1)', fmtEuro(series.gross[0])));
+        snap.appendChild(card('Net (yr 1)', fmtEuro(series.net[0])));
+        snap.appendChild(card('Hours/week', spec.hours_per_week));
+        snap.appendChild(card('Doctors in Sevilla', spec.doctors_est));
+      }
+      // Render job postings
+      function renderJobCards() {
+        const list = document.getElementById('jobList');
+        list.innerHTML = '';
+        const filtered = jobs.filter(j => !state.specialtyKey || j.specialty_key === state.specialtyKey);
+        filtered.forEach(job => {
+          const div = document.createElement('div');
+          div.className = 'col-md-6 col-lg-4 mb-3';
+          div.innerHTML = `<div class="card h-100"><div class="card-body"><h6 class="card-title">${job.title}</h6><p class="small text-muted mb-1">${job.employer}</p><p class="mb-1"><strong>Salary:</strong> ${fmtEuro(job.salary_gross_min)}${job.salary_gross_max && job.salary_gross_max !== job.salary_gross_min ? '–' + fmtEuro(job.salary_gross_max) : ''}</p><p class="mb-1"><strong>Contract:</strong> ${job.contract}</p><a href="${job.source}" target="_blank" class="small">Source</a></div></div>`;
+          list.appendChild(div);
+        });
+      }
+      // Update charts and UI
+      function updateCharts() {
+        const spec = specialties.find(s => s.key === state.specialtyKey);
+        if (!spec) return;
+        const series = buildSeries(spec);
+        const labels = Array.from({ length: config.career_years }, (_, i) => i);
+        annualChart.data.labels = labels;
+        annualChart.data.datasets[0].data = state.showReal ? series.net_real : series.net;
+        annualChart.data.datasets[1].data = state.showReal ? series.fcf_real : series.fcf;
+        annualChart.update();
+        wealthChart.data.labels = labels;
+        wealthChart.data.datasets[0].data = series.cnw;
+        wealthChart.data.datasets[1].data = series.cnw_real;
+        wealthChart.update();
+        updateSnapshots(spec, series);
+        renderJobCards();
+      }
+      // Main initialization
+      function init() {
+        populateSpecialties();
+        setupControls();
+        const annualCtx = document.getElementById('annualChart').getContext('2d');
+        const wealthCtx = document.getElementById('wealthChart').getContext('2d');
+        annualChart = new Chart(annualCtx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [
+              { label: 'ADI', data: [], borderColor: '#007bff', borderWidth: 2 },
+              { label: 'FCF', data: [], borderColor: '#28a745', borderWidth: 2 }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { ticks: { callback: v => fmtEuro(v) } } }
+          }
+        });
+        wealthChart = new Chart(wealthCtx, {
+          type: 'line',
+          data: {
+            labels: [],
+            datasets: [
+              { label: 'CNW', data: [], borderColor: '#007bff', borderWidth: 2 },
+              { label: 'CNW (real €)', data: [], borderColor: '#6c757d', borderDash: [5,5], borderWidth: 2 }
+            ]
+          },
+          options: {
+            responsive: true,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { position: 'bottom' } },
+            scales: { y: { ticks: { callback: v => fmtEuro(v) } } }
+          }
+        });
+        window.updateAll = updateCharts;
+        updateCharts();
+      }
+      document.addEventListener('DOMContentLoaded', init);
+    </script>
+  </body>
 </html>
