@@ -1,301 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Doctor Marketcap Analysis – Seville</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
- body { background-color:#f5f8fc; font-family: 'Segoe UI', Tahoma, sans-serif; }
- .hero { background: linear-gradient(90deg,#0066cc,#004c99); color:#fff; padding:40px 30px; margin-bottom:30px; border-radius:10px; }
- .hero h1 { font-size:2.4rem; margin-bottom:10px; }
- .section { background-color:#fff; border-radius:10px; padding:25px; margin-bottom:30px; box-shadow:0 2px 6px rgba(0,0,0,0.05); }
- .table-striped tbody tr:nth-of-type(odd) { background-color:#f9f9f9; }
- details { margin-bottom:1rem; border:1px solid #e1e8f0; border-radius:6px; background-color:#fafbfc; padding:0.6rem; }
- details summary { font-size:1.15rem; font-weight:600; cursor:pointer; list-style:none; }
- details summary::before { content:"\25B6"; display:inline-block; margin-right:8px; transition:transform 0.2s; }
- details[open] summary::before { transform:rotate(90deg); }
- .controls { margin-bottom:20px; }
- .controls label { margin-right:20px; }
- .job-table td, .job-table th { vertical-align:middle; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Market Insights — Sevilla</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="container my-4">
- <div class="hero">
-  <h1>Doctor Marketcap Analysis – Seville</h1>
-  <p class="lead mb-0">An insight platform exploring doctor salaries, specialties and affordability in Seville.</p>
- </div>
+  <div class="container my-4">
+    <header class="hero">
+      <h1>Doctor Market Insights — Sevilla</h1>
+      <p class="sub">Per-specialty earnings, taxes, hours, and long‑term affordability</p>
+    </header>
 
- <div class="section">
-  <h2>Overview</h2>
-  <p>Seville has about <strong>9 631</strong> active doctors. The province hosts <strong>13 public hospitals</strong> and <strong>10 private hospitals</strong>, providing roughly <strong>4 464</strong> beds【496329393683654†L194-L215】. Private hospitals account for about <strong>20 %</strong> of hospital beds.</p>
- </div>
+    <!-- Controls section -->
+    <div id="controls" class="section">
+      <h2 class="h5 mb-3">Configuration</h2>
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="specialtySelect" class="form-label">Select specialty</label>
+          <select id="specialtySelect" class="form-select"></select>
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-3 form-check">
+              <input class="form-check-input" type="checkbox" id="toggleReal">
+              <label class="form-check-label" for="toggleReal">Show in real €</label>
+            </div>
+            <div class="col-md-3 form-check">
+              <input class="form-check-input" type="checkbox" id="toggleHouse">
+              <label class="form-check-label" for="toggleHouse">Include house</label>
+            </div>
+            <div class="col-md-3 form-check">
+              <input class="form-check-input" type="checkbox" id="toggleCar">
+              <label class="form-check-label" for="toggleCar">Include car</label>
+            </div>
+            <div class="col-md-3 form-check">
+              <input class="form-check-input" type="checkbox" id="toggleFamily">
+              <label class="form-check-label" for="toggleFamily">Include family</label>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-4 input-group">
+              <span class="input-group-text">House €</span>
+              <input type="number" id="housePrice" class="form-control" min="0">
+            </div>
+            <div class="col-md-4 input-group">
+              <span class="input-group-text">Car €</span>
+              <input type="number" id="carPrice" class="form-control" min="0">
+            </div>
+            <div class="col-md-4 input-group">
+              <span class="input-group-text">Family €/yr</span>
+              <input type="number" id="familyCost" class="form-control" min="0">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
- <div class="section">
-  <h2>Salary Distribution</h2>
-  <p>Doctor earnings vary widely by speciality and experience. Top earners capture a large share of total payroll, while family and early‑career doctors occupy the lower end.</p>
-  <div class="table-responsive">
-   <table class="table table-striped">
-    <thead><tr><th>Category</th><th>Doctors</th><th>Avg. salary (€/yr)</th><th>Payroll (M €)</th></tr></thead>
-    <tbody>
-     <tr><td>Top 5 %</td><td>482</td><td>110 000</td><td>53.0</td></tr>
-     <tr><td>High‑mid 20 %</td><td>1 926</td><td>70 000</td><td>134.8</td></tr>
-     <tr><td>Middle 50 %</td><td>4 816</td><td>48 000</td><td>231.2</td></tr>
-     <tr><td>Bottom 25 %</td><td>2 407</td><td>35 000</td><td>84.2</td></tr>
-    </tbody>
-   </table>
+    <!-- Snapshot cards -->
+    <div id="snapshots" class="section">
+    </div>
+
+    <!-- Annual chart section -->
+    <div class="section">
+      <h2 class="h5 mb-3">Annual Income & Free Cash Flow</h2>
+      <div style="height:300px;">
+        <canvas id="annualChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Wealth chart section -->
+    <div class="section">
+      <h2 class="h5 mb-3">Cumulative Net Worth</h2>
+      <div style="height:300px;">
+        <canvas id="wealthChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Specialty mix bar chart placeholder -->
+    <div id="mix" class="section">
+      <h2 class="h5 mb-3">Specialty Mix</h2>
+      <div id="mixChart" style="height:300px;"></div>
+    </div>
+
+    <!-- Job postings -->
+    <div id="jobs" class="section">
+      <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
+      <div id="jobList" class="row"></div>
+    </div>
+
+    <!-- Notes & sources -->
+    <footer id="notes" class="section">
+      <h2 class="h5">Notes & Sources</h2>
+      <ul>
+        <li>Tax brackets combine Andalusian and national rates.</li>
+        <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
+        <li>Salaries grow at an assumed 2 % annually to approximate inflation and seniority progression.</li>
+        <li>Living expenses are set at €30 000/year; optional costs (house, car, family) are applied when selected.</li>
+        <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners.</li>
+      </ul>
+    </footer>
   </div>
- </div>
 
- <div class="section">
-  <h2>Speciality Mix</h2>
-  <p>Family medicine comprises about 25 % of practitioners【282232784900643†L233-L247】. Other specialities span internal medicine, surgery, paediatrics, gynaecology, anaesthesiology and assorted subspecialties.</p>
-  <div class="table-responsive">
-   <table class="table table-striped">
-    <thead><tr><th>Speciality group</th><th>Approx. doctors</th></tr></thead>
-    <tbody>
-     <tr><td>Internal Medicine & subspecialties</td><td>1 084</td></tr>
-     <tr><td>Surgery & surgical specialties</td><td>722</td></tr>
-     <tr><td>Paediatrics & neonatology</td><td>722</td></tr>
-     <tr><td>Gynaecology & obstetrics</td><td>722</td></tr>
-     <tr><td>Anaesthesiology & critical care</td><td>722</td></tr>
-     <tr><td>Other specialties</td><td>3 252</td></tr>
-     <tr><td>Family medicine</td><td>2 407</td></tr>
-    </tbody>
-   </table>
-  </div>
- </div>
+  <script type="module">
+    import { loadData } from './js/data.js';
+    import { state, loadSpecialtyOptions, setupControls, updateSnapshots, renderJobs } from './js/ui.js';
+    import { buildSeries } from './js/calculations.js';
+    import { makeAnnualChart, makeWealthChart } from './js/charts.js';
 
- <div class="section">
-  <h2>Private Hospitals</h2>
-  <p>Approximate staffing and revenue for Seville’s private hospitals (doctors estimated at ~2.19 per bed; revenue scaled from group‑level figures).</p>
-  <div class="table-responsive">
-   <table class="table table-striped">
-    <thead><tr><th>Hospital</th><th>Beds</th><th>Approx. doctors</th><th>Est. revenue (M €)</th></tr></thead>
-    <tbody>
-     <tr><td>Vithas Sevilla</td><td>148</td><td>324</td><td>60</td></tr>
-     <tr><td>Quirónsalud Sagrado Corazón</td><td>147</td><td>322</td><td>93</td></tr>
-     <tr><td>Quirónsalud Infanta Luisa</td><td>139</td><td>305</td><td>88</td></tr>
-     <tr><td>Quirónsalud Materno‑Infantil</td><td>32</td><td>70</td><td>20</td></tr>
-     <tr><td>Viamed Santa Ángela de la Cruz</td><td>105</td><td>230</td><td>39</td></tr>
-     <tr><td>San Agustín</td><td>93</td><td>203</td><td>34</td></tr>
-     <tr><td>Hospital Fátima</td><td>73</td><td>160</td><td>27</td></tr>
-     <tr><td>San Juan de Dios de Sevilla</td><td>47</td><td>103</td><td>17</td></tr>
-     <tr><td>Hospital Victoria Eugenia (Cruz Roja)</td><td>39</td><td>85</td><td>14</td></tr>
-    </tbody>
-   </table>
-  </div>
- </div>
+    const annualCtx = document.getElementById('annualChart').getContext('2d');
+    const wealthCtx = document.getElementById('wealthChart').getContext('2d');
+    const annualChart = makeAnnualChart(annualCtx);
+    const wealthChart = makeWealthChart(wealthCtx);
 
- <div class="section">
-  <h2>Lifetime & Annual Earnings</h2>
-  <p>To understand affordability over a career, we show both the cumulative net worth (after savings and modest investment) and the annual disposable income (net salary minus living expenses) for each salary band. Salaries are assumed to grow by 2 % per year to reflect general inflation and career progression.</p>
-  <div class="controls">
-    <label><input type="checkbox" id="houseToggle"> Include house purchase (€275k, 20 % deposit, 3 % 30‑yr mortgage)</label>
-    <label><input type="checkbox" id="carToggle"> Include car purchase (€26k upfront)</label>
-    <label><input type="checkbox" id="familyToggle"> Include family costs (€10k/yr)</label>
-  </div>
-  <details>
-    <summary>Elite specialities (Top 5 %)</summary>
-    <p>
-      • Gross salary first year ≈ €110 000<br>
-      • Effective income tax ≈ 43 %【226860511555268†L60-L67】<br>
-      • Net salary first year ≈ €62 700<br>
-      • Typical hours per week ≈ 50–55【920465131104645†L60-L63】<br>
-      • Baseline disposable income (net – living costs) first year ≈ €32 700<br>
-    </p>
-    <canvas id="eliteChart" height="220"></canvas>
-  </details>
-  <details>
-    <summary>High‑mid specialities (Next 20 %)</summary>
-    <p>
-      • Gross salary first year ≈ €70 000<br>
-      • Effective income tax ≈ 38 %【226860511555268†L60-L67】<br>
-      • Net salary first year ≈ €43 200<br>
-      • Typical hours per week ≈ 45【920465131104645†L60-L63】<br>
-      • Baseline disposable income first year ≈ €13 200
-    </p>
-    <canvas id="highChart" height="220"></canvas>
-  </details>
-  <details>
-    <summary>Middle specialities (Middle 50 %)</summary>
-    <p>
-      • Gross salary first year ≈ €48 000<br>
-      • Effective income tax ≈ 34 %【226860511555268†L60-L67】<br>
-      • Net salary first year ≈ €31 600<br>
-      • Typical hours per week ≈ 40【920465131104645†L60-L63】<br>
-      • Baseline disposable income first year ≈ €1 600
-    </p>
-    <canvas id="midChart" height="220"></canvas>
-  </details>
-  <details>
-    <summary>Family medicine & early‑career (Bottom 25 %)</summary>
-    <p>
-      • Gross salary first year ≈ €35 000<br>
-      • Effective income tax ≈ 31 %【226860511555268†L60-L67】<br>
-      • Net salary first year ≈ €24 200<br>
-      • Typical hours per week ≈ 38【920465131104645†L60-L63】<br>
-      • Baseline disposable income first year ≈ –€5 800 (insufficient to cover living costs)
-    </p>
-    <canvas id="bottomChart" height="220"></canvas>
-  </details>
- </div>
+    const data = await loadData();
+    // populate specialty options
+    loadSpecialtyOptions(data.specialties);
+    setupControls();
 
- <div class="section">
-  <h2>Job Postings & Salary Benchmarks</h2>
-  <p>Recent job listings provide a snapshot of salaries on offer in Seville. These examples come from the Colegio de Médicos de Sevilla and job portals.</p>
-  <div class="table-responsive">
-   <table class="table table-striped job-table">
-    <thead><tr><th>Position/Specialty</th><th>Employer</th><th>Contract & hours</th><th>Salary</th><th>Source</th></tr></thead>
-    <tbody>
-     <tr><td>Cardiologist</td><td>Bihotz (Centro de Rehabilitación Cardíaca)</td><td>Indefinite, flexible schedule (Mon–Fri, no on‑call)</td><td>54 000 €/yr</td><td><a href="https://www.comsevilla.es/oferta-empleo-cardiologo-a/">RICOMS</a>【422727991652910†L188-L196】</td></tr>
-     <tr><td>Company doctor</td><td>Mercadona (Seville)</td><td>Indefinite, full‑time</td><td>53 170 € rising to 80 715 €</td><td><a href="https://www.comsevilla.es/medico-en-mercadona/">RICOMS</a>【927188265911143†L176-L181】</td></tr>
-     <tr><td>Doctor in nursing home</td><td>Doméstiko.com – Residencia de mayores</td><td>Indefinite, full‑time</td><td>25 000–30 000 €/yr</td><td><a href="https://es.jooble.org/jdp/3581309344961133486">Jooble</a>【827367782107712†L34-L37】</td></tr>
-    </tbody>
-   </table>
-  </div>
- </div>
-
- <div class="section">
-  <h2>Summary & Assumptions</h2>
-  <ul class="notes">
-   <li>Income tax brackets combine Andalusian and national rates【226860511555268†L60-L67】.</li>
-   <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours【920465131104645†L60-L63】.</li>
-   <li>Salaries grow at an assumed 2 % annually to approximate inflation and seniority progression.</li>
-   <li>Living expenses are set at €30 000/year; optional costs (house, car, family) are deducted from net income before calculating disposable income.</li>
-   <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners.</li>
-   <li>This tool provides educational insights and should not be used as financial advice.</li>
-  </ul>
-  <p><a href="doctor_marketcap_analysis.py" download>Download analysis script</a> | <a href="doctor_marketcap_summary.csv" download>Download summary data</a></p>
- </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-const years = Array.from({length: 36}, (_, i) => i);
-const inflationRate = 0.02;
-const salaries = { elite: 110000, high: 70000, mid: 48000, bottom: 35000 };
-const livingExpenses = 30000;
-function computeTax(income) {
-  const brackets = [
-    {from: 0, to: 12450, rate: 0.19},
-    {from: 12450, to: 13000, rate: 0.215},
-    {from: 13000, to: 20200, rate: 0.24},
-    {from: 20200, to: 21100, rate: 0.24},
-    {from: 21100, to: 35200, rate: 0.30},
-    {from: 35200, to: 60000, rate: 0.37},
-    {from: 60000, to: 300000, rate: 0.45}
-  ];
-  let tax = 0;
-  for (const b of brackets) {
-    if (income > b.from) {
-      const taxable = Math.min(income, b.to) - b.from;
-      tax += taxable * b.rate;
+    function updateCharts() {
+      // find selected specialty
+      const spec = data.specialties.find(s => s.key === state.specialtyKey);
+      if (!spec) return;
+      const params = {
+        baseGross: spec.gross_base,
+        years: data.config.career_years,
+        salaryInfl: data.config.inflation_salary,
+        taxBrackets: data.config.tax_brackets_andalucia_2025,
+        ssRate: data.config.ss_employee_rate,
+        mortgage: { ...data.config.mortgage, housePrice: state.house.price, startYear: state.house.startYear },
+        car: { ...data.config.car, price: state.car.price, startYear: state.car.startYear },
+        family: { annual_cost: state.family.annual_cost },
+        toggles: { ...state.toggles },
+        investReturn: data.config.investment_return,
+        realCPI: state.showReal ? data.config.inflation_cpi : 0
+      };
+      const series = buildSeries(params);
+      // update charts
+      annualChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
+      annualChart.data.datasets[0].data = state.showReal ? series.net_real : series.net;
+      annualChart.data.datasets[1].data = state.showReal ? series.fcf_real : series.fcf;
+      annualChart.update();
+      wealthChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
+      wealthChart.data.datasets[0].data = state.showReal ? series.cnw_real : series.cnw;
+      wealthChart.data.datasets[1].data = state.showReal ? series.cnw_real : series.cnw_real;
+      wealthChart.update();
+      // update snapshots
+      updateSnapshots(spec, series);
+      // update jobs
+      renderJobs(data.jobs, state.specialtyKey);
     }
-  }
-  return tax;
-}
-function netSalaryAnnual(gross) {
-  const tax = computeTax(gross);
-  const social = gross * 0.0635;
-  return gross - tax - social;
-}
-// compute array of disposable income (net salary minus living expenses and optional costs)
-function computeDisposableArray(gross, includeHouse, includeCar, includeFamily) {
-  const arr = [];
-  for (let year = 0; year <= 35; year++) {
-    const salary = gross * Math.pow(1 + inflationRate, year);
-    const net = netSalaryAnnual(salary);
-    let expenses = livingExpenses;
-    // apply house costs: deposit in year 0, mortgage thereafter
-    if (includeHouse) {
-      const deposit = 275000 * 0.20;
-      const mortgage = mortgageAnnualPayment(275000 * 0.80);
-      if (year === 0) expenses += deposit;
-      else expenses += mortgage;
-    }
-    // car cost occurs at year 0
-    if (includeCar && year === 0) expenses += 26000;
-    // family cost each year
-    if (includeFamily) expenses += 10000;
-    arr.push(parseFloat((net - expenses).toFixed(0)));
-  }
-  return arr;
-}
-// compute cumulative net worth based on 20% savings of disposable income and 3% return
-function computeWealthArray(gross, includeHouse, includeCar, includeFamily) {
-  let wealth = 0;
-  const arr = [];
-  for (let year = 0; year <= 35; year++) {
-    const salary = gross * Math.pow(1 + inflationRate, year);
-    const net = netSalaryAnnual(salary);
-    let expenses = livingExpenses;
-    if (includeHouse) {
-      const deposit = 275000 * 0.20;
-      const mortgage = mortgageAnnualPayment(275000 * 0.80);
-      if (year === 0) expenses += deposit;
-      else expenses += mortgage;
-    }
-    if (includeCar && year === 0) expenses += 26000;
-    if (includeFamily) expenses += 10000;
-    const residual = net - expenses;
-    const save = residual > 0 ? residual * 0.20 : 0;
-    if (year > 0) wealth = wealth * 1.03 + save;
-    else wealth = -save; // deposit and car reduce initial wealth
-    arr.push(parseFloat((wealth / 1000).toFixed(1)));
-  }
-  return arr;
-}
-function mortgageAnnualPayment(principal) {
-  const r = 0.03/12;
-  const n = 30 * 12;
-  const m = principal * (r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-  return m * 12;
-}
-let charts = {};
-function buildCharts() {
-  ['elite','high','mid','bottom'].forEach(key => {
-    const ctx = document.getElementById(key + 'Chart').getContext('2d');
-    const wealthData = computeWealthArray(salaries[key], false, false, false);
-    const dispData  = computeDisposableArray(salaries[key], false, false, false);
-    charts[key] = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: years,
-        datasets: [
-          { label: 'Net worth (k€)', data: wealthData, borderColor: 'rgba(0,123,255,1)', borderWidth:2, fill:false },
-          { label: 'Disposable income (€/yr)', data: dispData, borderColor: 'rgba(255,99,132,1)', borderWidth:2, fill:false, yAxisID:'y2' }
-        ]
-      },
-      options: {
-        scales: {
-          x: { title: { display:true, text:'Years' } },
-          y: { position:'left', title: { display:true, text:'Net worth (k€)' } },
-          y2:{ position:'right', title:{ display:true, text:'Disposable income (€/yr)' }, grid:{ drawOnChartArea:false } }
-        },
-        plugins: { legend:{ display:true } }
-      }
-    });
-  });
-}
-function updateCharts() {
-  const house = document.getElementById('houseToggle').checked;
-  const car   = document.getElementById('carToggle').checked;
-  const family= document.getElementById('familyToggle').checked;
-  ['elite','high','mid','bottom'].forEach(key => {
-    const wealth = computeWealthArray(salaries[key], house, car, family);
-    const disp   = computeDisposableArray(salaries[key], house, car, family);
-    charts[key].data.datasets[0].data = wealth;
-    charts[key].data.datasets[1].data = disp;
-    charts[key].update();
-  });
-}
-// build charts and attach handlers
-window.addEventListener('DOMContentLoaded', () => {
-  buildCharts();
-  document.getElementById('houseToggle').addEventListener('change', updateCharts);
-  document.getElementById('carToggle').addEventListener('change', updateCharts);
-  document.getElementById('familyToggle').addEventListener('change', updateCharts);
-});
-</script>
+    // expose updateAll globally
+    window.updateAll = updateCharts;
+    // initial render
+    updateCharts();
+  </script>
 </body>
 </html>
