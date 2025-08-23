@@ -128,6 +128,27 @@
         <div id="rankingTable"></div>
       </section>
 
+      <!-- Specialty comparison scatter chart -->
+      <section id="comparison" class="mb-4">
+        <h2 class="h5 mb-1">Specialty Comparison</h2>
+        <p class="text-muted small mb-2">Compares net salary (incl. guardias) against weekly hours for each specialty. Bubble size reflects the number of job postings in our dataset.</p>
+        <canvas id="comparisonChart" style="max-height: 350px;"></canvas>
+      </section>
+
+      <!-- Radar Profile section -->
+      <section id="radarSection" class="mb-4">
+        <h2 class="h5 mb-1">Specialty Radar Profile</h2>
+        <p class="text-muted small mb-2">This radar chart summarizes key metrics for the selected specialty. Values are scaled relative to the highest across all specialties: net salary (incl. guardias), hours worked per week, job postings per 100 doctors and total doctors. Larger area indicates stronger performance across metrics.</p>
+        <canvas id="radarChart" style="max-height: 350px;"></canvas>
+      </section>
+
+      <!-- Job Demand vs Supply section -->
+      <section id="demandSection" class="mb-4">
+        <h2 class="h5 mb-1">Job Demand vs Doctor Supply</h2>
+        <p class="text-muted small mb-2">This bar chart shows the number of job postings per 100 doctors for each specialty, highlighting demand relative to supply. Higher bars indicate greater demand relative to the existing workforce.</p>
+        <canvas id="demandChart" style="max-height: 350px;"></canvas>
+      </section>
+
       <!-- Market cap summary -->
       <section id="marketcap" class="mb-4">
         <h2 class="h5 mb-3">Market Cap (Total Payroll)</h2>
@@ -382,6 +403,9 @@
       let annualChart;
       let wealthChart;
       let mixChart;
+      let comparisonChart;
+      let radarChart;
+      let demandChart;
 
       // Populate specialties dropdown
       function populateSpecialties() {
@@ -473,6 +497,177 @@
         snap.appendChild(card('Net (yr 1)', fmtEuro(series.net[0])));
         snap.appendChild(card('Hours/week', spec.hours_per_week));
         snap.appendChild(card('Doctors in Sevilla', spec.doctors_est));
+      }
+
+      // Update specialty comparison chart
+      function updateComparison() {
+        const ctxDiv = document.getElementById('comparisonChart');
+        if (!ctxDiv) return;
+        // Prepare data: each point is [net salary incl. guardias, hours/week, bubble size]
+        const dataPoints = specialties.map(spec => {
+          // average gross salary (use base salary as representative)
+          const gross = spec.gross_base;
+          // Net base salary (yr 1)
+          const netBase = gross - incomeTax(gross) - socialSecurity(gross);
+          // Net including guardias
+          const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
+          const totalGross = gross + guardGross;
+          const netGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
+          // Hours per week including guardias
+          const hours = spec.hours_per_week + (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4;
+          // Number of postings as bubble size (scaled)
+          const postings = jobs.filter(j => j.specialty_key === spec.key).length;
+          const radius = Math.max(4, postings * 2);
+          return { x: netGuard, y: hours, r: radius, name: spec.name };
+        });
+        // Initialize chart if not exists
+        if (!comparisonChart) {
+          const ctx = ctxDiv.getContext('2d');
+          comparisonChart = new Chart(ctx, {
+            type: 'bubble',
+            data: { datasets: [] },
+            options: {
+              responsive: true,
+              plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const d = context.raw;
+                      return `${d.name}: Net €${d.x.toFixed(0)}, Hours ${d.y.toFixed(1)}`;
+                    }
+                  }
+                },
+                legend: { display: false }
+              },
+              scales: {
+                x: { title: { display: true, text: 'Net salary incl. guardias (yr 1)' }, ticks: { callback: v => fmtEuro(v) } },
+                y: { title: { display: true, text: 'Hours per week' } }
+              }
+            }
+          });
+        }
+        // Update data
+        comparisonChart.data.datasets = [
+          {
+            label: 'Specialties',
+            data: dataPoints,
+            backgroundColor: '#007bff33',
+            borderColor: '#007bff',
+            borderWidth: 1
+          }
+        ];
+        comparisonChart.update();
+      }
+
+      // Update radar chart for selected specialty
+      function updateRadar() {
+        const ctxDiv = document.getElementById('radarChart');
+        if (!ctxDiv) return;
+        const spec = specialties.find(s => s.key === state.specialtyKey);
+        if (!spec) return;
+        // Compute metrics for each specialty to determine maxima
+        const metrics = specialties.map(s => {
+          const gross = s.gross_base;
+          const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
+          const totalGross = gross + guardGross;
+          const netGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
+          const hours = s.hours_per_week + (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4;
+          const posts = jobs.filter(j => j.specialty_key === s.key).length;
+          const jobsPerDoc = s.doctors_est ? posts * 100 / s.doctors_est : 0;
+          return { key: s.key, netGuard, hours, jobsPerDoc, doctors: s.doctors_est };
+        });
+        const maxNet = Math.max(...metrics.map(m => m.netGuard));
+        const maxHours = Math.max(...metrics.map(m => m.hours));
+        const maxJobs = Math.max(...metrics.map(m => m.jobsPerDoc));
+        const maxDocs = Math.max(...metrics.map(m => m.doctors));
+        const m = metrics.find(m => m.key === spec.key);
+        if (!m) return;
+        const data = [
+          maxNet ? m.netGuard / maxNet : 0,
+          maxHours ? m.hours / maxHours : 0,
+          maxJobs ? m.jobsPerDoc / maxJobs : 0,
+          maxDocs ? m.doctors / maxDocs : 0
+        ];
+        const labels = ['Net incl. guardias', 'Hours/week', 'Jobs per 100 doctors', 'Doctors'];
+        if (!radarChart) {
+          const ctx = ctxDiv.getContext('2d');
+          radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: spec.name,
+                data: data,
+                fill: true,
+                backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                borderColor: '#007bff',
+                pointBackgroundColor: '#007bff'
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: { legend: { display: false } },
+              scales: {
+                r: {
+                  min: 0,
+                  max: 1,
+                  ticks: { display: false },
+                  grid: { color: '#e9ecef' }
+                }
+              }
+            }
+          });
+        } else {
+          radarChart.data.datasets[0].label = spec.name;
+          radarChart.data.datasets[0].data = data;
+          radarChart.update();
+        }
+      }
+
+      // Update job demand bar chart
+      function updateDemandChart() {
+        const ctxDiv = document.getElementById('demandChart');
+        if (!ctxDiv) return;
+        const labels = specialties.map(s => s.name);
+        const values = specialties.map(s => {
+          const posts = jobs.filter(j => j.specialty_key === s.key).length;
+          return s.doctors_est ? (posts * 100 / s.doctors_est) : 0;
+        });
+        if (!demandChart) {
+          const ctx = ctxDiv.getContext('2d');
+          demandChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Job postings per 100 doctors',
+                data: values,
+                backgroundColor: '#ffc107'
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return `${context.parsed.y.toFixed(1)} postings/100 doctors`;
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: { ticks: { autoSkip: false }, grid: { display: false } },
+                y: { beginAtZero: true, title: { display: true, text: 'Postings per 100 doctors' } }
+              }
+            }
+          });
+        } else {
+          demandChart.data.labels = labels;
+          demandChart.data.datasets[0].data = values;
+          demandChart.update();
+        }
       }
 
       // Render interactive summary card showing net income with and without guardias
@@ -676,6 +871,9 @@
         updateSnapshots(spec, series);
         renderSummary(spec);
         renderJobCards();
+        updateComparison();
+        updateRadar();
+        updateDemandChart();
       }
       // Main initialization
       function init() {
@@ -739,6 +937,12 @@
         renderMarketCap();
         renderHospitals();
         renderRanking();
+
+        // Render initial comparison chart
+        updateComparison();
+        // Render initial radar and demand charts
+        updateRadar();
+        updateDemandChart();
 
         window.updateAll = updateCharts;
         updateCharts();
