@@ -124,6 +124,10 @@
         { key: 'gynaecology', name: 'Gynaecology', gross_base: 70000, gross_p90: 100000, hours_per_week: 43, doctors_est: 300 },
         { key: 'radiology', name: 'Radiology', gross_base: 80000, gross_p90: 120000, hours_per_week: 38, doctors_est: 150 },
         { key: 'neurology', name: 'Neurology', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 200 }
+        ,
+        { key: 'infectious', name: 'Infectious Disease', gross_base: 70000, gross_p90: 100000, hours_per_week: 40, doctors_est: 120 },
+        { key: 'psychiatry', name: 'Psychiatry', gross_base: 60000, gross_p90: 90000, hours_per_week: 40, doctors_est: 180 },
+        { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 75000, gross_p90: 110000, hours_per_week: 38, doctors_est: 150 }
       ];
       const jobs = [
         // Cardiology postings
@@ -163,6 +167,19 @@
         { title: 'Neurologist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' },
         { title: 'Neurologist – private clinic', employer: 'Clínica Neurológica', salary_gross_min: 85000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' },
         { title: 'Neurologist – public hospital', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'neurology', source: '#' }
+        ,
+        // Infectious disease postings
+        { title: 'Infectious disease specialist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'infectious', source: '#' },
+        { title: 'Infectologist – research hospital', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: '#' },
+        { title: 'Clinical microbiologist', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'infectious', source: '#' },
+        // Psychiatry postings
+        { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico', salary_gross_min: 60000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'psychiatry', source: '#' },
+        { title: 'Child psychiatrist', employer: 'Clínica Infanto‑Juvenil', salary_gross_min: 55000, salary_gross_max: 55000, contract: 'Indefinite', specialty_key: 'psychiatry', source: '#' },
+        { title: 'Consultant psychiatrist', employer: 'Hospital Virgen de la Macarena', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: '#' },
+        // Ophthalmology postings
+        { title: 'Ophthalmologist', employer: 'Clínica Oftalmológica', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: '#' },
+        { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: '#' },
+        { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: '#' }
       ];
       const config = {
         inflation_salary: 0.02,
@@ -353,7 +370,17 @@
         const filtered = jobs.filter(j => !state.specialtyKey || j.specialty_key === state.specialtyKey);
         // Display average salary and number of postings
         if (filtered.length > 0) {
-          const avg = filtered.reduce((sum, j) => sum + ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2, 0) / filtered.length;
+          // Compute average gross midpoint salary
+          const avgGross = filtered.reduce((sum, j) => {
+            const mid = ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
+            return sum + mid;
+          }, 0) / filtered.length;
+          // Compute average net salary by applying tax and social security to each midpoint
+          const avgNet = filtered.reduce((sum, j) => {
+            const mid = ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
+            const net = mid - incomeTax(mid) - socialSecurity(mid);
+            return sum + net;
+          }, 0) / filtered.length;
           const summaryDiv = document.createElement('div');
           summaryDiv.className = 'col-12 mb-2';
           // compute average number of job postings per specialty across entire dataset
@@ -361,8 +388,8 @@
           const avgCount = (jobs.length / uniqueSpecs.length).toFixed(1);
           summaryDiv.innerHTML =
             `<div class="alert alert-info">` +
-            `Average salary: <strong>${fmtEuro(avg)}</strong> (based on ${filtered.length} posting${filtered.length > 1 ? 's' : ''})` +
-            `<br><small>Average postings per specialty in this dataset: ${avgCount}</small>` +
+            `Average gross salary: <strong>${fmtEuro(avgGross)}</strong> — Average net salary after tax & social security: <strong>${fmtEuro(avgNet)}</strong>` +
+            `<br><small>Based on ${filtered.length} posting${filtered.length > 1 ? 's' : ''}. Average postings per specialty in this dataset: ${avgCount}</small>` +
             `</div>`;
           list.appendChild(summaryDiv);
         }
