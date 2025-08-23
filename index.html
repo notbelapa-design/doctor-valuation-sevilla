@@ -154,6 +154,7 @@
           <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat – typical of mid‑range apartments in central districts like Nervión or Triana – therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
           <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
           <li>Base salaries do not include on‑call pay (guardias). We assume one 24‑hour guardia per week at the weekday rate of €28.56/hour【602655506727465†L186-L188】, adding about €35 600 to gross pay per year. Net salary including guardias is shown in job postings and the specialty ranking.</li>
+        <li>Resident physicians’ duty hours comprise a regular working schedule of about 37.5 h per week plus four to six mandatory 24‑hour on‑call shifts【811531195383722†L308-L312】.  Spanish law caps total working time at 48 h per week with required rest periods【811531195383722†L308-L316】.  Base contractual hours for senior doctors in Spain typically range from 37.5 to 40 h/week.</li>
         </ul>
       </footer>
     </div>
@@ -175,6 +176,8 @@
         { key: 'infectious', name: 'Infectious Disease', gross_base: 70000, gross_p90: 100000, hours_per_week: 40, doctors_est: 120 },
         { key: 'psychiatry', name: 'Psychiatry', gross_base: 60000, gross_p90: 90000, hours_per_week: 40, doctors_est: 180 },
         { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 75000, gross_p90: 110000, hours_per_week: 38, doctors_est: 150 }
+        ,
+        { key: 'occupational', name: 'Occupational Medicine', gross_base: 55000, gross_p90: 80000, hours_per_week: 40, doctors_est: 300 }
       ];
       const jobs = [
         // Cardiology postings
@@ -226,7 +229,11 @@
         // Ophthalmology postings
         { title: 'Ophthalmologist', employer: 'Clínica Oftalmológica', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
-        { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' }
+        { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+        // Occupational medicine postings
+        { title: 'Company doctor', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
+        { title: 'Occupational physician – private clinic', employer: 'Mutua Andaluza', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+        { title: 'Occupational medicine specialist', employer: 'Servicio de Prevención de Riesgos Laborales', salary_gross_min: 65000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' }
       ];
 
       // Hospitals in Seville (public & private) with bed counts and revenue (where available)
@@ -665,17 +672,19 @@
       function renderHospitals() {
         const tableDiv = document.getElementById('hospitalTable');
         if (!tableDiv) return;
-        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Revenue</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed</th><th>Revenue</th></tr></thead><tbody>';
         let totalBeds = 0;
         let totalDocs = 0;
         hospitals.forEach(h => {
           const estDocs = Math.round(h.beds * doctorsPerBed);
           totalBeds += h.beds;
           totalDocs += estDocs;
+          const ratio = (estDocs / h.beds).toFixed(2);
           const revenue = h.revenue ? fmtEuro(h.revenue) : '—';
-          html += `<tr><td>${h.name}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${revenue}</td></tr>`;
+          html += `<tr><td>${h.name}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenue}</td></tr>`;
         });
-        html += `<tr class="fw-bold"><td>Total</td><td></td><td>${totalBeds}</td><td>${Math.round(totalDocs)}</td><td></td></tr>`;
+        const totalRatio = (totalDocs / totalBeds).toFixed(2);
+        html += `<tr class="fw-bold"><td>Total</td><td></td><td>${totalBeds}</td><td>${Math.round(totalDocs)}</td><td>${totalRatio}</td><td></td></tr>`;
         html += '</tbody></table>';
         tableDiv.innerHTML = html;
       }
