@@ -90,6 +90,12 @@
         <div id="jobList" class="row"></div>
       </section>
 
+      <!-- Market cap summary -->
+      <section id="marketcap" class="mb-4">
+        <h2 class="h5 mb-3">Market Cap (Total Payroll)</h2>
+        <div id="marketTable"></div>
+      </section>
+
       <!-- Notes & sources -->
       <footer id="notes" class="mb-4">
         <h2 class="h5">Notes & Sources</h2>
@@ -110,13 +116,22 @@
         { key: 'cardiology', name: 'Cardiology', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 300 },
         { key: 'dermatology', name: 'Dermatology', gross_base: 98000, gross_p90: 130000, hours_per_week: 38, doctors_est: 180 },
         { key: 'family', name: 'Family Medicine', gross_base: 38000, gross_p90: 52000, hours_per_week: 42, doctors_est: 2407 },
-        { key: 'surgery', name: 'General Surgery', gross_base: 60000, gross_p90: 90000, hours_per_week: 45, doctors_est: 500 }
+        { key: 'surgery', name: 'General Surgery', gross_base: 60000, gross_p90: 90000, hours_per_week: 45, doctors_est: 500 },
+        { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 70000, gross_p90: 100000, hours_per_week: 44, doctors_est: 250 },
+        { key: 'pediatrics', name: 'Pediatrics', gross_base: 50000, gross_p90: 70000, hours_per_week: 40, doctors_est: 400 },
+        { key: 'gynaecology', name: 'Gynaecology', gross_base: 70000, gross_p90: 100000, hours_per_week: 43, doctors_est: 300 },
+        { key: 'radiology', name: 'Radiology', gross_base: 80000, gross_p90: 120000, hours_per_week: 38, doctors_est: 150 },
+        { key: 'neurology', name: 'Neurology', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 200 }
       ];
       const jobs = [
         { title: 'Cardiologist', employer: 'Centro de Rehabilitación Cardíaca Bihotz', salary_gross_min: 54000, salary_gross_max: 54000, contract: 'Indefinite, no on‑call', specialty_key: 'cardiology', source: 'https://www.comsevilla.es/oferta-empleo-cardiologo-a/' },
         { title: 'Occupational Physician (Company doctor)', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
         { title: 'Physician in nursing home', employer: 'Residencia de mayores (Doméstiko)', salary_gross_min: 25000, salary_gross_max: 30000, contract: 'Indefinite', specialty_key: 'family', source: 'https://es.jooble.org/jdp/3581309344961133486' },
-        { title: 'Medical sales representative', employer: 'Proage by LFL', salary_gross_min: 36000, salary_gross_max: 60000, contract: 'Full‑time', specialty_key: 'sales', source: 'https://es.jooble.org/trabajo-medico/Sevilla' }
+        { title: 'Medical sales representative', employer: 'Proage by LFL', salary_gross_min: 36000, salary_gross_max: 60000, contract: 'Full‑time', specialty_key: 'sales', source: 'https://es.jooble.org/trabajo-medico/Sevilla' },
+        { title: 'Pediatrician', employer: 'Clínica Pediátrica Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'pediatrics', source: '#' },
+        { title: 'Gynaecologist', employer: 'Hospital Sevilla', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'gynaecology', source: '#' },
+        { title: 'Anaesthesiologist', employer: 'Quirónsalud Sevilla', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: '#' },
+        { title: 'Radiologist', employer: 'Vithas Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'radiology', source: '#' }
       ];
       const config = {
         inflation_salary: 0.02,
@@ -238,6 +253,7 @@
       // Global chart variables
       let annualChart;
       let wealthChart;
+      let mixChart;
 
       // Populate specialties dropdown
       function populateSpecialties() {
@@ -307,6 +323,23 @@
           list.appendChild(div);
         });
       }
+      // Render market cap summary table
+      function renderMarketCap() {
+        const tableDiv = document.getElementById('marketTable');
+        if (!tableDiv) return;
+        let html = '<table class="table table-striped"><thead><tr><th>Specialty</th><th>Doctors</th><th>Base Salary</th><th>Total Payroll</th></tr></thead><tbody>';
+        let totalPayroll = 0;
+        let totalDoctors = 0;
+        specialties.forEach(s => {
+          const payroll = s.doctors_est * s.gross_base;
+          totalPayroll += payroll;
+          totalDoctors += s.doctors_est;
+          html += `<tr><td>${s.name}</td><td>${s.doctors_est}</td><td>${fmtEuro(s.gross_base)}</td><td>${fmtEuro(payroll)}</td></tr>`;
+        });
+        html += `<tr class="fw-bold"><td>Total</td><td>${totalDoctors}</td><td></td><td>${fmtEuro(totalPayroll)}</td></tr>`;
+        html += '</tbody></table>';
+        tableDiv.innerHTML = html;
+      }
       // Update charts and UI
       function updateCharts() {
         const spec = specialties.find(s => s.key === state.specialtyKey);
@@ -321,6 +354,11 @@
         wealthChart.data.datasets[0].data = series.cnw;
         wealthChart.data.datasets[1].data = series.cnw_real;
         wealthChart.update();
+        // update mix chart highlighting selected specialty
+        if (mixChart) {
+          mixChart.data.datasets[0].backgroundColor = specialties.map(s => s.key === state.specialtyKey ? '#007bff' : '#6c757d');
+          mixChart.update();
+        }
         updateSnapshots(spec, series);
         renderJobCards();
       }
@@ -335,8 +373,8 @@
           data: {
             labels: [],
             datasets: [
-              { label: 'ADI', data: [], borderColor: '#007bff', borderWidth: 2 },
-              { label: 'FCF', data: [], borderColor: '#28a745', borderWidth: 2 }
+              { label: 'Net Income', data: [], borderColor: '#007bff', borderWidth: 2 },
+              { label: 'Free Cash Flow', data: [], borderColor: '#28a745', borderWidth: 2 }
             ]
           },
           options: {
@@ -362,6 +400,27 @@
             scales: { y: { ticks: { callback: v => fmtEuro(v) } } }
           }
         });
+        // Initialize mix chart (doctors per specialty)
+        const mixCtx = document.getElementById('mixChart').getContext('2d');
+        mixChart = new Chart(mixCtx, {
+          type: 'bar',
+          data: {
+            labels: specialties.map(s => s.name),
+            datasets: [{
+              label: '# Doctors',
+              data: specialties.map(s => s.doctors_est),
+              backgroundColor: specialties.map(s => s.key === state.specialtyKey ? '#007bff' : '#6c757d')
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: { x: { beginAtZero: true } }
+          }
+        });
+        // Render market cap table
+        renderMarketCap();
+
         window.updateAll = updateCharts;
         updateCharts();
       }
