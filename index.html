@@ -96,11 +96,11 @@
     <footer id="notes" class="section">
       <h2 class="h5">Notes & Sources</h2>
       <ul>
-        <li>Tax brackets combine Andalusian and national rates.</li>
-        <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
+        <li>Tax brackets combine Andalusian and national rates【226860511555268†L60-L67】.</li>
+        <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours【920465131104645†L60-L63】.</li>
         <li>Salaries grow at an assumed 2 % annually to approximate inflation and seniority progression.</li>
         <li>Living expenses are set at €30 000/year; optional costs (house, car, family) are applied when selected.</li>
-        <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners.</li>
+        <li>Job postings reflect publicly advertised positions and may not represent typical earnings for all practitioners【422727991652910†L188-L196】【927188265911143†L176-L181】【827367782107712†L34-L37】.</li>
       </ul>
     </footer>
   </div>
@@ -140,13 +140,17 @@
       };
       const series = buildSeries(params);
       // update charts
+      // update x‑axis labels for both charts
       annualChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
+      // Dataset 0 on the annual chart is the annual net income before expenses.
+      // Dataset 1 is the free cash flow after optional expenses.
       annualChart.data.datasets[0].data = state.showReal ? series.net_real : series.net;
       annualChart.data.datasets[1].data = state.showReal ? series.fcf_real : series.fcf;
       annualChart.update();
+      // For the wealth chart, always show nominal and real cumulative net worth
       wealthChart.data.labels = Array.from({ length: data.config.career_years }, (_, i) => i);
-      wealthChart.data.datasets[0].data = state.showReal ? series.cnw_real : series.cnw;
-      wealthChart.data.datasets[1].data = state.showReal ? series.cnw_real : series.cnw_real;
+      wealthChart.data.datasets[0].data = series.cnw;
+      wealthChart.data.datasets[1].data = series.cnw_real;
       wealthChart.update();
       // update snapshots
       updateSnapshots(spec, series);
