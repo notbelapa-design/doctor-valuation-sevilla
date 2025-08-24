@@ -8,11 +8,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <!-- Custom styles -->
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<l<ink href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <style>
       /* Dark mode variables and badge styles */
       :root {
         --bg-light: #ffffff;
         --text-light: #212529;
+          --radius: 14px;
+  --shadow: 0 10px 30px rgba(2,6,23,0.08);
+  --shadow-hover: 0 12px 40px rgba(2,6,23,0.12);
+  --grid-light: #e2e8f0;
+  --grid-dark: #233044;
         --card-light: #f8f9fa;
         --bg-dark: #0b0c10;
         --text-dark: #e8eef6;
@@ -138,7 +147,7 @@
       <!-- Cumulative net worth chart -->
       <section class="mb-4">
         <h2 class="h5 mb-1">Cumulative Net Worth</h2>
-        <p class="text-muted small mb-2">Shows how your wealth builds over time by saving or investing leftover free cash flow. The real € line deflates values to constant purchasing power.</p>
+        <p class="text-muted small mb-2">Shows how your wealth builds over time by saving or investing leftover free cash flow. The real € line deflates values to constant purchasing power When you enable the 'Include house' or 'Include car' options above, the model assumes you purchase these assets using a mortgage or car loan. The initial deposit and purchase costs cause a sharp drop in net worth, and ongoing loan payments reduce your free cash flow. The 'Include family' option adds annual family-related costs (e.g., childcare), which slow down net worth growth.</p>
         <canvas id="wealthChart" style="max-height: 300px;"></canvas>
       </section>
 
@@ -561,18 +570,23 @@
           });
         }
 
-        // Dark mode toggle
+             // Dark mode toggle
         const darkToggle = document.getElementById('toggleDark');
         if (darkToggle) {
-          // Initialize based on body class
-          darkToggle.checked = document.body.classList.contains('dark');
-          darkToggle.addEventListener('change', () => {
-            document.body.classList.toggle('dark', darkToggle.checked);
-          });
+            // Initialize based on body class
+            darkToggle.checked = document.body.classList.contains('dark');
+            const rootStyles = getComputedStyle(document.documentElement);
+            Chart.defaults.color = darkToggle.checked ? rootStyles.getPropertyValue('--text-light') : rootStyles.getPropertyValue('--text-dark');
+            darkToggle.addEventListener('change', () => {
+                document.body.classList.toggle('dark', darkToggle.checked);
+                const rootStyles = getComputedStyle(document.documentElement);
+                Chart.defaults.color = darkToggle.checked ? rootStyles.getPropertyValue('--text-light') : rootStyles.getPropertyValue('--text-dark');
+                annualChart.update();
+                wealthChart.update();
+                mixChart.update();
+            });
         }
-      }
-      // Update snapshot cards
-      function updateSnapshots(spec, series) {
+ateSnapshots(spec, series) {
         const snap = document.getElementById('snapshots');
         snap.innerHTML = '';
         const card = (title, value) => {
@@ -970,6 +984,29 @@
         updateCharts();
       }
       document.addEventListener('DOMContentLoaded', init);
-    </script>
+   
+        // Apply chart colors based on current theme
+function applyThemeToCharts() {
+  const style = getComputedStyle(document.body);
+  const textColor = style.getPropertyValue('--text-dark') || style.getPropertyValue('--text-light');
+  const gridColor = style.getPropertyValue('--grid-dark') || style.getPropertyValue('--grid-light');
+  Chart.defaults.color = textColor.trim();
+  [annualChart, wealthChart, mixChart].forEach(ch => {
+    if (!ch) return;
+    if (ch.options.scales?.x?.grid) ch.options.scales.x.grid.color = gridColor.trim();
+    if (ch.options.scales?.y?.grid) ch.options.scales.y.grid.color = gridColor.trim();
+    ch.update('none');
+  });
+}
+// Initialize chart colors now and on dark mode toggle
+applyThemeToCharts();
+const darkToggleEl = document.getElementById('toggleDark');
+if (darkToggleEl) {
+  darkToggleEl.addEventListener('change', () => {
+    document.body.classList.toggle('dark', darkToggleEl.checked);
+    applyThemeToCharts();
+  });
+}
+</script>
   </body>
 </html>
