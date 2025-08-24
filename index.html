@@ -131,7 +131,7 @@
       <!-- Annual income vs free cash flow chart -->
       <section class="mb-4">
         <h2 class="h5 mb-1">Annual Income & Free Cash Flow</h2>
-        <p class="text-muted small mb-2">Net income is your take‑home pay after taxes and social security. Free cash flow subtracts any selected expenses (mortgage, car, family) from net income.</p>
+        <p class="text-muted small mb-2">Net income is your take‑home pay after taxes and social security. Free cash flow subtracts any selected expenses (mortgage, car, family) from net income. The red “Living Costs” line shows an estimated baseline cost of living for a family in Seville (about €2 524 per month【265078350539284†L61-L68】), scaled to each year.</p>
         <canvas id="annualChart" style="max-height: 300px;"></canvas>
       </section>
 
@@ -196,7 +196,7 @@
           <li>Tax brackets combine Andalusian and national rates. See official sources for updates.</li>
           <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
           <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
-          <li>Living expenses are set at €30 000/year; optional costs (house, car, family) apply when selected.</li>
+          <li>Living expenses are set at around €30 300/year, based on Numbeo’s 2025 estimate of €2 524 per month for a family of four in Seville【265078350539284†L61-L68】.  Optional costs (house, car, family) apply when selected.</li>
           <li>The weekly hours used for each specialty are approximate and based on general working‑time guidelines; they are meant for comparison only and not exact values.</li>
           <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat – typical of mid‑range apartments in central districts like Nervión or Triana – therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
           <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
@@ -345,6 +345,14 @@
         // annual guardia pay we multiply the hourly rate by 24 hours and by 52
         // weeks.  These values can be tweaked if more accurate data becomes available.
         guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
+        ,
+        // Basic living cost per year for an average family in Seville.  Numbeo’s
+        // 2025 cost-of-living survey reports that a family of four spends about
+        // €2,524 per month excluding rent【265078350539284†L61-L68】.  We round this to
+        // €2,524 × 12 ≈ €30 300 per year.  This value is used to plot a
+        // baseline cost-of-living line on the annual income chart.  Users can
+        // adjust living costs manually by editing this constant in the code.
+        basic_annual_cost: 30288
       };
 
 
@@ -444,6 +452,16 @@
         function deflate(arr) {
           return arr.map((v, i) => v / Math.pow(1 + config.inflation_cpi, i));
         }
+
+        // Compute basic living costs for each year.  We model nominal
+        // cost-of-living as growing with CPI.  The base year cost comes from
+        // Numbeo’s 2025 cost-of-living estimate for a family of four in Seville
+        // (about €2,524 per month or ~€30 300 per year)【265078350539284†L61-L68】.
+        const basicNom = [];
+        for (let i = 0; i < config.career_years; i++) {
+          basicNom.push(config.basic_annual_cost * Math.pow(1 + config.inflation_cpi, i));
+        }
+        const basicReal = deflate(basicNom);
         return {
           gross,
           net,
@@ -453,6 +471,11 @@
           net_real: deflate(net),
           fcf_real: deflate(fcf),
           cnw_real: deflate(cnw)
+          ,
+          // Basic cost arrays (nominal and real) to plot living costs on the
+          // annual income chart.
+          basic_nom: basicNom,
+          basic_real: basicReal
         };
       }
 
@@ -535,6 +558,16 @@
             const v = parseInt(guardSlider.value);
             if (!isNaN(v)) state.guardiasPerMonth = v;
             updateAll();
+          });
+        }
+
+        // Dark mode toggle
+        const darkToggle = document.getElementById('toggleDark');
+        if (darkToggle) {
+          // Initialize based on body class
+          darkToggle.checked = document.body.classList.contains('dark');
+          darkToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark', darkToggle.checked);
           });
         }
       }
@@ -829,6 +862,8 @@
         annualChart.data.labels = labels;
         annualChart.data.datasets[0].data = state.showReal ? series.net_real : series.net;
         annualChart.data.datasets[1].data = state.showReal ? series.fcf_real : series.fcf;
+        // Plot living costs line
+        annualChart.data.datasets[2].data = state.showReal ? series.basic_real : series.basic_nom;
         annualChart.update();
         wealthChart.data.labels = labels;
         wealthChart.data.datasets[0].data = series.cnw;
@@ -856,7 +891,8 @@
             labels: [],
             datasets: [
               { label: 'Net Income', data: [], borderColor: '#007bff', borderWidth: 2 },
-              { label: 'Free Cash Flow', data: [], borderColor: '#28a745', borderWidth: 2 }
+              { label: 'Free Cash Flow', data: [], borderColor: '#28a745', borderWidth: 2 },
+              { label: 'Living Costs', data: [], borderColor: '#dc3545', borderWidth: 2, borderDash: [4,4] }
             ]
           },
           options: {
