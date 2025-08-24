@@ -883,7 +883,7 @@
               cnwAfter.push(acc2);
             }
             wealthChart.data.datasets[0].data = cnwAfter;
-            wealthChart.data.datasets[1].data = deflate(cnwAfter);
+            wealthwealthChart.data.datasets[1].data = cnwAfter.map((v, i) => v / Math.pow(1 + config.inflation_cpi, i));
             // Update labels to reflect that CNW now accounts for living costs
             wealthChart.data.datasets[0].label = 'CNW after living';
             wealthChart.data.datasets[1].label = 'CNW after living (real €)';
