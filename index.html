@@ -8,20 +8,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <!-- Custom styles -->
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<l<ink href="https://fonts.googleapis.com/css2?family=Inter:wght@300..800&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
     <style>
       /* Dark mode variables and badge styles */
       :root {
         --bg-light: #ffffff;
         --text-light: #212529;
-          --radius: 14px;
-  --shadow: 0 10px 30px rgba(2,6,23,0.08);
-  --shadow-hover: 0 12px 40px rgba(2,6,23,0.12);
-  --grid-light: #e2e8f0;
-  --grid-dark: #233044;
         --card-light: #f8f9fa;
         --bg-dark: #0b0c10;
         --text-dark: #e8eef6;
@@ -147,7 +138,7 @@
       <!-- Cumulative net worth chart -->
       <section class="mb-4">
         <h2 class="h5 mb-1">Cumulative Net Worth</h2>
-        <p class="text-muted small mb-2">Shows how your wealth builds over time by saving or investing leftover free cash flow. The real € line deflates values to constant purchasing power When you enable the 'Include house' or 'Include car' options above, the model assumes you purchase these assets using a mortgage or car loan. The initial deposit and purchase costs cause a sharp drop in net worth, and ongoing loan payments reduce your free cash flow. The 'Include family' option adds annual family-related costs (e.g., childcare), which slow down net worth growth.</p>
+        <p class="text-muted small mb-2">Shows how your wealth builds over time by saving or investing leftover free cash flow. The real € line deflates values to constant purchasing power.</p>
         <canvas id="wealthChart" style="max-height: 300px;"></canvas>
       </section>
 
@@ -187,7 +178,7 @@
       <!-- Specialty comparison scatter chart -->
       <section id="comparison" class="mb-4">
         <h2 class="h5 mb-1">Specialty Comparison</h2>
-        <p class="text-muted small mb-2">Compares net salary (incl. guardias) against weekly hours for each specialty. Hours per week are approximate and based on typical working patterns for Spanish specialists—55 % of doctors work over 40 hours/week and the average week ranges 21–40 hours【920465131104645†L60-L63】. Bubble size reflects the number of job postings in our dataset.</p>
+        <p class="text-muted small mb-2">Compares net salary (incl. guardias) against weekly hours for each specialty. Hours per week are approximate and based on typical working patterns for Spanish specialists—55 % of doctors work over 40 hours/week and the average week ranges 21–40 hours【920465131104645†L60-L63】. Bubble size reflects the number of job postings in our dataset.</p>
         <canvas id="comparisonChart" style="max-height: 350px;"></canvas>
       </section>
 
@@ -203,14 +194,14 @@
         <h2 class="h5">Notes & Sources</h2>
         <ul>
           <li>Tax brackets combine Andalusian and national rates. See official sources for updates.</li>
-          <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
-          <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
+          <li>Working hours statistics: 55 % of Spanish doctors work over 40 hours/week; average week ranges 21–40 hours.</li>
+          <li>Salaries grow at 2 % annually to approximate inflation and seniority progression.</li>
           <li>Living expenses are set at around €30 300/year, based on Numbeo’s 2025 estimate of €2 524 per month for a family of four in Seville【265078350539284†L61-L68】.  Optional costs (house, car, family) apply when selected.</li>
           <li>The weekly hours used for each specialty are approximate and based on general working‑time guidelines; they are meant for comparison only and not exact values.</li>
-          <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat – typical of mid‑range apartments in central districts like Nervión or Triana – therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
+          <li>Mortgage calculations use an average Seville property price of around €2 611/m² (April 2025). An 80 m² flat – typical of mid‑range apartments in central districts like Nervión or Triana – therefore costs roughly €210 000【473835927129573†L198-L201】. We assume a 20 % deposit (~€42 000), 9 % purchase costs and a 30‑year loan at 3 % interest.</li>
           <li>Job postings reflect publicly advertised positions (some outside Seville) and may not represent typical earnings for all practitioners.</li>
           <li>Base salaries do not include on‑call pay (guardias). We assume one 24‑hour guardia per week at the weekday rate of €28.56/hour【602655506727465†L186-L188】, adding about €35 600 to gross pay per year. Net salary including guardias is shown in job postings and the specialty ranking.</li>
-        <li>Resident physicians’ duty hours comprise a regular working schedule of about 37.5 h per week plus four to six mandatory 24‑hour on‑call shifts【811531195383722†L308-L312】.  Spanish law caps total working time at 48 h per week with required rest periods【811531195383722†L308-L316】.  Base contractual hours for senior doctors in Spain typically range from 37.5 to 40 h/week.</li>
+        <li>Resident physicians’ duty hours comprise a regular working schedule of about 37.5 h per week plus four to six mandatory 24‑hour on‑call shifts【811531195383722†L308-L312】.  Spanish law caps total working time at 48 h per week with required rest periods【811531195383722†L308-L316】.  Base contractual hours for senior doctors in Spain typically range from 37.5 to 40 h/week.</li>
         <li>Doctors‑per‑bed values shown in the hospital overview are approximate.  In Spain there are roughly 0.4 doctors per hospital bed (one doctor for every 2.5 beds); larger tertiary hospitals often employ slightly more doctors per bed than smaller facilities.  We therefore apply a base ratio of 0.4 doctors per bed plus a small incremental factor depending on hospital size.  Actual staffing may vary.</li>
         </ul>
       </footer>
@@ -277,7 +268,7 @@
         ,
         // Infectious disease postings
         { title: 'Infectious disease specialist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
-        { title: 'Infectologist – research hospital', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+        { title: 'Infectologist – research hospital', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         { title: 'Clinical microbiologist', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         // Psychiatry postings
         { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico', salary_gross_min: 60000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
@@ -285,7 +276,7 @@
         { title: 'Consultant psychiatrist', employer: 'Hospital Virgen de la Macarena', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         // Ophthalmology postings
         { title: 'Ophthalmologist', employer: 'Clínica Oftalmológica', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
-        { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+        { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         // Occupational medicine postings
         { title: 'Company doctor', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
@@ -326,7 +317,7 @@
       // ratio for every hospital.  See Notes for more context.
       const baseDoctorsPerBed = 0.4;
       // Additional doctors per bed added per bed count (0.05 spread across
-      // 2000 beds).  A 1 000‑bed hospital therefore gets +0.025 added to the
+      // 2000 beds).  A 1 000‑bed hospital therefore gets +0.025 added to the
       // base ratio; a 200‑bed hospital gets +0.005.  Adjust as needed if more
       // precise data become available.
       const extraDoctorPerBedFactor = 0.05 / 2000;
@@ -373,9 +364,9 @@
         // Key used to filter the job postings list.  Defaults to the first
         // specialty and updated via the job dropdown.
         jobSpecialtyKey: null,
-        // Set default house price based on average 80 m² apartment in Seville.
-        // Idealista reported property prices around €2,611 per m² in April 2025, so
-        // an 80 m² flat costs roughly 2,611 € × 80 ≈ 210 000 €.  We use this
+        // Set default house price based on average 80 m² apartment in Seville.
+        // Idealista reported property prices around €2,611 per m² in April 2025, so
+        // an 80 m² flat costs roughly 2,611 € × 80 ≈ 210 000 €.  We use this
         // as the default purchase price for mortgage calculations.
         house: { price: 210000, startYear: 2 },
         car: { price: 26000, startYear: 0 },
@@ -570,23 +561,18 @@
           });
         }
 
-             // Dark mode toggle
+        // Dark mode toggle
         const darkToggle = document.getElementById('toggleDark');
         if (darkToggle) {
-            // Initialize based on body class
-            darkToggle.checked = document.body.classList.contains('dark');
-            const rootStyles = getComputedStyle(document.documentElement);
-            Chart.defaults.color = darkToggle.checked ? rootStyles.getPropertyValue('--text-light') : rootStyles.getPropertyValue('--text-dark');
-            darkToggle.addEventListener('change', () => {
-                document.body.classList.toggle('dark', darkToggle.checked);
-                const rootStyles = getComputedStyle(document.documentElement);
-                Chart.defaults.color = darkToggle.checked ? rootStyles.getPropertyValue('--text-light') : rootStyles.getPropertyValue('--text-dark');
-                annualChart.update();
-                wealthChart.update();
-                mixChart.update();
-            });
+          // Initialize based on body class
+          darkToggle.checked = document.body.classList.contains('dark');
+          darkToggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark', darkToggle.checked);
+          });
         }
-ateSnapshots(spec, series) {
+      }
+      // Update snapshot cards
+      function updateSnapshots(spec, series) {
         const snap = document.getElementById('snapshots');
         snap.innerHTML = '';
         const card = (title, value) => {
@@ -642,7 +628,7 @@ ateSnapshots(spec, series) {
                 legend: { display: false }
               },
               scales: {
-                x: { title: { display: true, text: 'Net salary incl. guardias (yr 1)' }, ticks: { callback: v => fmtEuro(v) } },
+                x: { title: { display: true, text: 'Net salary incl. guardias (yr 1)' }, ticks: { callback: v => fmtEuro(v) } },
                 y: { title: { display: true, text: 'Hours per week' } }
               }
             }
@@ -679,12 +665,12 @@ ateSnapshots(spec, series) {
         const totalHours = baseHours + guardHours;
         summaryDiv.innerHTML =
           `<div class="card shadow-sm"><div class="card-body">` +
-          `<h6 class="card-title">Net income (yr 1)</h6>` +
+          `<h6 class="card-title">Net income (yr 1)</h6>` +
           `<p class="card-text mb-1"><strong>${fmtEuro(netBase)}</strong></p>` +
           `<p class="small text-muted mb-2">Without guardias</p>` +
           `<h6 class="card-title">Net incl. guardias</h6>` +
           `<p class="card-text mb-1"><strong>${fmtEuro(netGuard)}</strong></p>` +
-          `<p class="small text-muted mb-2">${state.guardiasPerMonth} guardia${state.guardiasPerMonth === 1 ? '' : 's'} per month adds ${fmtEuro(diff)} net</p>` +
+          `<p class="small text-muted mb-2">${state.guardiasPerMonth} guardia${state.guardiasPerMonth === 1 ? '' : 's'} per month adds ${fmtEuro(diff)} net</p>` +
           `<h6 class="card-title">Hours/week</h6>` +
           `<p class="card-text mb-1"><strong>${baseHours} → ${totalHours.toFixed(1)}</strong></p>` +
           `<p class="small text-muted">Base vs with guardias</p>` +
@@ -984,29 +970,6 @@ ateSnapshots(spec, series) {
         updateCharts();
       }
       document.addEventListener('DOMContentLoaded', init);
-   
-        // Apply chart colors based on current theme
-function applyThemeToCharts() {
-  const style = getComputedStyle(document.body);
-  const textColor = style.getPropertyValue('--text-dark') || style.getPropertyValue('--text-light');
-  const gridColor = style.getPropertyValue('--grid-dark') || style.getPropertyValue('--grid-light');
-  Chart.defaults.color = textColor.trim();
-  [annualChart, wealthChart, mixChart].forEach(ch => {
-    if (!ch) return;
-    if (ch.options.scales?.x?.grid) ch.options.scales.x.grid.color = gridColor.trim();
-    if (ch.options.scales?.y?.grid) ch.options.scales.y.grid.color = gridColor.trim();
-    ch.update('none');
-  });
-}
-// Initialize chart colors now and on dark mode toggle
-applyThemeToCharts();
-const darkToggleEl = document.getElementById('toggleDark');
-if (darkToggleEl) {
-  darkToggleEl.addEventListener('change', () => {
-    document.body.classList.toggle('dark', darkToggleEl.checked);
-    applyThemeToCharts();
-  });
-}
-</script>
+    </script>
   </body>
 </html>
