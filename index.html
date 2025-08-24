@@ -870,10 +870,24 @@
         const fcfAfter = baseFCF.map((v, i) => v - baseBasic[i]);
         annualChart.data.datasets[3].data = fcfAfter;
         annualChart.update();
-        wealthChart.data.labels = labels;
-        wealthChart.data.datasets[0].data = series.cnw;
-        wealthChart.data.datasets[1].data = series.cnw_real;
-        wealthChart.update();
+            wealthChart.data.labels = labels;
+            // Compute cumulative net worth after living costs using free cash flow
+            // after living (fcfAfter). This ensures CNW reflects discretionary cash
+            // flow rather than total net income. We accumulate the fcfAfter array
+            // with investment growth (config.investment_return) to derive CNW
+            // after living costs, and deflate it for the real € series.
+            const cnwAfter = [];
+            let acc2 = 0;
+            for (let i = 0; i < fcfAfter.length; i++) {
+              acc2 = (acc2 + fcfAfter[i]) * (1 + config.investment_return);
+              cnwAfter.push(acc2);
+            }
+            wealthChart.data.datasets[0].data = cnwAfter;
+            wealthChart.data.datasets[1].data = deflate(cnwAfter);
+            // Update labels to reflect that CNW now accounts for living costs
+            wealthChart.data.datasets[0].label = 'CNW after living';
+            wealthChart.data.datasets[1].label = 'CNW after living (real €)';
+            wealthChart.update();
         // update mix chart highlighting selected specialty
         if (mixChart) {
           mixChart.data.datasets[0].backgroundColor = specialties.map(s => s.key === state.specialtyKey ? '#007bff' : '#6c757d');
