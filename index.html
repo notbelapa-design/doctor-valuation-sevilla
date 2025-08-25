@@ -25,6 +25,9 @@
       html { scroll-behavior: smooth; }
       body { font-feature-settings: "kern" 1, "liga" 1; }
       h1, h2, .h5 { letter-spacing: 0.2px; }
+      h1 { font-weight: 800; color: #0c2d48; }
+      body.dark h1 { color: var(--text-dark); }
+      .hero h1 { margin-bottom: .25rem; }
       .sub { opacity: 0.9; }
       .hero {
         background: linear-gradient(135deg, rgba(57,177,255,0.12), rgba(29,185,84,0.08));
@@ -94,8 +97,18 @@
   <body>
     <div class="container my-4">
       <header class="hero mb-4 text-center">
-        <h1>Doctor Market Insights — Sevilla</h1>
+        <h1 id="pageTitle">Doctor Market Insights — Sevilla</h1>
         <p class="sub">Per‑specialty earnings, taxes, hours and long‑term affordability</p>
+        <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+          <label for="citySelect" class="form-label me-2 mb-0 small">City</label>
+          <select id="citySelect" class="form-select form-select-sm" style="max-width: 220px;">
+            <option value="sevilla" selected>Sevilla</option>
+            <option value="madrid">Madrid</option>
+            <option value="barcelona">Barcelona</option>
+            <option value="valencia">Valencia</option>
+            <option value="bilbao">Bilbao</option>
+          </select>
+        </div>
         <div class="quicknav small mt-2">
           <a href="#controls">Configure</a> ·
           <a href="#summary">Summary</a> ·
@@ -437,6 +450,7 @@
       // Application state
       const state = {
         specialtyKey: null,
+        city: 'sevilla',
         showReal: false,
         toggles: { house: false, car: false, family: false },
         // Key used to filter the job postings list.  Defaults to the first
@@ -1056,6 +1070,19 @@
       function init() {
         populateSpecialties();
         setupControls();
+        // City selector setup
+        const citySel = document.getElementById('citySelect');
+        const pageTitle = document.getElementById('pageTitle');
+        function setCity(newCity) {
+          state.city = newCity;
+          const label = newCity.charAt(0).toUpperCase() + newCity.slice(1);
+          if (pageTitle) pageTitle.textContent = `Doctor Market Insights — ${label}`;
+          // Placeholder: when city-specific datasets are available, trigger reload here.
+        }
+        if (citySel) {
+          citySel.value = state.city;
+          citySel.addEventListener('change', () => setCity(citySel.value));
+        }
         const annualCtx = document.getElementById('annualChart').getContext('2d');
         const wealthCtx = document.getElementById('wealthChart').getContext('2d');
         annualChart = new Chart(annualCtx, {
