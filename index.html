@@ -44,6 +44,19 @@
       /* Reveal-on-scroll (low-cost) */
       .reveal { opacity: 0; transform: translateY(8px); transition: opacity 260ms ease, transform 260ms ease; }
       .reveal.visible { opacity: 1; transform: translateY(0); }
+      /* Controls layout polish */
+      .section-card {
+        background: var(--card-light);
+        border-radius: 12px;
+        padding: 1rem;
+      }
+      body.dark .section-card { background: var(--card-dark); }
+      .section-title { font-weight: 700; font-size: .95rem; margin: 0 0 .5rem 0; opacity: .85; }
+      .divider { height: 1px; background: rgba(0,0,0,.06); margin: .75rem 0; }
+      body.dark .divider { background: rgba(255,255,255,.08); }
+      .label-row { display: flex; align-items: center; justify-content: space-between; }
+      .mini-help { margin-top: .25rem; opacity: .7; }
+      .ig-btn { border-top-left-radius: 0; border-bottom-left-radius: 0; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .reveal { transition: none !important; }
@@ -122,17 +135,19 @@
       <div class="row g-4 align-items-start">
       <section id="controls" class="mb-4 col-lg-7">
         <h2 class="h5 mb-3">Plan Setup</h2>
-        <div class="row g-3 align-items-end">
+        <div class="section-card">
+        <div class="row g-3 align-items-start">
           <div class="col-md-4">
-            <label for="specialtySelect" class="form-label">Select specialty</label>
+            <div class="section-title">Specialty</div>
             <select id="specialtySelect" class="form-select"></select>
           </div>
           <div class="col-md-8">
+            <div class="section-title">Display & Inclusions</div>
             <div class="row g-2">
               <div class="col-md-3 form-check">
                 <input class="form-check-input" type="checkbox" id="toggleReal">
                 <label class="form-check-label" for="toggleReal">Show in real €</label>
-                    <div class="form-text text-muted small">Real € displays all amounts in constant 2025 euros, adjusting for inflation.</div>
+                    <div class="form-text text-muted small mini-help">Real € shows constant 2025 euros.</div>
               </div>
               <div class="col-md-3 form-check">
                 <input class="form-check-input" type="checkbox" id="toggleHouse">
@@ -153,33 +168,35 @@
               </div>
                 </div>
                 <!-- Guardias sliders -->
-                <div class="row g-2 mt-2">
+                <div class="divider"></div>
+                <div class="row g-2">
                   <div class="col-md-6">
-                    <label for="guardiasPerMonth" class="form-label">Guardias per month <span id="guardiasPerMonthValue" class="badge bg-secondary ms-2">4</span></label>
+                    <div class="label-row"><label for="guardiasPerMonth" class="form-label mb-0">Guardias per month</label><span id="guardiasPerMonthValue" class="badge bg-secondary">4</span></div>
                     <input type="range" class="form-range" id="guardiasPerMonth" min="0" max="8" step="1" value="4">
-                    <div class="form-text text-muted small">24‑h hospital on‑call. Pay uses weekday rate.</div>
+                    <div class="form-text text-muted small">24‑h hospital on‑call. Weekday rate.</div>
                   </div>
                   <div class="col-md-6">
-                    <label for="guardiasLocalizadasPerMonth" class="form-label">Guardias localizadas per month <span id="guardiasLocalizadasPerMonthValue" class="badge bg-secondary ms-2">0</span></label>
+                    <div class="label-row"><label for="guardiasLocalizadasPerMonth" class="form-label mb-0">Guardias localizadas per month</label><span id="guardiasLocalizadasPerMonthValue" class="badge bg-secondary">0</span></div>
                     <input type="range" class="form-range" id="guardiasLocalizadasPerMonth" min="0" max="8" step="1" value="0">
                     <div class="form-text text-muted small">Off‑site on‑call. Rate <span id="localizadasRateDisplay"></span> per hour.</div>
                   </div>
                 </div>
-            <div class="row g-2 mt-2">
+            <div class="divider"></div>
+            <div class="row g-2">
               <div class="col-md-4 input-group">
                 <span class="input-group-text">House €</span>
                 <input type="number" id="housePrice" class="form-control" min="0">
-                <button id="toggleHouseBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
+                <button id="toggleHouseBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Car €</span>
                 <input type="number" id="carPrice" class="form-control" min="0">
-                <button id="toggleCarBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
+                <button id="toggleCarBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Family €/yr</span>
                 <input type="number" id="familyCost" class="form-control" min="0">
-                <button id="toggleFamilyBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
+                <button id="toggleFamilyBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
             </div>
             <div class="row g-2 mt-2">
@@ -195,13 +212,14 @@
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Living €/yr</span>
                 <input type="number" id="livingCost" class="form-control" min="0">
-                <button id="resetLivingBtn" class="btn btn-outline-secondary" type="button">Reset</button>
+                <button id="resetLivingBtn" class="btn btn-outline-secondary ig-btn" type="button">Reset</button>
               </div>
               <div class="col-12">
                 <small class="text-muted">Defaults per year: 1 p €8 436; 2 p €15 144; 3 p €22 716; 4 p €30 288. · Source: <a href="https://www.numbeo.com/cost-of-living/in/Sevilla" target="_blank" rel="noopener">Numbeo (Sevilla, 2025)</a></small>
               </div>
             </div>
           </div>
+        </div>
         </div>
       </section>
 
