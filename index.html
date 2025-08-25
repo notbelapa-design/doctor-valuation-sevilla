@@ -562,6 +562,99 @@
             living_cost_monthly: 2945,
             property_price_m2: 5250
           }
+        },
+        valencia: {
+          name: 'Valencia',
+          specialties: [
+            { key: 'cardiology', name: 'Cardiology', gross_base: 82000, gross_p90: 115000, hours_per_week: 40, doctors_est: 400 },
+            { key: 'dermatology', name: 'Dermatology', gross_base: 95000, gross_p90: 125000, hours_per_week: 38, doctors_est: 200 },
+            { key: 'family', name: 'Family Medicine', gross_base: 40000, gross_p90: 55000, hours_per_week: 42, doctors_est: 2800 },
+            { key: 'surgery', name: 'General Surgery', gross_base: 65000, gross_p90: 95000, hours_per_week: 45, doctors_est: 700 },
+            { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 75000, gross_p90: 105000, hours_per_week: 44, doctors_est: 350 },
+            { key: 'pediatrics', name: 'Pediatrics', gross_base: 55000, gross_p90: 75000, hours_per_week: 40, doctors_est: 500 },
+            { key: 'gynaecology', name: 'Gynaecology', gross_base: 75000, gross_p90: 105000, hours_per_week: 43, doctors_est: 400 },
+            { key: 'radiology', name: 'Radiology', gross_base: 85000, gross_p90: 125000, hours_per_week: 38, doctors_est: 200 },
+            { key: 'neurology', name: 'Neurology', gross_base: 80000, gross_p90: 115000, hours_per_week: 40, doctors_est: 250 },
+            { key: 'infectious', name: 'Infectious Disease', gross_base: 75000, gross_p90: 105000, hours_per_week: 40, doctors_est: 150 },
+            { key: 'psychiatry', name: 'Psychiatry', gross_base: 65000, gross_p90: 95000, hours_per_week: 40, doctors_est: 250 },
+            { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 80000, gross_p90: 115000, hours_per_week: 38, doctors_est: 180 },
+            { key: 'occupational', name: 'Occupational Medicine', gross_base: 60000, gross_p90: 85000, hours_per_week: 40, doctors_est: 400 }
+          ],
+          jobs: [
+            // Cardiology postings
+            { title: 'Cardiologist', employer: 'Hospital Clínico Universitario', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/valencia/medico-cardiologo/of-i' },
+            { title: 'Interventional Cardiologist', employer: 'Hospital La Fe', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/valencia/medico-cardiologo-intervencionista/of-i' },
+            { title: 'Cardiologist – Private Clinic', employer: 'Clínica Quirónsalud Valencia', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.quironsalud.es/valencia/empleo' },
+            // Dermatology postings
+            { title: 'Dermatologist', employer: 'Hospital General Universitario', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/valencia/medico-dermatologo/of-i' },
+            { title: 'Dermatology Specialist', employer: 'Clínica Dermatológica Valencia', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/valencia/medico-dermatologo-especialista/of-i' },
+            { title: 'Dermatologist – Private Practice', employer: 'Centro Médico Estético Valencia', salary_gross_min: 80000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/valencia/medico-dermatologo-consultas/of-i' },
+            // Family medicine postings
+            { title: 'Family Physician', employer: 'Centro de Salud Valencia', salary_gross_min: 45000, salary_gross_max: 55000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/valencia/medico-familia/of-i' },
+            { title: 'Occupational Physician', employer: 'Mutua Valenciana', salary_gross_min: 50000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/valencia/medico-trabajo/of-i' },
+            { title: 'Primary Care Physician', employer: 'Centro de Salud Benimaclet', salary_gross_min: 43000, salary_gross_max: 53000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/valencia/medico-atencion-primaria/of-i' },
+            { title: 'Family Doctor – Private Practice', employer: 'Clínica Valencia Salud', salary_gross_min: 55000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/valencia/medico-familia-consultas/of-i' },
+            // General surgery postings
+            { title: 'General Surgeon', employer: 'Hospital La Fe', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/valencia/medico-cirujano/of-i' },
+            { title: 'Trauma Surgeon', employer: 'Hospital Clínico Universitario', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/valencia/medico-traumatologo/of-i' },
+            { title: 'Surgical Specialist', employer: 'Hospital General Universitario', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/valencia/medico-cirugia/of-i' },
+            // Anaesthesiology postings
+            { title: 'Anaesthesiologist', employer: 'Hospital La Fe', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/valencia/medico-anestesista/of-i' },
+            { title: 'Anaesthesiology Specialist', employer: 'Hospital Clínico Universitario', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/valencia/medico-anestesiologia/of-i' },
+            { title: 'Anaesthesiologist – Private', employer: 'Quirónsalud Valencia', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.quironsalud.es/valencia/empleo' },
+            // Pediatrics postings
+            { title: 'Pediatrician', employer: 'Hospital Infantil La Fe', salary_gross_min: 55000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/valencia/medico-pediatra/of-i' },
+            { title: 'Pediatric Specialist', employer: 'Hospital Clínico Universitario', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/valencia/medico-pediatria/of-i' },
+            { title: 'Pediatrician – Private Clinic', employer: 'Clínica Pediátrica Valencia', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/valencia/medico-pediatra-consultas/of-i' },
+            // Gynaecology postings
+            { title: 'Gynaecologist', employer: 'Hospital La Fe', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/valencia/medico-ginecologo/of-i' },
+            { title: 'Gynaecology Specialist', employer: 'Hospital Clínico Universitario', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/valencia/medico-ginecologia/of-i' },
+            { title: 'Gynaecologist – Private Practice', employer: 'Clínica Ginecológica Valencia', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/valencia/medico-ginecologo-consultas/of-i' },
+            // Radiology postings
+            { title: 'Radiologist', employer: 'Hospital General Universitario', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/valencia/medico-radiologo/of-i' },
+            { title: 'Radiology Specialist', employer: 'Hospital La Fe', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/valencia/medico-radiologia/of-i' },
+            { title: 'Radiologist – Private Clinic', employer: 'Centro de Diagnóstico Valencia', salary_gross_min: 85000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/valencia/medico-radiologo-consultas/of-i' },
+            // Neurology postings
+            { title: 'Neurologist', employer: 'Hospital Clínico Universitario', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/valencia/medico-neurologo/of-i' },
+            { title: 'Neurology Specialist', employer: 'Hospital La Fe', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/valencia/medico-neurologia/of-i' },
+            { title: 'Neurologist – Private Practice', employer: 'Clínica Neurológica Valencia', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/valencia/medico-neurologo-consultas/of-i' },
+            // Infectious disease postings
+            { title: 'Infectious Disease Specialist', employer: 'Hospital La Fe', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/valencia/medico-enfermedades-infecciosas/of-i' },
+            { title: 'Infectologist – Research', employer: 'Instituto de Investigación Sanitaria La Fe', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/valencia/medico-infectologo/of-i' },
+            { title: 'Clinical Microbiologist', employer: 'Hospital Clínico Universitario', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/valencia/medico-microbiologo/of-i' },
+            // Psychiatry postings
+            { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico Valencia', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/valencia/medico-psiquiatra/of-i' },
+            { title: 'Child Psychiatrist', employer: 'Hospital Infantil La Fe', salary_gross_min: 55000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/valencia/medico-psiquiatra-infantil/of-i' },
+            { title: 'Consultant Psychiatrist', employer: 'Hospital Clínico Universitario', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/valencia/medico-psiquiatria/of-i' },
+            // Ophthalmology postings
+            { title: 'Ophthalmologist', employer: 'Hospital General Universitario', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/valencia/medico-oftalmologo/of-i' },
+            { title: 'Retina Specialist', employer: 'Hospital La Fe', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/valencia/medico-oftalmologo-retina/of-i' },
+            { title: 'Ophthalmologist – Private Practice', employer: 'Clínica Oftalmológica Valencia', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/valencia/medico-oftalmologo-consultas/of-i' },
+            // Occupational medicine postings
+            { title: 'Occupational Physician', employer: 'Mutua Valenciana', salary_gross_min: 55000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/valencia/medico-trabajo/of-i' },
+            { title: 'Company Doctor', employer: 'Servicio de Prevención Valencia', salary_gross_min: 50000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/valencia/medico-empresa/of-i' },
+            { title: 'Occupational Medicine Specialist', employer: 'Centro de Prevención Valencia', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/valencia/medico-medicina-trabajo/of-i' }
+          ],
+          hospitals: [
+            { name: 'La Fe', sector: 'public', beds: 1100, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_y_Polit%C3%A9cnico_La_Fe' },
+            { name: 'Clínico Universitario', sector: 'public', beds: 800, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Cl%C3%ADnico_Universitario_de_Valencia' },
+            { name: 'General Universitario', sector: 'public', beds: 600, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_General_Universitario_de_Valencia' },
+            { name: 'Doctor Peset', sector: 'public', beds: 400, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Dr._Peset' },
+            { name: 'Arnau de Vilanova', sector: 'public', beds: 350, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Arnau_de_Vilanova' },
+            { name: 'Quirónsalud Valencia', sector: 'private', beds: 180, revenue: null, source: null, source_url: 'https://www.quironsalud.es/valencia' },
+            { name: 'Hospital 9 de Octubre', sector: 'private', beds: 120, revenue: null, source: null, source_url: 'https://www.hospital9deoctubre.es/' },
+            { name: 'Vithas Valencia', sector: 'private', beds: 100, revenue: null, source: null, source_url: 'https://vithas.es/en/center/vithas-valencia-hospital/' },
+            { name: 'Hospital Casa de Salud', sector: 'private', beds: 80, revenue: null, source: null, source_url: 'https://www.hospitalcasadesalud.es/' },
+            { name: 'Clínica Virgen del Consuelo', sector: 'private', beds: 60, revenue: null, source: null, source_url: 'https://www.clinicavirgendelconsuelo.es/' }
+          ],
+          config: {
+            living_costs: { 1: 8640, 2: 17280, 3: 25920, 4: 34560 },
+            house_price: 280000,
+            guardia_rate: 25.50,
+            numbeo_url: 'https://www.numbeo.com/cost-of-living/in/Valencia',
+            living_cost_monthly: 2880,
+            property_price_m2: 3500
+          }
         }
       };
 
