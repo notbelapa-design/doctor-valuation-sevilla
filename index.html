@@ -118,9 +118,10 @@
         </div>
       </header>
 
-      <!-- Configuration controls -->
-      <section id="controls" class="mb-4">
-        <h2 class="h5 mb-3">Configuration</h2>
+      <!-- Controls + Summary layout -->
+      <div class="row g-4 align-items-start">
+      <section id="controls" class="mb-4 col-lg-7">
+        <h2 class="h5 mb-3">Plan Setup</h2>
         <div class="row g-3 align-items-end">
           <div class="col-md-4">
             <label for="specialtySelect" class="form-label">Select specialty</label>
@@ -197,22 +198,24 @@
                 <button id="resetLivingBtn" class="btn btn-outline-secondary" type="button">Reset</button>
               </div>
               <div class="col-12">
-                <small class="text-muted">Defaults per year: 1 p €8 436; 2 p €15 144; 3 p €22 716; 4 p €30 288. · Source: <a href="https://www.numbeo.com/cost-of-living/in/Seville" target="_blank" rel="noopener">Numbeo (Seville, 2025)</a></small>
+                <small class="text-muted">Defaults per year: 1 p €8 436; 2 p €15 144; 3 p €22 716; 4 p €30 288. · Source: <a href="https://www.numbeo.com/cost-of-living/in/Sevilla" target="_blank" rel="noopener">Numbeo (Sevilla, 2025)</a></small>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Snapshot cards -->
-      <section id="snapshots" class="mb-4 row reveal"></section>
-
       <!-- Interactive summary -->
-      <section id="summary" class="mb-4 reveal">
+      <section id="summary" class="mb-4 col-lg-5 reveal">
         <h2 class="h5 mb-3">Interactive Summary</h2>
         <!-- This card will display base net income, net income including guardias and weekly hours -->
         <div id="summaryCard"></div>
       </section>
+
+      </div>
+
+      <!-- Snapshot cards -->
+      <section id="snapshots" class="mb-4 row reveal"></section>
 
       <!-- Annual income vs free cash flow chart -->
       <section class="mb-4 reveal">
