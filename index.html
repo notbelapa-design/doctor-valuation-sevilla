@@ -297,11 +297,24 @@
       <!-- Job postings -->
       <section id="jobs" class="mb-4 reveal">
         <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
-        <!-- Dropdown to filter job postings by specialty -->
-        <div class="row mb-2">
+        <!-- Filters -->
+        <div class="row g-2 mb-2">
           <div class="col-md-4">
             <label for="jobSpecialtySelect" class="form-label">Select specialty (jobs)</label>
             <select id="jobSpecialtySelect" class="form-select"></select>
+          </div>
+          <div class="col-md-4">
+            <label for="jobSearch" class="form-label">Search</label>
+            <input id="jobSearch" type="text" class="form-control" placeholder="Filter by title or employer">
+          </div>
+          <div class="col-md-4">
+            <label for="jobSort" class="form-label">Sort</label>
+            <select id="jobSort" class="form-select">
+              <option value="net_desc" selected>Highest net incl. guardias</option>
+              <option value="gross_desc">Highest gross</option>
+              <option value="title_asc">Title A–Z</option>
+              <option value="employer_asc">Employer A–Z</option>
+            </select>
           </div>
         </div>
         <div id="jobList" class="row"></div>
@@ -692,6 +705,11 @@
           state.jobSpecialtyKey = sel.value;
           renderJobCards();
         });
+        // search and sort
+        const jobSearch = document.getElementById('jobSearch');
+        const jobSort = document.getElementById('jobSort');
+        if (jobSearch) jobSearch.addEventListener('input', () => renderJobCards());
+        if (jobSort) jobSort.addEventListener('change', () => renderJobCards());
       }
       // Setup controls and event listeners
       function setupControls() {
@@ -918,7 +936,10 @@
         // If no job specialty is selected, default to first specialty in array
         const specKey = state.jobSpecialtyKey || (specialties.length ? specialties[0].key : null);
         if (!specKey) return;
-        const filtered = jobs.filter(j => j.specialty_key === specKey);
+        const q = (document.getElementById('jobSearch')?.value || '').toLowerCase().trim();
+        const sort = document.getElementById('jobSort')?.value || 'net_desc';
+        let filtered = jobs.filter(j => j.specialty_key === specKey);
+        if (q) filtered = filtered.filter(j => (j.title||'').toLowerCase().includes(q) || (j.employer||'').toLowerCase().includes(q));
         // Display average salary and number of postings
         if (filtered.length > 0) {
           let sumGross = 0;
@@ -953,6 +974,22 @@
             `</div>`;
           list.appendChild(summaryDiv);
         }
+        // sort
+        filtered.sort((a,b) => {
+          const mid = j => ((j.salary_gross_min || 0) + (j.salary_gross_max || j.salary_gross_min || 0)) / 2;
+          if (sort === 'gross_desc') return mid(b) - mid(a);
+          if (sort === 'title_asc') return (a.title||'').localeCompare(b.title||'');
+          if (sort === 'employer_asc') return (a.employer||'').localeCompare(b.employer||'');
+          // net_desc with guardias
+          const netVal = (j) => {
+            const m = mid(j);
+            const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
+            const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+            const totalGross = m + guardGross + locGross;
+            return totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
+          };
+          return netVal(b) - netVal(a);
+        });
         filtered.forEach(job => {
           const div = document.createElement('div');
           div.className = 'col-md-6 col-lg-4 mb-3';
