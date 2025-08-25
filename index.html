@@ -132,7 +132,7 @@
       </header>
 
       <!-- Controls + Summary layout -->
-      <div class="row g-4 align-items-start">
+      <div class="row g-3 align-items-start">
       <section id="controls" class="mb-4 col-lg-7">
         <h2 class="h5 mb-3">Plan Setup</h2>
         <div class="section-card">
@@ -225,7 +225,13 @@
 
       <!-- Interactive summary -->
       <section id="summary" class="mb-4 col-lg-5 reveal">
-        <h2 class="h5 mb-3">Interactive Summary</h2>
+        <div class="d-flex justify-content-between align-items-end mb-2">
+          <h2 class="h5 mb-0">Interactive Summary</h2>
+          <div class="ms-2" style="min-width: 48%;">
+            <label for="specialtySelectTop" class="form-label small mb-1">Specialty</label>
+            <select id="specialtySelectTop" class="form-select form-select-sm"></select>
+          </div>
+        </div>
         <!-- This card will display base net income, net income including guardias and weekly hours -->
         <div id="summaryCard"></div>
       </section>
@@ -606,20 +612,30 @@
       // Populate specialties dropdown
       function populateSpecialties() {
         const sel = document.getElementById('specialtySelect');
+        const selTop = document.getElementById('specialtySelectTop');
         specialties.forEach(spec => {
           const opt = document.createElement('option');
           opt.value = spec.key;
           opt.textContent = spec.name;
           sel.appendChild(opt);
+          if (selTop) selTop.appendChild(opt.cloneNode(true));
         });
         if (specialties.length > 0) {
           state.specialtyKey = specialties[0].key;
           sel.value = state.specialtyKey;
+          if (selTop) selTop.value = state.specialtyKey;
         }
         sel.addEventListener('change', () => {
           state.specialtyKey = sel.value;
           updateAll();
         });
+        if (selTop) {
+          selTop.addEventListener('change', () => {
+            state.specialtyKey = selTop.value;
+            sel.value = state.specialtyKey;
+            updateAll();
+          });
+        }
       }
 
       // Populate job specialty dropdown for filtering job postings.  It uses the
