@@ -748,6 +748,99 @@
             living_cost_monthly: 3040,
             property_price_m2: 6000
           }
+        },
+        bilbao: {
+          name: 'Bilbao',
+          specialties: [
+            { key: 'cardiology', name: 'Cardiology', gross_base: 88000, gross_p90: 125000, hours_per_week: 40, doctors_est: 350 },
+            { key: 'dermatology', name: 'Dermatology', gross_base: 105000, gross_p90: 140000, hours_per_week: 38, doctors_est: 200 },
+            { key: 'family', name: 'Family Medicine', gross_base: 42000, gross_p90: 58000, hours_per_week: 42, doctors_est: 1800 },
+            { key: 'surgery', name: 'General Surgery', gross_base: 70000, gross_p90: 105000, hours_per_week: 45, doctors_est: 600 },
+            { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 80000, gross_p90: 115000, hours_per_week: 44, doctors_est: 300 },
+            { key: 'pediatrics', name: 'Pediatrics', gross_base: 60000, gross_p90: 85000, hours_per_week: 40, doctors_est: 450 },
+            { key: 'gynaecology', name: 'Gynaecology', gross_base: 80000, gross_p90: 115000, hours_per_week: 43, doctors_est: 350 },
+            { key: 'radiology', name: 'Radiology', gross_base: 90000, gross_p90: 135000, hours_per_week: 38, doctors_est: 200 },
+            { key: 'neurology', name: 'Neurology', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 250 },
+            { key: 'infectious', name: 'Infectious Disease', gross_base: 80000, gross_p90: 115000, hours_per_week: 40, doctors_est: 150 },
+            { key: 'psychiatry', name: 'Psychiatry', gross_base: 70000, gross_p90: 105000, hours_per_week: 40, doctors_est: 200 },
+            { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 85000, gross_p90: 120000, hours_per_week: 38, doctors_est: 150 },
+            { key: 'occupational', name: 'Occupational Medicine', gross_base: 65000, gross_p90: 95000, hours_per_week: 40, doctors_est: 300 }
+          ],
+          jobs: [
+            // Cardiology postings
+            { title: 'Cardiologist', employer: 'Hospital de Basurto', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/bilbao/medico-cardiologo/of-i' },
+            { title: 'Interventional Cardiologist', employer: 'Hospital de Cruces', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/bilbao/medico-cardiologo-intervencionista/of-i' },
+            { title: 'Cardiologist – Private Clinic', employer: 'Clínica Quirónsalud Bilbao', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.quironsalud.es/bilbao/empleo' },
+            // Dermatology postings
+            { title: 'Dermatologist', employer: 'Hospital de Galdakao', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/bilbao/medico-dermatologo/of-i' },
+            { title: 'Dermatology Specialist', employer: 'Clínica Dermatológica Bilbao', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/bilbao/medico-dermatologo-especialista/of-i' },
+            { title: 'Dermatologist – Private Practice', employer: 'Centro Médico Estético Bilbao', salary_gross_min: 85000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/bilbao/medico-dermatologo-consultas/of-i' },
+            // Family medicine postings
+            { title: 'Family Physician', employer: 'Centro de Salud Bilbao', salary_gross_min: 48000, salary_gross_max: 58000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/bilbao/medico-familia/of-i' },
+            { title: 'Occupational Physician', employer: 'Mutua Vasca', salary_gross_min: 53000, salary_gross_max: 68000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/bilbao/medico-trabajo/of-i' },
+            { title: 'Primary Care Physician', employer: 'Centro de Salud Deusto', salary_gross_min: 46000, salary_gross_max: 56000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/bilbao/medico-atencion-primaria/of-i' },
+            { title: 'Family Doctor – Private Practice', employer: 'Clínica Bilbao Salud', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/bilbao/medico-familia-consultas/of-i' },
+            // General surgery postings
+            { title: 'General Surgeon', employer: 'Hospital de Cruces', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/bilbao/medico-cirujano/of-i' },
+            { title: 'Trauma Surgeon', employer: 'Hospital de Basurto', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/bilbao/medico-traumatologo/of-i' },
+            { title: 'Surgical Specialist', employer: 'Hospital de Galdakao', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/bilbao/medico-cirugia/of-i' },
+            // Anaesthesiology postings
+            { title: 'Anaesthesiologist', employer: 'Hospital de Cruces', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/bilbao/medico-anestesista/of-i' },
+            { title: 'Anaesthesiology Specialist', employer: 'Hospital de Basurto', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/bilbao/medico-anestesiologia/of-i' },
+            { title: 'Anaesthesiologist – Private', employer: 'Quirónsalud Bilbao', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.quironsalud.es/bilbao/empleo' },
+            // Pediatrics postings
+            { title: 'Pediatrician', employer: 'Hospital de Cruces', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/bilbao/medico-pediatra/of-i' },
+            { title: 'Pediatric Specialist', employer: 'Hospital de Basurto', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/bilbao/medico-pediatria/of-i' },
+            { title: 'Pediatrician – Private Clinic', employer: 'Clínica Pediátrica Bilbao', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/bilbao/medico-pediatra-consultas/of-i' },
+            // Gynaecology postings
+            { title: 'Gynaecologist', employer: 'Hospital de Cruces', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/bilbao/medico-ginecologo/of-i' },
+            { title: 'Gynaecology Specialist', employer: 'Hospital de Basurto', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/bilbao/medico-ginecologia/of-i' },
+            { title: 'Gynaecologist – Private Practice', employer: 'Clínica Ginecológica Bilbao', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/bilbao/medico-ginecologo-consultas/of-i' },
+            // Radiology postings
+            { title: 'Radiologist', employer: 'Hospital de Galdakao', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/bilbao/medico-radiologo/of-i' },
+            { title: 'Radiology Specialist', employer: 'Hospital de Cruces', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/bilbao/medico-radiologia/of-i' },
+            { title: 'Radiologist – Private Clinic', employer: 'Centro de Diagnóstico Bilbao', salary_gross_min: 95000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/bilbao/medico-radiologo-consultas/of-i' },
+            // Neurology postings
+            { title: 'Neurologist', employer: 'Hospital de Basurto', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/bilbao/medico-neurologo/of-i' },
+            { title: 'Neurology Specialist', employer: 'Hospital de Cruces', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/bilbao/medico-neurologia/of-i' },
+            { title: 'Neurologist – Private Practice', employer: 'Clínica Neurológica Bilbao', salary_gross_min: 95000, salary_gross_max: 105000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/bilbao/medico-neurologo-consultas/of-i' },
+            // Infectious disease postings
+            { title: 'Infectious Disease Specialist', employer: 'Hospital de Cruces', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/bilbao/medico-enfermedades-infecciosas/of-i' },
+            { title: 'Infectologist – Research', employer: 'Instituto de Investigación Sanitaria Biocruces', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/bilbao/medico-infectologo/of-i' },
+            { title: 'Clinical Microbiologist', employer: 'Hospital de Basurto', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/bilbao/medico-microbiologo/of-i' },
+            // Psychiatry postings
+            { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico Bilbao', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/bilbao/medico-psiquiatra/of-i' },
+            { title: 'Child Psychiatrist', employer: 'Hospital de Cruces', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/bilbao/medico-psiquiatra-infantil/of-i' },
+            { title: 'Consultant Psychiatrist', employer: 'Hospital de Basurto', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/bilbao/medico-psiquiatria/of-i' },
+            // Ophthalmology postings
+            { title: 'Ophthalmologist', employer: 'Hospital de Galdakao', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/bilbao/medico-oftalmologo/of-i' },
+            { title: 'Retina Specialist', employer: 'Hospital de Cruces', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/bilbao/medico-oftalmologo-retina/of-i' },
+            { title: 'Ophthalmologist – Private Practice', employer: 'Clínica Oftalmológica Bilbao', salary_gross_min: 95000, salary_gross_max: 105000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/bilbao/medico-oftalmologo-consultas/of-i' },
+            // Occupational medicine postings
+            { title: 'Occupational Physician', employer: 'Mutua Vasca', salary_gross_min: 65000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/bilbao/medico-trabajo/of-i' },
+            { title: 'Company Doctor', employer: 'Servicio de Prevención Bilbao', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/bilbao/medico-empresa/of-i' },
+            { title: 'Occupational Medicine Specialist', employer: 'Centro de Prevención Bilbao', salary_gross_min: 70000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/bilbao/medico-medicina-trabajo/of-i' }
+          ],
+          hospitals: [
+            { name: 'Hospital de Cruces', sector: 'public', beds: 1000, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_de_Cruces' },
+            { name: 'Hospital de Basurto', sector: 'public', beds: 800, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_de_Basurto' },
+            { name: 'Hospital de Galdakao', sector: 'public', beds: 600, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_de_Galdakao' },
+            { name: 'Hospital de Txagorritxu', sector: 'public', beds: 400, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_de_Txagorritxu' },
+            { name: 'Hospital de Gorliz', sector: 'public', beds: 300, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_de_Gorliz' },
+            { name: 'Quirónsalud Bilbao', sector: 'private', beds: 200, revenue: null, source: null, source_url: 'https://www.quironsalud.es/bilbao' },
+            { name: 'Hospital San Eloy', sector: 'private', beds: 150, revenue: null, source: null, source_url: 'https://www.hospitalsaneloy.com/' },
+            { name: 'Vithas Bilbao', sector: 'private', beds: 120, revenue: null, source: null, source_url: 'https://vithas.es/en/center/vithas-bilbao-hospital/' },
+            { name: 'Hospital IMQ Zorrotzaurre', sector: 'private', beds: 100, revenue: null, source: null, source_url: 'https://www.imq.es/hospitales/hospital-imq-zorrotzaurre' },
+            { name: 'Clínica San Juan de Dios', sector: 'private', beds: 80, revenue: null, source: null, source_url: 'https://www.sanjuandedios-bilbao.es/' }
+          ],
+          config: {
+            living_costs: { 1: 8880, 2: 17760, 3: 26640, 4: 35520 },
+            house_price: 320000,
+            guardia_rate: 24.50,
+            numbeo_url: 'https://www.numbeo.com/cost-of-living/in/Bilbao',
+            living_cost_monthly: 2960,
+            property_price_m2: 4000
+          }
         }
       };
 
