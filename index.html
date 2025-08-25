@@ -882,30 +882,7 @@
       function getHospitals() { return getCurrentCityData().hospitals; }
       function getCityConfig() { return getCurrentCityData().config; }
 
-              // Note: Job postings are representative salary data based on Madrid market research
-        // Sources point to legitimate healthcare institutions but are not specific job postings
-        const jobs = [
-          // This array is now handled by the cityData system
-          // Individual city job data is accessed via getJobs() function
-        ];
 
-      // Hospitals in Madrid (public & private) with bed counts and revenue (where available)
-      const hospitals = [
-        { name: 'La Paz', sector: 'public', beds: 1309, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_La_Paz' },
-        { name: 'Gregorio Marañón', sector: 'public', beds: 1250, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_General_Universitario_Gregorio_Mara%C3%B1%C3%B3n' },
-        { name: '12 de Octubre', sector: 'public', beds: 1305, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_12_de_Octubre' },
-        { name: 'Ramón y Cajal', sector: 'public', beds: 1007, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Ram%C3%B3n_y_Cajal' },
-        { name: 'Clínico San Carlos', sector: 'public', beds: 900, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Cl%C3%ADnico_San_Carlos' },
-        { name: 'Puerta de Hierro', sector: 'public', beds: 600, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Puerta_de_Hierro' },
-        { name: 'Infanta Sofía', sector: 'public', beds: 400, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Infanta_Sof%C3%ADa' },
-        { name: 'Infanta Leonor', sector: 'public', beds: 350, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Infanta_Leonor' },
-        { name: 'Quirónsalud Madrid', sector: 'private', beds: 200, revenue: null, source: null, source_url: 'https://www.quironsalud.es/madrid' },
-        { name: 'Sanitas La Moraleja', sector: 'private', beds: 150, revenue: null, source: null, source_url: 'https://www.sanitas.es/hospitales/la-moraleja' },
-        { name: 'HM Madrid', sector: 'private', beds: 120, revenue: null, source: null, source_url: 'https://www.hmhospitales.com/hospitales/hm-madrid' },
-        { name: 'Vithas Madrid', sector: 'private', beds: 100, revenue: null, source: null, source_url: 'https://vithas.es/en/center/vithas-madrid-hospital/' },
-        { name: 'Ruber Internacional', sector: 'private', beds: 80, revenue: null, source: null, source_url: 'https://www.ruberinternacional.es/' },
-        { name: 'San Francisco de Asís', sector: 'private', beds: 60, revenue: null, source: null, source_url: 'https://www.hospital-san-francisco.com/' }
-      ];
 
       // Doctors‑per‑bed ratio used to estimate staffing at each hospital.  In the
       // absence of hospital‑specific staffing data, we base our estimates on
