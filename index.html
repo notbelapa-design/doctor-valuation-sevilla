@@ -1408,11 +1408,11 @@
             </div>
             <div class="mb-2">
               <strong>Years to save deposit:</strong> ${houseYearsToSave} years<br>
-              <strong>Mortgage payment:</strong> ${fmtEuro(housePayment)}/month<br>
+              <strong>Mortgage payment:</strong> ${fmtEuro(housePayment / 12)}/month<br>
               <strong>Mortgage term:</strong> ${config.mortgage.term_years} years at ${(config.mortgage.rate * 100).toFixed(1)}% interest
             </div>
             <div class="small text-muted">
-              Assumes saving 30% of net income. Mortgage reduces free cash flow by ${fmtEuro(housePayment * 12)}/year for ${config.mortgage.term_years} years.
+              Assumes saving 30% of net income. Mortgage reduces free cash flow by ${fmtEuro(housePayment)}/year for ${config.mortgage.term_years} years.
             </div>
           `;
         }
@@ -1424,11 +1424,11 @@
             <div class="mb-2">
               <strong>Price:</strong> ${fmtEuro(state.car.price)}<br>
               <strong>Years to save:</strong> ${carYearsToSave} years<br>
-              <strong>Loan payment:</strong> ${fmtEuro(carPayment)}/month<br>
+              <strong>Loan payment:</strong> ${fmtEuro(carPayment / 12)}/month<br>
               <strong>Loan term:</strong> ${config.car.term_years} years at ${(config.car.loan_rate * 100).toFixed(1)}% interest
             </div>
             <div class="small text-muted">
-              Assumes saving 20% of net income. Car loan reduces free cash flow by ${fmtEuro(carPayment * 12)}/year for ${config.car.term_years} years.
+              Assumes saving 20% of net income. Car loan reduces free cash flow by ${fmtEuro(carPayment)}/year for ${config.car.term_years} years.
             </div>
           `;
         }
