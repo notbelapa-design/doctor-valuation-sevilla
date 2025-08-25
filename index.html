@@ -155,14 +155,17 @@
               <div class="col-md-4 input-group">
                 <span class="input-group-text">House €</span>
                 <input type="number" id="housePrice" class="form-control" min="0">
+                <button id="toggleHouseBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
               </div>
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Car €</span>
                 <input type="number" id="carPrice" class="form-control" min="0">
+                <button id="toggleCarBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
               </div>
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Family €/yr</span>
                 <input type="number" id="familyCost" class="form-control" min="0">
+                <button id="toggleFamilyBtn" class="btn btn-outline-primary" type="button" aria-pressed="false">Include</button>
               </div>
             </div>
             <div class="row g-2 mt-2">
@@ -178,6 +181,7 @@
               <div class="col-md-4 input-group">
                 <span class="input-group-text">Living €/yr</span>
                 <input type="number" id="livingCost" class="form-control" min="0">
+                <button id="resetLivingBtn" class="btn btn-outline-secondary" type="button">Reset</button>
               </div>
               <div class="col-12">
                 <small class="text-muted">Defaults per year: 1 p €8 436; 2 p €15 144; 3 p €22 716; 4 p €30 288.</small>
@@ -615,8 +619,12 @@
         const housePrice = document.getElementById('housePrice');
         const carPrice = document.getElementById('carPrice');
         const familyCost = document.getElementById('familyCost');
+        const btnHouse = document.getElementById('toggleHouseBtn');
+        const btnCar = document.getElementById('toggleCarBtn');
+        const btnFamily = document.getElementById('toggleFamilyBtn');
         const livingPersons = document.getElementById('livingPersons');
         const livingCost = document.getElementById('livingCost');
+        const resetLivingBtn = document.getElementById('resetLivingBtn');
         const guardSlider = document.getElementById('guardiasPerMonth');
         const guardValue = document.getElementById('guardiasPerMonthValue');
         const locSlider = document.getElementById('guardiasLocalizadasPerMonth');
@@ -636,6 +644,20 @@
         house.addEventListener('change', () => { state.toggles.house = house.checked; updateAll(); });
         car.addEventListener('change', () => { state.toggles.car = car.checked; updateAll(); });
         family.addEventListener('change', () => { state.toggles.family = family.checked; updateAll(); });
+        // inline include/exclude buttons
+        function syncToggleBtn(btn, isOn) {
+          if (!btn) return;
+          btn.classList.toggle('btn-primary', isOn);
+          btn.classList.toggle('btn-outline-primary', !isOn);
+          btn.textContent = isOn ? 'Included' : 'Include';
+          btn.setAttribute('aria-pressed', String(isOn));
+        }
+        syncToggleBtn(btnHouse, state.toggles.house);
+        syncToggleBtn(btnCar, state.toggles.car);
+        syncToggleBtn(btnFamily, state.toggles.family);
+        if (btnHouse) btnHouse.addEventListener('click', () => { state.toggles.house = !state.toggles.house; house.checked = state.toggles.house; syncToggleBtn(btnHouse, state.toggles.house); updateAll(); });
+        if (btnCar) btnCar.addEventListener('click', () => { state.toggles.car = !state.toggles.car; car.checked = state.toggles.car; syncToggleBtn(btnCar, state.toggles.car); updateAll(); });
+        if (btnFamily) btnFamily.addEventListener('click', () => { state.toggles.family = !state.toggles.family; family.checked = state.toggles.family; syncToggleBtn(btnFamily, state.toggles.family); updateAll(); });
         // inputs
         housePrice.addEventListener('input', () => { const v = parseFloat(housePrice.value); if (!isNaN(v)) state.house.price = v; updateAll(); });
         carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
@@ -655,6 +677,15 @@
           livingCost.addEventListener('input', () => {
             const v = parseFloat(livingCost.value);
             if (!isNaN(v)) { state.living.annual_cost = v; updateAll(); }
+          });
+        }
+        if (resetLivingBtn) {
+          resetLivingBtn.addEventListener('click', () => {
+            const p = state.living.persons;
+            const def = (config.basic_living_annual_costs && config.basic_living_annual_costs[p]) ? config.basic_living_annual_costs[p] : state.living.annual_cost;
+            state.living.annual_cost = def;
+            if (livingCost) livingCost.value = def;
+            updateAll();
           });
         }
         // guardias sliders
