@@ -30,6 +30,19 @@
         background-color: var(--card-dark);
         color: var(--text-dark);
       }
+      /* Improve dark mode contrast for inputs, selects, tables and muted text */
+      body.dark .form-control,
+      body.dark .form-select {
+        background-color: var(--card-dark);
+        color: var(--text-dark);
+        border-color: #2a2e39;
+      }
+      body.dark label,
+      body.dark .form-check-label,
+      body.dark .input-group-text { color: var(--text-dark); }
+      body.dark .table { color: var(--text-dark); }
+      body.dark .table thead th { color: var(--text-dark); }
+      body.dark .text-muted { color: #b8c1cc !important; }
       .badge-pill {
         display: inline-block;
         padding: 0.15rem 0.5rem;
@@ -92,14 +105,19 @@
                 <label class="form-check-label" for="toggleDark">Dark mode</label>
               </div>
                 </div>
-                <!-- Guardias slider -->
+                <!-- Guardias sliders -->
                 <div class="row g-2 mt-2">
                   <div class="col-md-6">
-                    <label for="guardiasPerMonth" class="form-label">Guardias per month</label>
+                    <label for="guardiasPerMonth" class="form-label">Guardias per month <span id="guardiasPerMonthValue" class="badge bg-secondary ms-2">4</span></label>
                     <input type="range" class="form-range" id="guardiasPerMonth" min="0" max="8" step="1" value="4">
-                    <div class="form-text text-muted small">Adjust the number of 24‑h on‑call shifts per month. Net salaries including guardias will update accordingly.</div>
+                    <div class="form-text text-muted small">24‑h hospital on‑call. Pay uses weekday rate.</div>
                   </div>
-            </div>
+                  <div class="col-md-6">
+                    <label for="guardiasLocalizadasPerMonth" class="form-label">Guardias localizadas per month <span id="guardiasLocalizadasPerMonthValue" class="badge bg-secondary ms-2">0</span></label>
+                    <input type="range" class="form-range" id="guardiasLocalizadasPerMonth" min="0" max="8" step="1" value="0">
+                    <div class="form-text text-muted small">Off‑site on‑call. Rate <span id="localizadasRateDisplay"></span> per hour.</div>
+                  </div>
+                </div>
             <div class="row g-2 mt-2">
               <div class="col-md-4 input-group">
                 <span class="input-group-text">House €</span>
@@ -364,6 +382,9 @@
         // weeks.  These values can be tweaked if more accurate data becomes available.
         guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
         ,
+        // Guardias localizadas (off-site on-call) assumptions
+        localizadas: { hours_per_guardia: 12, rate: 15.00, per_year: 52 }
+        ,
         // Default annual living costs (no rent) per household size
         basic_living_annual_costs: {
           1: 8436,
@@ -396,7 +417,9 @@
         living: { persons: 4, annual_cost: 30288 }
         ,
         // Default number of guardias per month.  Users can adjust this via the slider.
-        guardiasPerMonth: 4
+        guardiasPerMonth: 4,
+        // Off-site guardias localizadas per month
+        guardiasLocalizadasPerMonth: 0
       };
 
       // Formatting helper
@@ -561,12 +584,20 @@
         const familyCost = document.getElementById('familyCost');
         const livingPersons = document.getElementById('livingPersons');
         const livingCost = document.getElementById('livingCost');
+        const guardSlider = document.getElementById('guardiasPerMonth');
+        const guardValue = document.getElementById('guardiasPerMonthValue');
+        const locSlider = document.getElementById('guardiasLocalizadasPerMonth');
+        const locValue = document.getElementById('guardiasLocalizadasPerMonthValue');
+        const locRateDisplay = document.getElementById('localizadasRateDisplay');
         // defaults
         housePrice.value = state.house.price;
         carPrice.value = state.car.price;
         familyCost.value = state.family.annual_cost;
         if (livingPersons) livingPersons.value = String(state.living.persons);
         if (livingCost) livingCost.value = state.living.annual_cost;
+        if (guardValue) guardValue.textContent = String(state.guardiasPerMonth);
+        if (locValue) locValue.textContent = String(state.guardiasLocalizadasPerMonth);
+        if (locRateDisplay) locRateDisplay.textContent = `${fmtEuro(config.localizadas.rate)}/h`;
         // toggles
         real.addEventListener('change', () => { state.showReal = real.checked; updateAll(); });
         house.addEventListener('change', () => { state.toggles.house = house.checked; updateAll(); });
@@ -593,14 +624,22 @@
             if (!isNaN(v)) { state.living.annual_cost = v; updateAll(); }
           });
         }
-        // guardias slider
-        const guardSlider = document.getElementById('guardiasPerMonth');
+        // guardias sliders
         if (guardSlider) {
-          // set state from slider initial value
           state.guardiasPerMonth = parseInt(guardSlider.value || state.guardiasPerMonth);
+          if (guardValue) guardValue.textContent = String(state.guardiasPerMonth);
           guardSlider.addEventListener('input', () => {
             const v = parseInt(guardSlider.value);
-            if (!isNaN(v)) state.guardiasPerMonth = v;
+            if (!isNaN(v)) { state.guardiasPerMonth = v; if (guardValue) guardValue.textContent = String(v); }
+            updateAll();
+          });
+        }
+        if (locSlider) {
+          state.guardiasLocalizadasPerMonth = parseInt(locSlider.value || state.guardiasLocalizadasPerMonth);
+          if (locValue) locValue.textContent = String(state.guardiasLocalizadasPerMonth);
+          locSlider.addEventListener('input', () => {
+            const v = parseInt(locSlider.value);
+            if (!isNaN(v)) { state.guardiasLocalizadasPerMonth = v; if (locValue) locValue.textContent = String(v); }
             updateAll();
           });
         }
@@ -643,10 +682,13 @@
           const netBase = gross - incomeTax(gross) - socialSecurity(gross);
           // Net including guardias
           const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
-          const totalGross = gross + guardGross;
+          const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+          const totalGross = gross + guardGross + locGross;
           const netGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
           // Hours per week including guardias
-          const hours = spec.hours_per_week + (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4;
+          const hours = spec.hours_per_week
+            + (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4
+            + (state.guardiasLocalizadasPerMonth * config.localizadas.hours_per_guardia) / 4;
           // Number of postings as bubble size (scaled)
           const postings = jobs.filter(j => j.specialty_key === spec.key).length;
           const radius = Math.max(4, postings * 2);
@@ -701,12 +743,14 @@
         const netBase = gross - incomeTax(gross) - socialSecurity(gross);
         // Guardia gross pay based on current guardias per month
         const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
-        const totalGross = gross + guardGross;
+        const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+        const totalGross = gross + guardGross + locGross;
         const netGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
         const diff = netGuard - netBase;
         const baseHours = spec.hours_per_week;
-        const guardHours = (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4; // convert monthly guardias to hours per week
-        const totalHours = baseHours + guardHours;
+        const guardHours = (state.guardiasPerMonth * config.guardias.hours_per_guardia) / 4;
+        const locHours = (state.guardiasLocalizadasPerMonth * config.localizadas.hours_per_guardia) / 4;
+        const totalHours = baseHours + guardHours + locHours;
         summaryDiv.innerHTML =
           `<div class="card shadow-sm"><div class="card-body">` +
           `<h6 class="card-title">Net income (yr 1)</h6>` +
@@ -714,7 +758,7 @@
           `<p class="small text-muted mb-2">Without guardias</p>` +
           `<h6 class="card-title">Net incl. guardias</h6>` +
           `<p class="card-text mb-1"><strong>${fmtEuro(netGuard)}</strong></p>` +
-          `<p class="small text-muted mb-2">${state.guardiasPerMonth} guardia${state.guardiasPerMonth === 1 ? '' : 's'} per month adds ${fmtEuro(diff)} net</p>` +
+          `<p class="small text-muted mb-2">${state.guardiasPerMonth} guardia${state.guardiasPerMonth === 1 ? '' : 's'} + ${state.guardiasLocalizadasPerMonth} localizada${state.guardiasLocalizadasPerMonth === 1 ? '' : 's'} per month</p>` +
           `<h6 class="card-title">Hours/week</h6>` +
           `<p class="card-text mb-1"><strong>${baseHours} → ${totalHours.toFixed(1)}</strong></p>` +
           `<p class="small text-muted">Base vs with guardias</p>` +
@@ -741,7 +785,8 @@
             sumNet += netBase;
             // guardias gross assumption: multiply hours, rate and number of guardias per year (state.guardiasPerMonth * 12)
             const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
-            const totalGross = mid + guardGross;
+            const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+            const totalGross = mid + guardGross + locGross;
             const netWithGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
             sumNetWithGuard += netWithGuard;
           });
@@ -770,9 +815,10 @@
           // Compute net salary for this job posting
           const mid = ((job.salary_gross_min || 0) + (job.salary_gross_max || job.salary_gross_min || 0)) / 2;
           const netSal = mid - incomeTax(mid) - socialSecurity(mid);
-          // Net salary including guardias: using current guardias per month from state
+          // Net salary including guardias and localizadas: using current sliders
           const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
-          const totalGross = mid + guardGross;
+          const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+          const totalGross = mid + guardGross + locGross;
           const netWithGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
           // Determine badge based on source: verified if from real job board, speculative if from salary table, missing if no source
           let badgeLabel;
