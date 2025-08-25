@@ -48,13 +48,13 @@
       .section-card {
         background: var(--card-light);
         border-radius: 12px;
-        padding: 1rem;
+        padding: .75rem .9rem;
       }
       body.dark .section-card { background: var(--card-dark); }
       .section-title { font-weight: 700; font-size: .95rem; margin: 0 0 .5rem 0; opacity: .85; }
-      .divider { height: 1px; background: rgba(0,0,0,.06); margin: .75rem 0; }
+      .divider { height: 1px; background: rgba(0,0,0,.06); margin: .5rem 0; }
       body.dark .divider { background: rgba(255,255,255,.08); }
-      .label-row { display: flex; align-items: center; justify-content: space-between; }
+      .label-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
       .mini-help { margin-top: .25rem; opacity: .7; }
       .ig-btn { border-top-left-radius: 0; border-bottom-left-radius: 0; }
       /* Tiny hover tooltip */
@@ -174,7 +174,7 @@
             <div class="row g-2">
               <div class="col-md-3 form-check">
                 <input class="form-check-input" type="checkbox" id="toggleReal">
-                <label class="form-check-label" for="toggleReal">Show in real € <span class="info-badge ms-1" aria-label="info" data-tip="Real € shows constant 2025 euros.">i</span></label>
+                <label class="form-check-label" for="toggleReal">Show in real € <span class="info-badge ms-1" aria-label="info" data-tip="Inflation-adjusted (CPI) to 2025 euros; deflator = 2%/yr (config.inflation_cpi)">i</span></label>
               </div>
               <div class="col-md-3 form-check d-none">
                 <input class="form-check-input" type="checkbox" id="toggleHouse">
