@@ -1175,7 +1175,6 @@
         // defaults
         housePrice.value = state.house.price;
         carPrice.value = state.car.price;
-        familyCost.value = state.family.annual_cost;
         if (livingPersons) livingPersons.value = String(state.living.persons);
         if (livingCost) livingCost.value = state.living.annual_cost;
         if (guardValue) guardValue.textContent = String(state.guardiasPerMonth);
@@ -1185,7 +1184,6 @@
         real.addEventListener('change', () => { state.showReal = real.checked; updateAll(); });
         house.addEventListener('change', () => { state.toggles.house = house.checked; updateAll(); });
         car.addEventListener('change', () => { state.toggles.car = car.checked; updateAll(); });
-        family.addEventListener('change', () => { state.toggles.family = family.checked; updateAll(); });
         // inline include/exclude buttons
         function syncToggleBtn(btn, isOn) {
           if (!btn) return;
