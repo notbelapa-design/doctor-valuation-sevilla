@@ -1019,7 +1019,7 @@
       function renderHospitals() {
         const tableDiv = document.getElementById('hospitalTable');
         if (!tableDiv) return;
-        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed (approx.)</th><th>Revenue</th></tr></thead><tbody>';
+        let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed (approx.)</th><th>Budget/Revenue <span class="info-badge ms-1" data-tip="Public: annual budget; Private: annual revenue if disclosed">i</span></th></tr></thead><tbody>';
         let totalBeds = 0;
         let totalDocs = 0;
         hospitals.forEach(h => {
@@ -1032,7 +1032,9 @@
           const ratio = ratioFloat.toFixed(2);
           const revenue = h.revenue ? fmtEuro(h.revenue) : '—';
           const srcBadge = h.source_url ? ` <span class="info-badge ms-1" data-tip="${(h.source || 'Source')} — ${h.source_url}">i</span>` : '';
-          html += `<tr><td>${h.name}${srcBadge}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenue}</td></tr>`;
+          const revenueTip = h.revenue ? (h.sector === 'public' ? 'Public hospital budget (annual)' : 'Private hospital revenue (annual)') : (h.sector === 'private' ? 'Not publicly disclosed' : 'Not available');
+          const revenueCell = `${revenue} <span class="info-badge ms-1" data-tip="${revenueTip}">i</span>`;
+          html += `<tr><td>${h.name}${srcBadge}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenueCell}</td></tr>`;
         });
         // Compute an overall ratio across all hospitals using the new estimates.
         const totalRatio = (totalDocs / totalBeds).toFixed(2);
