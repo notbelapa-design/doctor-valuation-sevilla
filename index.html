@@ -1643,8 +1643,11 @@
            }
       // Update charts and UI
       function updateCharts() {
+        console.log('updateCharts called');
         const specialties = getSpecialties();
+        console.log('Specialties found:', specialties?.length);
         const spec = specialties.find(s => s.key === state.specialtyKey);
+        console.log('Selected specialty:', spec?.name);
         if (!spec) return;
         const series = buildSeries(spec);
         const labels = Array.from({ length: config.career_years }, (_, i) => i);
@@ -1690,11 +1693,12 @@
       }
       // Main initialization
       function init() {
-        // Set initial city defaults
-        updateCityDefaults();
-        
-        populateSpecialties();
-        setupControls();
+        try {
+          // Set initial city defaults
+          updateCityDefaults();
+          
+          populateSpecialties();
+          setupControls();
         // City selector setup
         const citySel = document.getElementById('citySelect');
         const pageTitle = document.getElementById('pageTitle');
@@ -1716,8 +1720,17 @@
           citySel.value = state.city;
           citySel.addEventListener('change', () => setCity(citySel.value));
         }
-        const annualCtx = document.getElementById('annualChart').getContext('2d');
-        const wealthCtx = document.getElementById('wealthChart').getContext('2d');
+        const annualCtx = document.getElementById('annualChart')?.getContext('2d');
+        const wealthCtx = document.getElementById('wealthChart')?.getContext('2d');
+        
+        if (!annualCtx || !wealthCtx) {
+          console.error('Chart canvas elements not found');
+          return;
+        }
+        
+        // Test if Chart.js is working
+        console.log('Chart.js available:', typeof Chart !== 'undefined');
+        console.log('Canvas elements found:', !!annualCtx, !!wealthCtx);
         annualChart = new Chart(annualCtx, {
           type: 'line',
           data: {
@@ -1753,8 +1766,16 @@
           }
         });
         // Initialize mix chart (doctors per specialty)
-        const mixCtx = document.getElementById('mixChart').getContext('2d');
+        const mixCtx = document.getElementById('mixChart')?.getContext('2d');
+        if (!mixCtx) {
+          console.error('Mix chart canvas element not found');
+          return;
+        }
         const specialties = getSpecialties();
+        if (!specialties || specialties.length === 0) {
+          console.error('No specialties found');
+          return;
+        }
         mixChart = new Chart(mixCtx, {
           type: 'bar',
           data: {
@@ -1793,6 +1814,9 @@
           });
         }, { rootMargin: '0px 0px -10% 0px' }) : null;
         if (observer) document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        } catch (error) {
+          console.error('Error during initialization:', error);
+        }
       }
       document.addEventListener('DOMContentLoaded', init);
     </script>
