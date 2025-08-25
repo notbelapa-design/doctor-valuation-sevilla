@@ -226,6 +226,38 @@
                 <button id="toggleCarBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
             </div>
+            <div class="row g-2">
+              <div class="col-md-6 input-group">
+                <span class="input-group-text">Buy house in year</span>
+                <select id="houseYear" class="form-select">
+                  <option value="1">Year 1</option>
+                  <option value="2">Year 2</option>
+                  <option value="3">Year 3</option>
+                  <option value="4">Year 4</option>
+                  <option value="5">Year 5</option>
+                  <option value="6">Year 6</option>
+                  <option value="7">Year 7</option>
+                  <option value="8">Year 8</option>
+                  <option value="9">Year 9</option>
+                  <option value="10">Year 10</option>
+                </select>
+              </div>
+              <div class="col-md-6 input-group">
+                <span class="input-group-text">Buy car in year</span>
+                <select id="carYear" class="form-select">
+                  <option value="1">Year 1</option>
+                  <option value="2">Year 2</option>
+                  <option value="3">Year 3</option>
+                  <option value="4">Year 4</option>
+                  <option value="5">Year 5</option>
+                  <option value="6">Year 6</option>
+                  <option value="7">Year 7</option>
+                  <option value="8">Year 8</option>
+                  <option value="9">Year 9</option>
+                  <option value="10">Year 10</option>
+                </select>
+              </div>
+            </div>
             <div class="row g-2 mt-2">
               <div class="col-12">
                 <small class="text-muted">
@@ -1172,9 +1204,13 @@
         const locSlider = document.getElementById('guardiasLocalizadasPerMonth');
         const locValue = document.getElementById('guardiasLocalizadasPerMonthValue');
         const locRateDisplay = document.getElementById('localizadasRateDisplay');
+        const houseYear = document.getElementById('houseYear');
+        const carYear = document.getElementById('carYear');
         // defaults
         housePrice.value = state.house.price;
         carPrice.value = state.car.price;
+        if (houseYear) houseYear.value = state.house.startYear;
+        if (carYear) carYear.value = state.car.startYear;
         if (livingPersons) livingPersons.value = String(state.living.persons);
         if (livingCost) livingCost.value = state.living.annual_cost;
         if (guardValue) guardValue.textContent = String(state.guardiasPerMonth);
@@ -1199,6 +1235,8 @@
         // inputs
         housePrice.addEventListener('input', () => { const v = parseFloat(housePrice.value); if (!isNaN(v)) state.house.price = v; updateAll(); });
         carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
+        if (houseYear) houseYear.addEventListener('change', () => { const v = parseInt(houseYear.value); if (!isNaN(v)) state.house.startYear = v; updateAll(); });
+        if (carYear) carYear.addEventListener('change', () => { const v = parseInt(carYear.value); if (!isNaN(v)) state.car.startYear = v; updateAll(); });
 
         if (livingPersons) {
           livingPersons.addEventListener('change', () => {
@@ -1407,6 +1445,7 @@
               <strong>Total initial cost:</strong> ${fmtEuro(totalHouseInitial)}
             </div>
             <div class="mb-2">
+              <strong>Purchase year:</strong> Year ${state.house.startYear}<br>
               <strong>Years to save deposit:</strong> ${houseYearsToSave} years<br>
               <strong>Mortgage payment:</strong> ${fmtEuro(housePayment / 12)}/month<br>
               <strong>Mortgage term:</strong> ${config.mortgage.term_years} years at ${(config.mortgage.rate * 100).toFixed(1)}% interest
@@ -1423,6 +1462,7 @@
           carTimeline.innerHTML = `
             <div class="mb-2">
               <strong>Price:</strong> ${fmtEuro(state.car.price)}<br>
+              <strong>Purchase year:</strong> Year ${state.car.startYear}<br>
               <strong>Years to save:</strong> ${carYearsToSave} years<br>
               <strong>Loan payment:</strong> ${fmtEuro(carPayment / 12)}/month<br>
               <strong>Loan term:</strong> ${config.car.term_years} years at ${(config.car.loan_rate * 100).toFixed(1)}% interest
