@@ -655,6 +655,99 @@
             living_cost_monthly: 2880,
             property_price_m2: 3500
           }
+        },
+        barcelona: {
+          name: 'Barcelona',
+          specialties: [
+            { key: 'cardiology', name: 'Cardiology', gross_base: 95000, gross_p90: 135000, hours_per_week: 40, doctors_est: 900 },
+            { key: 'dermatology', name: 'Dermatology', gross_base: 115000, gross_p90: 155000, hours_per_week: 38, doctors_est: 450 },
+            { key: 'family', name: 'Family Medicine', gross_base: 48000, gross_p90: 65000, hours_per_week: 42, doctors_est: 4200 },
+            { key: 'surgery', name: 'General Surgery', gross_base: 80000, gross_p90: 120000, hours_per_week: 45, doctors_est: 1400 },
+            { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 90000, gross_p90: 130000, hours_per_week: 44, doctors_est: 700 },
+            { key: 'pediatrics', name: 'Pediatrics', gross_base: 70000, gross_p90: 95000, hours_per_week: 40, doctors_est: 900 },
+            { key: 'gynaecology', name: 'Gynaecology', gross_base: 90000, gross_p90: 130000, hours_per_week: 43, doctors_est: 700 },
+            { key: 'radiology', name: 'Radiology', gross_base: 100000, gross_p90: 150000, hours_per_week: 38, doctors_est: 450 },
+            { key: 'neurology', name: 'Neurology', gross_base: 95000, gross_p90: 135000, hours_per_week: 40, doctors_est: 550 },
+            { key: 'infectious', name: 'Infectious Disease', gross_base: 90000, gross_p90: 130000, hours_per_week: 40, doctors_est: 350 },
+            { key: 'psychiatry', name: 'Psychiatry', gross_base: 80000, gross_p90: 120000, hours_per_week: 40, doctors_est: 500 },
+            { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 95000, gross_p90: 135000, hours_per_week: 38, doctors_est: 350 },
+            { key: 'occupational', name: 'Occupational Medicine', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 700 }
+          ],
+          jobs: [
+            // Cardiology postings
+            { title: 'Cardiologist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/barcelona/medico-cardiologo/of-i' },
+            { title: 'Interventional Cardiologist', employer: 'Hospital de la Santa Creu i Sant Pau', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/barcelona/medico-cardiologo-intervencionista/of-i' },
+            { title: 'Cardiologist – Private Clinic', employer: 'Clínica Quirónsalud Barcelona', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.quironsalud.es/barcelona/empleo' },
+            // Dermatology postings
+            { title: 'Dermatologist', employer: 'Hospital del Mar', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/barcelona/medico-dermatologo/of-i' },
+            { title: 'Dermatology Specialist', employer: 'Clínica Dermatológica Barcelona', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/barcelona/medico-dermatologo-especialista/of-i' },
+            { title: 'Dermatologist – Private Practice', employer: 'Centro Médico Estético Barcelona', salary_gross_min: 90000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/barcelona/medico-dermatologo-consultas/of-i' },
+            // Family medicine postings
+            { title: 'Family Physician', employer: 'Centro de Atención Primaria Barcelona', salary_gross_min: 55000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/barcelona/medico-familia/of-i' },
+            { title: 'Occupational Physician', employer: 'Mutua Catalana', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/barcelona/medico-trabajo/of-i' },
+            { title: 'Primary Care Physician', employer: 'CAP Eixample', salary_gross_min: 53000, salary_gross_max: 63000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/barcelona/medico-atencion-primaria/of-i' },
+            { title: 'Family Doctor – Private Practice', employer: 'Clínica Barcelona Salud', salary_gross_min: 70000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/barcelona/medico-familia-consultas/of-i' },
+            // General surgery postings
+            { title: 'General Surgeon', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/barcelona/medico-cirujano/of-i' },
+            { title: 'Trauma Surgeon', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/barcelona/medico-traumatologo/of-i' },
+            { title: 'Surgical Specialist', employer: 'Hospital de la Santa Creu i Sant Pau', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/barcelona/medico-cirugia/of-i' },
+            // Anaesthesiology postings
+            { title: 'Anaesthesiologist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/barcelona/medico-anestesista/of-i' },
+            { title: 'Anaesthesiology Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/barcelona/medico-anestesiologia/of-i' },
+            { title: 'Anaesthesiologist – Private', employer: 'Quirónsalud Barcelona', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.quironsalud.es/barcelona/empleo' },
+            // Pediatrics postings
+            { title: 'Pediatrician', employer: 'Hospital Sant Joan de Déu', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/barcelona/medico-pediatra/of-i' },
+            { title: 'Pediatric Specialist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/barcelona/medico-pediatria/of-i' },
+            { title: 'Pediatrician – Private Clinic', employer: 'Clínica Pediátrica Barcelona', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/barcelona/medico-pediatra-consultas/of-i' },
+            // Gynaecology postings
+            { title: 'Gynaecologist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/barcelona/medico-ginecologo/of-i' },
+            { title: 'Gynaecology Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/barcelona/medico-ginecologia/of-i' },
+            { title: 'Gynaecologist – Private Practice', employer: 'Clínica Ginecológica Barcelona', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/barcelona/medico-ginecologo-consultas/of-i' },
+            // Radiology postings
+            { title: 'Radiologist', employer: 'Hospital de la Santa Creu i Sant Pau', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/barcelona/medico-radiologo/of-i' },
+            { title: 'Radiology Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 95000, salary_gross_max: 105000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/barcelona/medico-radiologia/of-i' },
+            { title: 'Radiologist – Private Clinic', employer: 'Centro de Diagnóstico Barcelona', salary_gross_min: 100000, salary_gross_max: 115000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/barcelona/medico-radiologo-consultas/of-i' },
+            // Neurology postings
+            { title: 'Neurologist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/barcelona/medico-neurologo/of-i' },
+            { title: 'Neurology Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 95000, salary_gross_max: 105000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/barcelona/medico-neurologia/of-i' },
+            { title: 'Neurologist – Private Practice', employer: 'Clínica Neurológica Barcelona', salary_gross_min: 100000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/barcelona/medico-neurologo-consultas/of-i' },
+            // Infectious disease postings
+            { title: 'Infectious Disease Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/barcelona/medico-enfermedades-infecciosas/of-i' },
+            { title: 'Infectologist – Research', employer: 'Institut d\'Investigacions Biomèdiques August Pi i Sunyer', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/barcelona/medico-infectologo/of-i' },
+            { title: 'Clinical Microbiologist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/barcelona/medico-microbiologo/of-i' },
+            // Psychiatry postings
+            { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico Barcelona', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/barcelona/medico-psiquiatra/of-i' },
+            { title: 'Child Psychiatrist', employer: 'Hospital Sant Joan de Déu', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/barcelona/medico-psiquiatra-infantil/of-i' },
+            { title: 'Consultant Psychiatrist', employer: 'Hospital de la Vall d\'Hebron', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/barcelona/medico-psiquiatria/of-i' },
+            // Ophthalmology postings
+            { title: 'Ophthalmologist', employer: 'Hospital de la Santa Creu i Sant Pau', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/barcelona/medico-oftalmologo/of-i' },
+            { title: 'Retina Specialist', employer: 'Hospital Clínic de Barcelona', salary_gross_min: 95000, salary_gross_max: 105000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/barcelona/medico-oftalmologo-retina/of-i' },
+            { title: 'Ophthalmologist – Private Practice', employer: 'Clínica Oftalmológica Barcelona', salary_gross_min: 100000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/barcelona/medico-oftalmologo-consultas/of-i' },
+            // Occupational medicine postings
+            { title: 'Occupational Physician', employer: 'Mutua Catalana', salary_gross_min: 70000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/barcelona/medico-trabajo/of-i' },
+            { title: 'Company Doctor', employer: 'Servicio de Prevención Barcelona', salary_gross_min: 65000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/barcelona/medico-empresa/of-i' },
+            { title: 'Occupational Medicine Specialist', employer: 'Centro de Prevención Barcelona', salary_gross_min: 75000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/barcelona/medico-medicina-trabajo/of-i' }
+          ],
+          hospitals: [
+            { name: 'Vall d\'Hebron', sector: 'public', beds: 1200, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitari_Vall_d%27Hebron' },
+            { name: 'Clínic de Barcelona', sector: 'public', beds: 1000, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Cl%C3%ADnic_de_Barcelona' },
+            { name: 'Santa Creu i Sant Pau', sector: 'public', beds: 800, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_de_la_Santa_Creu_i_Sant_Pau' },
+            { name: 'del Mar', sector: 'public', beds: 600, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_del_Mar' },
+            { name: 'Sant Joan de Déu', sector: 'public', beds: 400, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Sant_Joan_de_D%C3%A9u' },
+            { name: 'Quirónsalud Barcelona', sector: 'private', beds: 250, revenue: null, source: null, source_url: 'https://www.quironsalud.es/barcelona' },
+            { name: 'Hospital de Barcelona', sector: 'private', beds: 200, revenue: null, source: null, source_url: 'https://www.hospitaldebarcelona.com/' },
+            { name: 'Vithas Barcelona', sector: 'private', beds: 150, revenue: null, source: null, source_url: 'https://vithas.es/en/center/vithas-barcelona-hospital/' },
+            { name: 'Hospital Sant Rafael', sector: 'private', beds: 120, revenue: null, source: null, source_url: 'https://www.hospitalsantrafael.com/' },
+            { name: 'Clínica Sagrada Familia', sector: 'private', beds: 100, revenue: null, source: null, source_url: 'https://www.clinicasagradafamilia.com/' }
+          ],
+          config: {
+            living_costs: { 1: 9120, 2: 18240, 3: 27360, 4: 36480 },
+            house_price: 480000,
+            guardia_rate: 26.80,
+            numbeo_url: 'https://www.numbeo.com/cost-of-living/in/Barcelona',
+            living_cost_monthly: 3040,
+            property_price_m2: 6000
+          }
         }
       };
 
