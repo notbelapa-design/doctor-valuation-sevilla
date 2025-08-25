@@ -57,6 +57,34 @@
       .label-row { display: flex; align-items: center; justify-content: space-between; }
       .mini-help { margin-top: .25rem; opacity: .7; }
       .ig-btn { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+      /* Tiny hover tooltip */
+      .info-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px; height: 18px;
+        font-size: 12px; line-height: 1;
+        border-radius: 50%;
+        border: 1px solid rgba(0,0,0,.2);
+        color: #333; background: #fff;
+        cursor: default;
+        position: relative;
+      }
+      body.dark .info-badge { color: var(--text-dark); border-color: rgba(255,255,255,.25); background: transparent; }
+      .info-badge::after {
+        content: attr(data-tip);
+        position: absolute;
+        bottom: 150%; left: 50%; transform: translateX(-50%);
+        background: #111; color: #fff;
+        padding: .35rem .5rem; border-radius: 6px; font-size: 12px; white-space: nowrap;
+        opacity: 0; pointer-events: none; transition: opacity .15s ease;
+      }
+      .info-badge::before {
+        content: '';
+        position: absolute; bottom: calc(150% - 6px); left: 50%; transform: translateX(-50%);
+        border: 6px solid transparent; border-top-color: #111; opacity: 0; transition: opacity .15s ease;
+      }
+      .info-badge:hover::after, .info-badge:hover::before { opacity: 1; }
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
         .reveal { transition: none !important; }
@@ -146,7 +174,7 @@
             <div class="row g-2">
               <div class="col-md-3 form-check">
                 <input class="form-check-input" type="checkbox" id="toggleReal">
-                <label class="form-check-label" for="toggleReal">Show in real € <span class="badge rounded-pill text-bg-light border ms-1" title="Real € shows constant 2025 euros.">i</span></label>
+                <label class="form-check-label" for="toggleReal">Show in real € <span class="info-badge ms-1" aria-label="info" data-tip="Real € shows constant 2025 euros.">i</span></label>
               </div>
               <div class="col-md-3 form-check d-none">
                 <input class="form-check-input" type="checkbox" id="toggleHouse">
