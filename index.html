@@ -426,20 +426,20 @@
 
       // Hospitals in Seville (public & private) with bed counts and revenue (where available)
       const hospitals = [
-        { name: 'Virgen del Rocío', sector: 'public', beds: 1278, revenue: null },
-        { name: 'Macarena', sector: 'public', beds: 777, revenue: null },
-        { name: 'Valme', sector: 'public', beds: 617, revenue: null },
-        { name: 'Muñoz Cariñanos', sector: 'public', beds: 276, revenue: null },
-        { name: 'San Juan de Dios del Aljarafe', sector: 'public', beds: 200, revenue: null },
-        { name: 'Hospital de La Merced (Osuna)', sector: 'public', beds: 225, revenue: null },
-        { name: 'Vithas Sevilla', sector: 'private', beds: 148, revenue: 60000000 },
-        { name: 'Quirónsalud Sagrado Corazón', sector: 'private', beds: 147, revenue: 93300000 },
-        { name: 'Quirónsalud Infanta Luisa', sector: 'private', beds: 139, revenue: 88200000 },
-        { name: 'Viamed Santa Ángela de la Cruz', sector: 'private', beds: 105, revenue: 39000000 },
-        { name: 'San Agustín', sector: 'private', beds: 93, revenue: 34000000 },
-        { name: 'Hospital Fátima', sector: 'private', beds: 73, revenue: 27000000 },
-        { name: 'San Juan de Dios (Sevilla)', sector: 'private', beds: 47, revenue: 17000000 },
-        { name: 'Hospital Victoria Eugenia (Cruz Roja)', sector: 'private', beds: 39, revenue: 14000000 }
+        { name: 'Virgen del Rocío', sector: 'public', beds: 1278, revenue: null, source: null, source_url: 'https://en.wikipedia.org/wiki/Hospital_Universitario_Virgen_del_Roc%C3%ADo' },
+        { name: 'Macarena', sector: 'public', beds: 777, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Virgen_Macarena' },
+        { name: 'Valme', sector: 'public', beds: 617, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Virgen_de_Valme' },
+        { name: 'Muñoz Cariñanos', sector: 'public', beds: 276, revenue: null, source: null, source_url: null },
+        { name: 'San Juan de Dios del Aljarafe', sector: 'public', beds: 200, revenue: null, source: null, source_url: null },
+        { name: 'Hospital de La Merced (Osuna)', sector: 'public', beds: 225, revenue: null, source: null, source_url: null },
+        { name: 'Vithas Sevilla', sector: 'private', beds: 135, revenue: 60000000, source: '135 beds — Vithas', source_url: 'https://vithas.es/en/center/vithas-sevilla-hospital/' },
+        { name: 'Quirónsalud Sagrado Corazón', sector: 'private', beds: 147, revenue: 93300000, source: null, source_url: null },
+        { name: 'Quirónsalud Infanta Luisa', sector: 'private', beds: 139, revenue: 88200000, source: null, source_url: null },
+        { name: 'Viamed Santa Ángela de la Cruz', sector: 'private', beds: 105, revenue: 39000000, source: null, source_url: null },
+        { name: 'San Agustín', sector: 'private', beds: 93, revenue: 34000000, source: null, source_url: null },
+        { name: 'Hospital Fátima', sector: 'private', beds: 73, revenue: 27000000, source: null, source_url: null },
+        { name: 'San Juan de Dios (Sevilla)', sector: 'private', beds: 47, revenue: 17000000, source: null, source_url: null },
+        { name: 'Hospital Victoria Eugenia (Cruz Roja)', sector: 'private', beds: 39, revenue: 14000000, source: null, source_url: null }
       ];
 
       // Doctors‑per‑bed ratio used to estimate staffing at each hospital.  In the
@@ -1031,7 +1031,8 @@
           totalDocs += estDocs;
           const ratio = ratioFloat.toFixed(2);
           const revenue = h.revenue ? fmtEuro(h.revenue) : '—';
-          html += `<tr><td>${h.name}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenue}</td></tr>`;
+          const srcBadge = h.source_url ? ` <span class="info-badge ms-1" data-tip="${(h.source || 'Source')} — ${h.source_url}">i</span>` : '';
+          html += `<tr><td>${h.name}${srcBadge}</td><td>${h.sector}</td><td>${h.beds}</td><td>${estDocs}</td><td>${ratio}</td><td>${revenue}</td></tr>`;
         });
         // Compute an overall ratio across all hospitals using the new estimates.
         const totalRatio = (totalDocs / totalBeds).toFixed(2);
