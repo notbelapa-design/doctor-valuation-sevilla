@@ -114,6 +114,24 @@
                 <input type="number" id="familyCost" class="form-control" min="0">
               </div>
             </div>
+            <div class="row g-2 mt-2">
+              <div class="col-md-4 input-group">
+                <span class="input-group-text">Living size</span>
+                <select id="livingPersons" class="form-select">
+                  <option value="1">1 person</option>
+                  <option value="2">2 people</option>
+                  <option value="3">3 people</option>
+                  <option value="4" selected>4 people</option>
+                </select>
+              </div>
+              <div class="col-md-4 input-group">
+                <span class="input-group-text">Living €/yr</span>
+                <input type="number" id="livingCost" class="form-control" min="0">
+              </div>
+              <div class="col-12">
+                <small class="text-muted">Defaults per year: 1 p €8 436; 2 p €15 144; 3 p €22 716; 4 p €30 288.</small>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -346,12 +364,14 @@
         // weeks.  These values can be tweaked if more accurate data becomes available.
         guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
         ,
-        // Basic living cost per year for an average family in Seville.  Numbeo’s
-        // 2025 cost-of-living survey reports that a family of four spends about
-        // €2,524 per month excluding rent【265078350539284†L61-L68】.  We round this to
-        // €2,524 × 12 ≈ €30 300 per year.  This value is used to plot a
-        // baseline cost-of-living line on the annual income chart.  Users can
-        // adjust living costs manually by editing this constant in the code.
+        // Default annual living costs (no rent) per household size
+        basic_living_annual_costs: {
+          1: 8436,
+          2: 15144,
+          3: 22716,
+          4: 30288
+        },
+        // Legacy single baseline retained for reference
         basic_annual_cost: 30288
       };
 
@@ -371,6 +391,9 @@
         house: { price: 210000, startYear: 2 },
         car: { price: 26000, startYear: 0 },
         family: { annual_cost: 8000 }
+        ,
+        // Living cost selection (defaults to 4-person household)
+        living: { persons: 4, annual_cost: 30288 }
         ,
         // Default number of guardias per month.  Users can adjust this via the slider.
         guardiasPerMonth: 4
@@ -456,10 +479,10 @@
         // Compute basic living costs for each year.  We model nominal
         // cost-of-living as growing with CPI.  The base year cost comes from
         // Numbeo’s 2025 cost-of-living estimate for a family of four in Seville
-        // (about €2,524 per month or ~€30 300 per year)【265078350539284†L61-L68】.
+        // (about €2,524 per month or ~€30 300 per year).
         const basicNom = [];
         for (let i = 0; i < config.career_years; i++) {
-          basicNom.push(config.basic_annual_cost * Math.pow(1 + config.inflation_cpi, i));
+          basicNom.push(state.living.annual_cost * Math.pow(1 + config.inflation_cpi, i));
         }
         const basicReal = deflate(basicNom);
         return {
@@ -536,10 +559,14 @@
         const housePrice = document.getElementById('housePrice');
         const carPrice = document.getElementById('carPrice');
         const familyCost = document.getElementById('familyCost');
+        const livingPersons = document.getElementById('livingPersons');
+        const livingCost = document.getElementById('livingCost');
         // defaults
         housePrice.value = state.house.price;
         carPrice.value = state.car.price;
         familyCost.value = state.family.annual_cost;
+        if (livingPersons) livingPersons.value = String(state.living.persons);
+        if (livingCost) livingCost.value = state.living.annual_cost;
         // toggles
         real.addEventListener('change', () => { state.showReal = real.checked; updateAll(); });
         house.addEventListener('change', () => { state.toggles.house = house.checked; updateAll(); });
@@ -549,6 +576,23 @@
         housePrice.addEventListener('input', () => { const v = parseFloat(housePrice.value); if (!isNaN(v)) state.house.price = v; updateAll(); });
         carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
         familyCost.addEventListener('input', () => { const v = parseFloat(familyCost.value); if (!isNaN(v)) state.family.annual_cost = v; updateAll(); });
+        if (livingPersons) {
+          livingPersons.addEventListener('change', () => {
+            const p = parseInt(livingPersons.value);
+            if (!isNaN(p)) {
+              state.living.persons = p;
+              state.living.annual_cost = (config.basic_living_annual_costs && config.basic_living_annual_costs[p]) ? config.basic_living_annual_costs[p] : 0;
+              if (livingCost) livingCost.value = state.living.annual_cost;
+              updateAll();
+            }
+          });
+        }
+        if (livingCost) {
+          livingCost.addEventListener('input', () => {
+            const v = parseFloat(livingCost.value);
+            if (!isNaN(v)) { state.living.annual_cost = v; updateAll(); }
+          });
+        }
         // guardias slider
         const guardSlider = document.getElementById('guardiasPerMonth');
         if (guardSlider) {
