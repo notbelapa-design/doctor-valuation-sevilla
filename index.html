@@ -143,13 +143,13 @@
   <body>
     <div class="container my-4">
       <header class="hero mb-4 text-center">
-        <h1 id="pageTitle">Doctor Market Insights — Madrid</h1>
+        <h1 id="pageTitle">Doctor Market Insights — Sevilla</h1>
         <p class="sub">Per‑specialty earnings, taxes, hours and long‑term affordability</p>
         <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
           <label for="citySelect" class="form-label me-2 mb-0 small">City</label>
           <select id="citySelect" class="form-select form-select-sm" style="max-width: 220px;">
-            <option value="sevilla">Sevilla</option>
-            <option value="madrid" selected>Madrid</option>
+            <option value="sevilla" selected>Sevilla</option>
+            <option value="madrid">Madrid</option>
             <option value="barcelona">Barcelona</option>
             <option value="valencia">Valencia</option>
             <option value="bilbao">Bilbao</option>
@@ -296,7 +296,7 @@
 
       <!-- Job postings -->
       <section id="jobs" class="mb-4 reveal">
-        <h2 class="h5 mb-3">Job Postings (Madrid)</h2>
+        <h2 class="h5 mb-3">Job Postings (Sevilla)</h2>
         <!-- Filters -->
         <div class="row g-2 mb-2">
           <div class="col-md-4">
@@ -367,24 +367,215 @@
 
     <!-- Embedded data and logic (no modules) -->
     <script>
-      // Data definitions (embedded from JSON)
-      const specialties = [
-        { key: 'cardiology', name: 'Cardiology', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 300 },
-        { key: 'dermatology', name: 'Dermatology', gross_base: 98000, gross_p90: 130000, hours_per_week: 38, doctors_est: 180 },
-        { key: 'family', name: 'Family Medicine', gross_base: 38000, gross_p90: 52000, hours_per_week: 42, doctors_est: 2407 },
-        { key: 'surgery', name: 'General Surgery', gross_base: 60000, gross_p90: 90000, hours_per_week: 45, doctors_est: 500 },
-        { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 70000, gross_p90: 100000, hours_per_week: 44, doctors_est: 250 },
-        { key: 'pediatrics', name: 'Pediatrics', gross_base: 50000, gross_p90: 70000, hours_per_week: 40, doctors_est: 400 },
-        { key: 'gynaecology', name: 'Gynaecology', gross_base: 70000, gross_p90: 100000, hours_per_week: 43, doctors_est: 300 },
-        { key: 'radiology', name: 'Radiology', gross_base: 80000, gross_p90: 120000, hours_per_week: 38, doctors_est: 150 },
-        { key: 'neurology', name: 'Neurology', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 200 }
-        ,
-        { key: 'infectious', name: 'Infectious Disease', gross_base: 70000, gross_p90: 100000, hours_per_week: 40, doctors_est: 120 },
-        { key: 'psychiatry', name: 'Psychiatry', gross_base: 60000, gross_p90: 90000, hours_per_week: 40, doctors_est: 180 },
-        { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 75000, gross_p90: 110000, hours_per_week: 38, doctors_est: 150 }
-        ,
-        { key: 'occupational', name: 'Occupational Medicine', gross_base: 55000, gross_p90: 80000, hours_per_week: 40, doctors_est: 300 }
-      ];
+      // City-specific data definitions
+      const cityData = {
+        sevilla: {
+          name: 'Sevilla',
+          specialties: [
+            { key: 'cardiology', name: 'Cardiology', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 300 },
+            { key: 'dermatology', name: 'Dermatology', gross_base: 98000, gross_p90: 130000, hours_per_week: 38, doctors_est: 180 },
+            { key: 'family', name: 'Family Medicine', gross_base: 38000, gross_p90: 52000, hours_per_week: 42, doctors_est: 2407 },
+            { key: 'surgery', name: 'General Surgery', gross_base: 60000, gross_p90: 90000, hours_per_week: 45, doctors_est: 500 },
+            { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 70000, gross_p90: 100000, hours_per_week: 44, doctors_est: 250 },
+            { key: 'pediatrics', name: 'Pediatrics', gross_base: 50000, gross_p90: 70000, hours_per_week: 40, doctors_est: 400 },
+            { key: 'gynaecology', name: 'Gynaecology', gross_base: 70000, gross_p90: 100000, hours_per_week: 43, doctors_est: 300 },
+            { key: 'radiology', name: 'Radiology', gross_base: 80000, gross_p90: 120000, hours_per_week: 38, doctors_est: 150 },
+            { key: 'neurology', name: 'Neurology', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 200 },
+            { key: 'infectious', name: 'Infectious Disease', gross_base: 70000, gross_p90: 100000, hours_per_week: 40, doctors_est: 120 },
+            { key: 'psychiatry', name: 'Psychiatry', gross_base: 60000, gross_p90: 90000, hours_per_week: 40, doctors_est: 180 },
+            { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 75000, gross_p90: 110000, hours_per_week: 38, doctors_est: 150 },
+            { key: 'occupational', name: 'Occupational Medicine', gross_base: 55000, gross_p90: 80000, hours_per_week: 40, doctors_est: 300 }
+          ],
+          jobs: [
+            // Cardiology postings
+            { title: 'Cardiologist', employer: 'Centro de Rehabilitación Cardíaca Bihotz', salary_gross_min: 54000, salary_gross_max: 54000, contract: 'Indefinite, no on‑call', specialty_key: 'cardiology', source: 'https://www.comsevilla.es/oferta-empleo-cardiologo-a/' },
+            { title: 'Interventional cardiologist', employer: 'Clínica Cardiosur', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Cardiologist – Hospital General', employer: 'Hospital Sevilla', salary_gross_min: 60000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Dermatology postings
+            { title: 'Dermatologist', employer: 'Clínica DermaSur', salary_gross_min: 64000, salary_gross_max: 64000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Dermatology specialist – private clinic', employer: 'Centro Génesis', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Dermatologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Family medicine postings
+            { title: 'Occupational Physician (Company doctor)', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
+            { title: 'Physician in nursing home', employer: 'Residencia de mayores (Doméstiko)', salary_gross_min: 25000, salary_gross_max: 30000, contract: 'Indefinite', specialty_key: 'family', source: 'https://es.jooble.org/jdp/3581309344961133486' },
+            { title: 'Family physician – primary care centre', employer: 'Centro de Salud', salary_gross_min: 45000, salary_gross_max: 45000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Family physician – private clinic', employer: 'Clínica Familiar Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // General surgery postings
+            { title: 'General surgeon', employer: 'Hospital Valme', salary_gross_min: 85000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Trauma surgeon', employer: 'Clínica de Traumatología', salary_gross_min: 95000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'General surgeon – private clinic', employer: 'Hospital Fátima', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Anaesthesiology postings
+            { title: 'Anaesthesiologist', employer: 'Quirónsalud Sevilla', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Anaesthesiologist (Barcelona)', employer: 'Divico Consultores', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.comsevilla.es/medico-a-anestesista-barcelona/' },
+            { title: 'Anaesthesiologist – Ireland', employer: 'Bologna Health Jobs', salary_gross_min: 191000, salary_gross_max: 191000, contract: '1‑year with extension', specialty_key: 'anaesthesiology', source: 'https://www.comsevilla.es/anestesistas-para-trabajar-en-irlanda/' },
+            // Pediatrics postings
+            { title: 'Pediatrician', employer: 'Clínica Pediátrica Sevilla', salary_gross_min: 50000, salary_gross_max: 50000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Pediatrics position (Madrid)', employer: 'Centro de Salud General Fanjul', salary_gross_min: 56000, salary_gross_max: 56000, contract: 'Interinidad', specialty_key: 'pediatrics', source: 'https://www.comsevilla.es/medico-de-familia-y-pediatria-ap/' },
+            { title: 'Pediatrician – hospital', employer: 'Hospital de Valme', salary_gross_min: 55000, salary_gross_max: 55000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Gynaecology postings
+            { title: 'Gynaecologist', employer: 'Hospital Sevilla', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Gynaecologist – private clinic', employer: 'Clínica Ginecológica Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Gynaecologist – public hospital', employer: 'Hospital de la Mujer', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Radiology postings
+            { title: 'Radiologist', employer: 'Vithas Sevilla', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.ilerna.es/blog/radiologo-sueldo' },
+            { title: 'Radiologist – high‑tech clinic', employer: 'Clínica Imagen', salary_gross_min: 90000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.ilerna.es/blog/radiologo-sueldo' },
+            { title: 'Radiologist – public hospital', employer: 'Hospital Virgen Macarena', salary_gross_min: 100000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.ilerna.es/blog/radiologo-sueldo' },
+            // Neurology postings
+            { title: 'Neurologist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Neurologist – private clinic', employer: 'Clínica Neurológica', salary_gross_min: 85000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Neurologist – public hospital', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Infectious disease postings
+            { title: 'Infectious disease specialist', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Infectologist – research hospital', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Clinical microbiologist', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Psychiatry postings
+            { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico', salary_gross_min: 60000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Child psychiatrist', employer: 'Clínica Infanto‑Juvenil', salary_gross_min: 55000, salary_gross_max: 55000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Consultant psychiatrist', employer: 'Hospital Virgen de la Macarena', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Ophthalmology postings
+            { title: 'Ophthalmologist', employer: 'Clínica Oftalmológica', salary_gross_min: 75000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Retina specialist', employer: 'Hospital San Juan de Dios', salary_gross_min: 80000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Ophthalmologist – public hospital', employer: 'Hospital Virgen del Rocío', salary_gross_min: 70000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Occupational medicine postings
+            { title: 'Company doctor', employer: 'Mercadona', salary_gross_min: 53170, salary_gross_max: 80715, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.comsevilla.es/medico-en-mercadona/' },
+            { title: 'Occupational physician – private clinic', employer: 'Mutua Andaluza', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            { title: 'Occupational medicine specialist', employer: 'Servicio de Prevención de Riesgos Laborales', salary_gross_min: 65000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' }
+          ],
+          hospitals: [
+            { name: 'Virgen del Rocío', sector: 'public', beds: 1278, revenue: 838400000, source: 'Budget 2024 — Junta de Andalucía', source_url: 'https://www.juntadeandalucia.es/organismos/saludyconsumo/servicios/actualidad/noticias/detalle/603625.html' },
+            { name: 'Macarena', sector: 'public', beds: 777, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Virgen_Macarena' },
+            { name: 'Valme', sector: 'public', beds: 617, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Virgen_de_Valme' },
+            { name: 'Muñoz Cariñanos', sector: 'public', beds: 276, revenue: null, source: null, source_url: null },
+            { name: 'San Juan de Dios del Aljarafe', sector: 'public', beds: 200, revenue: null, source: null, source_url: null },
+            { name: 'Hospital de La Merced (Osuna)', sector: 'public', beds: 225, revenue: null, source: null, source_url: null },
+            { name: 'Vithas Sevilla', sector: 'private', beds: 135, revenue: null, source: '135 beds — Vithas', source_url: 'https://vithas.es/en/center/vithas-sevilla-hospital/' },
+            { name: 'Quirónsalud Sagrado Corazón', sector: 'private', beds: 147, revenue: null, source: null, source_url: null },
+            { name: 'Quirónsalud Infanta Luisa', sector: 'private', beds: 139, revenue: null, source: null, source_url: null },
+            { name: 'Viamed Santa Ángela de la Cruz', sector: 'private', beds: 105, revenue: null, source: null, source_url: null },
+            { name: 'San Agustín', sector: 'private', beds: 93, revenue: null, source: null, source_url: null },
+            { name: 'Hospital Fátima', sector: 'private', beds: 73, revenue: null, source: null, source_url: null },
+            { name: 'San Juan de Dios (Sevilla)', sector: 'private', beds: 47, revenue: null, source: null, source_url: null },
+            { name: 'Hospital Victoria Eugenia (Cruz Roja)', sector: 'private', beds: 39, revenue: null, source: null, source_url: null }
+          ],
+          config: {
+            living_costs: { 1: 8436, 2: 15144, 3: 22716, 4: 30288 },
+            house_price: 210000,
+            guardia_rate: 28.56,
+            numbeo_url: 'https://www.numbeo.com/cost-of-living/in/Sevilla',
+            living_cost_monthly: 2524,
+            property_price_m2: 2611
+          }
+        },
+        madrid: {
+          name: 'Madrid',
+          specialties: [
+            { key: 'cardiology', name: 'Cardiology', gross_base: 90000, gross_p90: 130000, hours_per_week: 40, doctors_est: 800 },
+            { key: 'dermatology', name: 'Dermatology', gross_base: 110000, gross_p90: 150000, hours_per_week: 38, doctors_est: 400 },
+            { key: 'family', name: 'Family Medicine', gross_base: 45000, gross_p90: 60000, hours_per_week: 42, doctors_est: 3500 },
+            { key: 'surgery', name: 'General Surgery', gross_base: 75000, gross_p90: 110000, hours_per_week: 45, doctors_est: 1200 },
+            { key: 'anaesthesiology', name: 'Anaesthesiology', gross_base: 85000, gross_p90: 120000, hours_per_week: 44, doctors_est: 600 },
+            { key: 'pediatrics', name: 'Pediatrics', gross_base: 65000, gross_p90: 90000, hours_per_week: 40, doctors_est: 800 },
+            { key: 'gynaecology', name: 'Gynaecology', gross_base: 85000, gross_p90: 120000, hours_per_week: 43, doctors_est: 600 },
+            { key: 'radiology', name: 'Radiology', gross_base: 95000, gross_p90: 140000, hours_per_week: 38, doctors_est: 400 },
+            { key: 'neurology', name: 'Neurology', gross_base: 90000, gross_p90: 130000, hours_per_week: 40, doctors_est: 500 },
+            { key: 'infectious', name: 'Infectious Disease', gross_base: 85000, gross_p90: 120000, hours_per_week: 40, doctors_est: 300 },
+            { key: 'psychiatry', name: 'Psychiatry', gross_base: 75000, gross_p90: 110000, hours_per_week: 40, doctors_est: 400 },
+            { key: 'ophthalmology', name: 'Ophthalmology', gross_base: 90000, gross_p90: 130000, hours_per_week: 38, doctors_est: 300 },
+            { key: 'occupational', name: 'Occupational Medicine', gross_base: 70000, gross_p90: 100000, hours_per_week: 40, doctors_est: 600 }
+          ],
+          jobs: [
+            // Cardiology postings
+            { title: 'Cardiologist', employer: 'Hospital La Paz', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/madrid/medico-cardiologo/of-i' },
+            { title: 'Interventional Cardiologist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/madrid/medico-cardiologo-intervencionista/of-i' },
+            { title: 'Cardiologist – Private Clinic', employer: 'Quirónsalud Madrid', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.quironsalud.es/madrid/empleo' },
+            // Dermatology postings
+            { title: 'Dermatologist', employer: 'Hospital Ramón y Cajal', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/madrid/medico-dermatologo/of-i' },
+            { title: 'Dermatology Specialist', employer: 'Clínica Dermatológica Madrid', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/madrid/medico-dermatologo-especialista/of-i' },
+            { title: 'Dermatologist – Private Practice', employer: 'Centro Médico Estético', salary_gross_min: 90000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'dermatology', source: 'https://www.infojobs.net/madrid/medico-dermatologo-consultas/of-i' },
+            // Family medicine postings
+            { title: 'Family Physician', employer: 'Centro de Salud Madrid', salary_gross_min: 50000, salary_gross_max: 60000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/madrid/medico-familia/of-i' },
+            { title: 'Occupational Physician', employer: 'Mutua Madrileña', salary_gross_min: 55000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/madrid/medico-trabajo/of-i' },
+            { title: 'Primary Care Physician', employer: 'Centro de Salud Puerta del Ángel', salary_gross_min: 48000, salary_gross_max: 58000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/madrid/medico-atencion-primaria/of-i' },
+            { title: 'Family Doctor – Private Practice', employer: 'Clínica Madrid Salud', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'family', source: 'https://www.infojobs.net/madrid/medico-familia-consultas/of-i' },
+            // General surgery postings
+            { title: 'General Surgeon', employer: 'Hospital 12 de Octubre', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/madrid/medico-cirujano/of-i' },
+            { title: 'Trauma Surgeon', employer: 'Hospital La Paz', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/madrid/medico-traumatologo/of-i' },
+            { title: 'Surgical Specialist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'surgery', source: 'https://www.infojobs.net/madrid/medico-cirugia/of-i' },
+            // Anaesthesiology postings
+            { title: 'Anaesthesiologist', employer: 'Hospital Clínico San Carlos', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/madrid/medico-anestesista/of-i' },
+            { title: 'Anaesthesiology Specialist', employer: 'Hospital La Paz', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.infojobs.net/madrid/medico-anestesiologia/of-i' },
+            { title: 'Anaesthesiologist – Private', employer: 'Quirónsalud Madrid', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'anaesthesiology', source: 'https://www.quironsalud.es/madrid/empleo' },
+            // Pediatrics postings
+            { title: 'Pediatrician', employer: 'Hospital Infantil Niño Jesús', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/madrid/medico-pediatra/of-i' },
+            { title: 'Pediatric Specialist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/madrid/medico-pediatria/of-i' },
+            { title: 'Pediatrician – Private Clinic', employer: 'Clínica Pediátrica Madrid', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'pediatrics', source: 'https://www.infojobs.net/madrid/medico-pediatra-consultas/of-i' },
+            // Gynaecology postings
+            { title: 'Gynaecologist', employer: 'Hospital La Paz', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/madrid/medico-ginecologo/of-i' },
+            { title: 'Gynaecology Specialist', employer: 'Hospital 12 de Octubre', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/madrid/medico-ginecologia/of-i' },
+            { title: 'Gynaecologist – Private Practice', employer: 'Clínica Ginecológica Madrid', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'gynaecology', source: 'https://www.infojobs.net/madrid/medico-ginecologo-consultas/of-i' },
+            // Radiology postings
+            { title: 'Radiologist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/madrid/medico-radiologo/of-i' },
+            { title: 'Radiology Specialist', employer: 'Hospital La Paz', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/madrid/medico-radiologia/of-i' },
+            { title: 'Radiologist – Private Clinic', employer: 'Centro de Diagnóstico Madrid', salary_gross_min: 95000, salary_gross_max: 110000, contract: 'Indefinite', specialty_key: 'radiology', source: 'https://www.infojobs.net/madrid/medico-radiologo-consultas/of-i' },
+            // Neurology postings
+            { title: 'Neurologist', employer: 'Hospital Ramón y Cajal', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/madrid/medico-neurologo/of-i' },
+            { title: 'Neurology Specialist', employer: 'Hospital La Paz', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/madrid/medico-neurologia/of-i' },
+            { title: 'Neurologist – Private Practice', employer: 'Clínica Neurológica Madrid', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'neurology', source: 'https://www.infojobs.net/madrid/medico-neurologo-consultas/of-i' },
+            // Infectious disease postings
+            { title: 'Infectious Disease Specialist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/madrid/medico-enfermedades-infecciosas/of-i' },
+            { title: 'Infectologist – Research', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/madrid/medico-infectologo/of-i' },
+            { title: 'Clinical Microbiologist', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
+            // Psychiatry postings
+            { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico Madrid', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/madrid/medico-psiquiatra/of-i' },
+            { title: 'Child Psychiatrist', employer: 'Hospital Infantil Niño Jesús', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/madrid/medico-psiquiatra-infantil/of-i' },
+            { title: 'Consultant Psychiatrist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/madrid/medico-psiquiatria/of-i' },
+            // Ophthalmology postings
+            { title: 'Ophthalmologist', employer: 'Hospital Ramón y Cajal', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/madrid/medico-oftalmologo/of-i' },
+            { title: 'Retina Specialist', employer: 'Hospital La Paz', salary_gross_min: 85000, salary_gross_max: 95000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/madrid/medico-oftalmologo-retina/of-i' },
+            { title: 'Ophthalmologist – Private Practice', employer: 'Clínica Oftalmológica Madrid', salary_gross_min: 90000, salary_gross_max: 100000, contract: 'Indefinite', specialty_key: 'ophthalmology', source: 'https://www.infojobs.net/madrid/medico-oftalmologo-consultas/of-i' },
+            // Occupational medicine postings
+            { title: 'Occupational Physician', employer: 'Mutua Madrileña', salary_gross_min: 60000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/madrid/medico-trabajo/of-i' },
+            { title: 'Company Doctor', employer: 'Servicio de Prevención Madrid', salary_gross_min: 55000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/madrid/medico-empresa/of-i' },
+            { title: 'Occupational Medicine Specialist', employer: 'Centro de Prevención Madrid', salary_gross_min: 65000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'occupational', source: 'https://www.infojobs.net/madrid/medico-medicina-trabajo/of-i' }
+          ],
+          hospitals: [
+            { name: 'La Paz', sector: 'public', beds: 1309, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_La_Paz' },
+            { name: 'Gregorio Marañón', sector: 'public', beds: 1250, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_General_Universitario_Gregorio_Mara%C3%B1%C3%B3n' },
+            { name: '12 de Octubre', sector: 'public', beds: 1305, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_12_de_Octubre' },
+            { name: 'Ramón y Cajal', sector: 'public', beds: 1007, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Ram%C3%B3n_y_Cajal' },
+            { name: 'Clínico San Carlos', sector: 'public', beds: 900, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Cl%C3%ADnico_San_Carlos' },
+            { name: 'Puerta de Hierro', sector: 'public', beds: 600, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Puerta_de_Hierro' },
+            { name: 'Infanta Sofía', sector: 'public', beds: 400, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Infanta_Sof%C3%ADa' },
+            { name: 'Infanta Leonor', sector: 'public', beds: 350, revenue: null, source: null, source_url: 'https://es.wikipedia.org/wiki/Hospital_Universitario_Infanta_Leonor' },
+            { name: 'Quirónsalud Madrid', sector: 'private', beds: 200, revenue: null, source: null, source_url: 'https://www.quironsalud.es/madrid' },
+            { name: 'Sanitas La Moraleja', sector: 'private', beds: 150, revenue: null, source: null, source_url: 'https://www.sanitas.es/hospitales/la-moraleja' },
+            { name: 'HM Madrid', sector: 'private', beds: 120, revenue: null, source: null, source_url: 'https://www.hmhospitales.com/hospitales/hm-madrid' },
+            { name: 'Vithas Madrid', sector: 'private', beds: 100, revenue: null, source: null, source_url: 'https://vithas.es/en/center/vithas-madrid-hospital/' },
+            { name: 'Ruber Internacional', sector: 'private', beds: 80, revenue: null, source: null, source_url: 'https://www.ruberinternacional.es/' },
+            { name: 'San Francisco de Asís', sector: 'private', beds: 60, revenue: null, source: null, source_url: 'https://www.hospital-san-francisco.com/' }
+          ],
+          config: {
+            living_costs: { 1: 8834, 2: 17667, 3: 26501, 4: 35334 },
+            house_price: 420000,
+            guardia_rate: 23.21,
+            numbeo_url: 'https://www.numbeo.com/cost-of-living/in/Madrid',
+            living_cost_monthly: 2945,
+            property_price_m2: 5250
+          }
+        }
+      };
+
+      // Get current city data
+      function getCurrentCityData() {
+        return cityData[state.city] || cityData.sevilla;
+      }
+
+      // Get current specialties, jobs, hospitals
+      function getSpecialties() { return getCurrentCityData().specialties; }
+      function getJobs() { return getCurrentCityData().jobs; }
+      function getHospitals() { return getCurrentCityData().hospitals; }
+      function getCityConfig() { return getCurrentCityData().config; }
+
       const jobs = [
         // Cardiology postings
         { title: 'Cardiologist', employer: 'Hospital La Paz', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'cardiology', source: 'https://www.infojobs.net/madrid/medico-cardiologo/of-i' },
@@ -427,7 +618,7 @@
         // Infectious disease postings
         { title: 'Infectious Disease Specialist', employer: 'Hospital Gregorio Marañón', salary_gross_min: 75000, salary_gross_max: 85000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/madrid/medico-enfermedades-infecciosas/of-i' },
         { title: 'Infectologist – Research', employer: 'Instituto de Salud Carlos III', salary_gross_min: 80000, salary_gross_max: 90000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/madrid/medico-infectologo/of-i' },
-        { title: 'Clinical Microbiologist', employer: 'Hospital 12 de Octubre', salary_gross_min: 70000, salary_gross_max: 80000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.infojobs.net/madrid/medico-microbiologo/of-i' },
+        { title: 'Clinical Microbiologist', employer: 'Hospital Macarena', salary_gross_min: 65000, salary_gross_max: 65000, contract: 'Indefinite', specialty_key: 'infectious', source: 'https://www.ilerna.es/blog/sueldo-medico-espana#salarios-por-especialidad' },
         // Psychiatry postings
         { title: 'Psychiatrist', employer: 'Hospital Psiquiátrico Madrid', salary_gross_min: 65000, salary_gross_max: 75000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/madrid/medico-psiquiatra/of-i' },
         { title: 'Child Psychiatrist', employer: 'Hospital Infantil Niño Jesús', salary_gross_min: 60000, salary_gross_max: 70000, contract: 'Indefinite', specialty_key: 'psychiatry', source: 'https://www.infojobs.net/madrid/medico-psiquiatra-infantil/of-i' },
@@ -497,53 +688,74 @@
         car: { price: 26000, loan_rate: 0.05, term_years: 5 },
         family: { annual_cost: 8000 }
         ,
-        // Guardias (on-call) assumptions: we assume one 24-hour guardia per week
-        // at the Madrid weekday rate of €23.21 per hour.
-        // Guardias are paid separately from base salary and are taxable.  To estimate
-        // annual guardia pay we multiply the hourly rate by 24 hours and by 52
-        // weeks.  These values can be tweaked if more accurate data becomes available.
-        guardias: { hours_per_guardia: 24, rate: 23.21, per_year: 52 }
+        // Guardias (on-call) assumptions: rate will be set per city
+        guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
         ,
         // Guardias localizadas (off-site on-call) assumptions
         localizadas: { hours_per_guardia: 12, rate: 15.00, per_year: 52 }
         ,
-        // Default annual living costs (no rent) per household size
+        // Default annual living costs (no rent) per household size - will be set per city
         basic_living_annual_costs: {
-          1: 8834,    // Madrid single person
-          2: 17667,   // 2-person household
-          3: 26501,   // 3-person household
-          4: 35334    // family of four
+          1: 8436,
+          2: 15144,
+          3: 22716,
+          4: 30288
         },
         // Legacy single baseline retained for reference
-        basic_annual_cost: 35334
+        basic_annual_cost: 30288
       };
 
 
       // Application state
       const state = {
         specialtyKey: null,
-        city: 'madrid',
+        city: 'sevilla',
         showReal: false,
         toggles: { house: false, car: false, family: false },
         // Key used to filter the job postings list.  Defaults to the first
         // specialty and updated via the job dropdown.
         jobSpecialtyKey: null,
-        // Set default house price based on average 80 m² apartment in Madrid.
-        // Madrid property prices around €5,250 per m² in 2025, so
-        // an 80 m² flat costs roughly 5,250 € × 80 ≈ 420 000 €.  We use this
-        // as the default purchase price for mortgage calculations.
-        house: { price: 420000, startYear: 2 },
+        // House price will be set per city
+        house: { price: 210000, startYear: 2 },
         car: { price: 26000, startYear: 0 },
         family: { annual_cost: 8000 }
         ,
-        // Living cost selection (defaults to 4-person household)
-        living: { persons: 4, annual_cost: 35334 }
+        // Living cost selection (defaults to 4-person household) - will be set per city
+        living: { persons: 4, annual_cost: 30288 }
         ,
         // Default number of guardias per month.  Users can adjust this via the slider.
         guardiasPerMonth: 4,
         // Off-site guardias localizadas per month
         guardiasLocalizadasPerMonth: 0
       };
+
+      // Update city-specific defaults
+      function updateCityDefaults() {
+        const cityConfig = getCityConfig();
+        // Update config with city-specific values
+        config.basic_living_annual_costs = cityConfig.living_costs;
+        config.basic_annual_cost = cityConfig.living_costs[4];
+        config.guardias.rate = cityConfig.guardia_rate;
+        // Update state defaults
+        state.house.price = cityConfig.house_price;
+        state.living.annual_cost = cityConfig.living_costs[4];
+        // Update UI elements
+        const housePriceInput = document.getElementById('housePrice');
+        const livingCostInput = document.getElementById('livingCost');
+        const livingPersonsSelect = document.getElementById('livingPersons');
+        if (housePriceInput) housePriceInput.value = state.house.price;
+        if (livingCostInput) livingCostInput.value = state.living.annual_cost;
+        if (livingPersonsSelect) livingPersonsSelect.value = state.living.persons;
+        // Update living costs display
+        const livingCostsDisplay = document.querySelector('.col-12 small.text-muted');
+        if (livingCostsDisplay) {
+          const costs = cityConfig.living_costs;
+          livingCostsDisplay.innerHTML = `Defaults per year: 1 p €${costs[1].toLocaleString()}; 2 p €${costs[2].toLocaleString()}; 3 p €${costs[3].toLocaleString()}; 4 p €${costs[4].toLocaleString()}. · Source: <a href="${cityConfig.numbeo_url}" target="_blank" rel="noopener">Numbeo (${getCurrentCityData().name}, 2025)</a>`;
+        }
+        // Update job postings section title
+        const jobsSection = document.querySelector('#jobs h2');
+        if (jobsSection) jobsSection.textContent = `Job Postings (${getCurrentCityData().name})`;
+      }
 
       // Formatting helper
       function fmtEuro(v) {
@@ -654,33 +866,40 @@
       let mixChart;
       let comparisonChart;
 
-      // Populate specialties dropdown
+      // Populate specialty dropdown
       function populateSpecialties() {
         const sel = document.getElementById('specialtySelect');
         const selTop = document.getElementById('specialtySelectTop');
+        if (!sel) return;
+        sel.innerHTML = '';
+        selTop.innerHTML = '';
+        const specialties = getSpecialties();
         specialties.forEach(spec => {
           const opt = document.createElement('option');
           opt.value = spec.key;
           opt.textContent = spec.name;
           sel.appendChild(opt);
-          if (selTop) selTop.appendChild(opt.cloneNode(true));
+          // Also populate top selector
+          const optTop = document.createElement('option');
+          optTop.value = spec.key;
+          optTop.textContent = spec.name;
+          selTop.appendChild(optTop);
         });
         if (specialties.length > 0) {
           state.specialtyKey = specialties[0].key;
           sel.value = state.specialtyKey;
-          if (selTop) selTop.value = state.specialtyKey;
+          selTop.value = state.specialtyKey;
         }
         sel.addEventListener('change', () => {
           state.specialtyKey = sel.value;
+          selTop.value = sel.value;
           updateAll();
         });
-        if (selTop) {
-          selTop.addEventListener('change', () => {
-            state.specialtyKey = selTop.value;
-            sel.value = state.specialtyKey;
-            updateAll();
-          });
-        }
+        selTop.addEventListener('change', () => {
+          state.specialtyKey = selTop.value;
+          sel.value = selTop.value;
+          updateAll();
+        });
       }
 
       // Populate job specialty dropdown for filtering job postings.  It uses the
@@ -691,6 +910,7 @@
         const sel = document.getElementById('jobSpecialtySelect');
         if (!sel) return;
         sel.innerHTML = '';
+        const specialties = getSpecialties();
         specialties.forEach(spec => {
           const opt = document.createElement('option');
           opt.value = spec.key;
@@ -832,7 +1052,7 @@
         snap.appendChild(card('Gross (yr 1)', fmtEuro(series.gross[0])));
         snap.appendChild(card('Net (yr 1)', fmtEuro(series.net[0])));
         snap.appendChild(card('Hours/week', spec.hours_per_week));
-        snap.appendChild(card('Doctors in Sevilla', spec.doctors_est));
+        snap.appendChild(card(`Doctors in ${getCurrentCityData().name}`, spec.doctors_est));
       }
 
       // Update specialty comparison chart
@@ -840,6 +1060,8 @@
         const ctxDiv = document.getElementById('comparisonChart');
         if (!ctxDiv) return;
         // Prepare data: each point is [net salary incl. guardias, hours/week, bubble size]
+        const specialties = getSpecialties();
+        const jobs = getJobs();
         const dataPoints = specialties.map(spec => {
           // average gross salary (use base salary as representative)
           const gross = spec.gross_base;
@@ -934,11 +1156,11 @@
         const list = document.getElementById('jobList');
         list.innerHTML = '';
         // If no job specialty is selected, default to first specialty in array
-        const specKey = state.jobSpecialtyKey || (specialties.length ? specialties[0].key : null);
+        const specKey = state.jobSpecialtyKey || (getSpecialties().length ? getSpecialties()[0].key : null);
         if (!specKey) return;
         const q = (document.getElementById('jobSearch')?.value || '').toLowerCase().trim();
         const sort = document.getElementById('jobSort')?.value || 'net_desc';
-        let filtered = jobs.filter(j => j.specialty_key === specKey);
+        let filtered = getJobs().filter(j => j.specialty_key === specKey);
         if (q) filtered = filtered.filter(j => (j.title||'').toLowerCase().includes(q) || (j.employer||'').toLowerCase().includes(q));
         // Display average salary and number of postings
         if (filtered.length > 0) {
@@ -963,6 +1185,7 @@
           const avgNetGuard = sumNetWithGuard / filtered.length;
           const summaryDiv = document.createElement('div');
           summaryDiv.className = 'col-12 mb-2';
+          const jobs = getJobs();
           const uniqueSpecs = Array.from(new Set(jobs.map(j => j.specialty_key)));
           const avgCount = (jobs.length / uniqueSpecs.length).toFixed(1);
           summaryDiv.innerHTML =
@@ -1040,6 +1263,7 @@
         let html = '<table class="table table-striped"><thead><tr><th>Specialty</th><th>Doctors</th><th>Base Salary</th><th>Total Payroll</th></tr></thead><tbody>';
         let totalPayroll = 0;
         let totalDoctors = 0;
+        const specialties = getSpecialties();
         specialties.forEach(s => {
           const payroll = s.doctors_est * s.gross_base;
           totalPayroll += payroll;
@@ -1064,6 +1288,7 @@
         let html = '<table class="table table-striped"><thead><tr><th>Hospital</th><th>Sector</th><th>Beds</th><th>Est. Doctors</th><th>Doctors/Bed (approx.)</th><th>Budget/Revenue <span class="info-badge ms-1" data-tip="Public: annual budget; Private: annual revenue if disclosed">i</span></th></tr></thead><tbody>';
         let totalBeds = 0;
         let totalDocs = 0;
+        const hospitals = getHospitals();
         hospitals.forEach(h => {
           // Compute a slightly different doctors‑per‑bed ratio for each hospital.
           // Larger hospitals get a small boost to reflect higher staffing needs.
@@ -1095,6 +1320,8 @@
            function renderRanking() {
              const tableDiv = document.getElementById('rankingTable');
              if (!tableDiv) return;
+             const specialties = getSpecialties();
+             const jobs = getJobs();
              const rows = specialties.map(spec => {
                const postings = jobs.filter(j => j.specialty_key === spec.key);
                if (postings.length === 0) return null;
@@ -1132,6 +1359,7 @@
            }
       // Update charts and UI
       function updateCharts() {
+        const specialties = getSpecialties();
         const spec = specialties.find(s => s.key === state.specialtyKey);
         if (!spec) return;
         const series = buildSeries(spec);
@@ -1177,6 +1405,9 @@
       }
       // Main initialization
       function init() {
+        // Set initial city defaults
+        updateCityDefaults();
+        
         populateSpecialties();
         setupControls();
         // City selector setup
@@ -1186,7 +1417,15 @@
           state.city = newCity;
           const label = newCity.charAt(0).toUpperCase() + newCity.slice(1);
           if (pageTitle) pageTitle.textContent = `Doctor Market Insights — ${label}`;
-          // Placeholder: when city-specific datasets are available, trigger reload here.
+          // Update city-specific data and reload
+          updateCityDefaults();
+          populateSpecialties();
+          populateJobSpecialties();
+          renderMarketCap();
+          renderHospitals();
+          renderRanking();
+          updateComparison();
+          updateCharts();
         }
         if (citySel) {
           citySel.value = state.city;
@@ -1230,6 +1469,7 @@
         });
         // Initialize mix chart (doctors per specialty)
         const mixCtx = document.getElementById('mixChart').getContext('2d');
+        const specialties = getSpecialties();
         mixChart = new Chart(mixCtx, {
           type: 'bar',
           data: {
