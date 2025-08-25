@@ -258,6 +258,24 @@
                 </select>
               </div>
             </div>
+            <div class="row g-2">
+              <div class="col-md-6 input-group">
+                <span class="input-group-text">House payment</span>
+                <select id="housePaymentMethod" class="form-select">
+                  <option value="auto">Auto (use savings if available)</option>
+                  <option value="cash">Pay cash (use all savings)</option>
+                  <option value="loan">Take loan (keep savings)</option>
+                </select>
+              </div>
+              <div class="col-md-6 input-group">
+                <span class="input-group-text">Car payment</span>
+                <select id="carPaymentMethod" class="form-select">
+                  <option value="auto">Auto (use savings if available)</option>
+                  <option value="cash">Pay cash (use all savings)</option>
+                  <option value="loan">Take loan (keep savings)</option>
+                </select>
+              </div>
+            </div>
             <div class="row g-2 mt-2">
               <div class="col-12">
                 <small class="text-muted">
@@ -979,8 +997,8 @@
         // specialty and updated via the job dropdown.
         jobSpecialtyKey: null,
         // House price will be set per city
-        house: { price: 210000, startYear: 2 },
-        car: { price: 26000, startYear: 0 },
+        house: { price: 210000, startYear: 2, paymentMethod: 'auto' },
+        car: { price: 26000, startYear: 0, paymentMethod: 'auto' },
         // Living cost selection (defaults to 4-person household) - will be set per city
         living: { persons: 4, annual_cost: 30288 }
         ,
@@ -1056,11 +1074,12 @@
         const expenses = Array(config.career_years).fill(0);
         const savings = Array(config.career_years).fill(0);
         const savingsBalance = Array(config.career_years).fill(0);
+        const savingsUsed = Array(config.career_years).fill(0);
         
-        // Calculate savings balance year by year
+        // Calculate savings balance year by year (before purchases)
         let currentSavings = 0;
         for (let i = 0; i < config.career_years; i++) {
-          // Start with previous year's savings
+          // Start with previous year's savings (after any purchases)
           savingsBalance[i] = currentSavings;
           
           // Calculate this year's savings (net income minus living costs)
@@ -1071,49 +1090,97 @@
           currentSavings = (currentSavings + thisYearSavings) * (1 + config.investment_return);
         }
         
-        // house purchase - use savings if available
+        // house purchase
         if (state.toggles.house) {
           const H = state.house.price;
           const dep = H * config.mortgage.deposit_pct;
           const costs = H * config.mortgage.one_off_purchase_cost_pct;
           const totalHouseCost = dep + costs;
           const principal = H - dep;
-          const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
           const y0 = state.house.startYear - 1; // Convert to 0-based index
           
           if (y0 < config.career_years) {
-            // Check if we have enough savings
             const availableSavings = savingsBalance[y0];
-            const shortfall = Math.max(0, totalHouseCost - availableSavings);
             
-            // Add shortfall to expenses (this represents additional borrowing needed)
-            expenses[y0] += shortfall;
-            
-            // Add mortgage payments for the term
-            for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
-              expenses[i] += pay;
+            if (state.house.paymentMethod === 'cash') {
+              // Pay cash - use all available savings, borrow the rest
+              const shortfall = Math.max(0, totalHouseCost - availableSavings);
+              savingsUsed[y0] = Math.min(availableSavings, totalHouseCost);
+              expenses[y0] += shortfall; // Additional borrowing needed
+              
+              // Add mortgage payments for the term
+              const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
+              for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
+                expenses[i] += pay;
+              }
+            } else if (state.house.paymentMethod === 'loan') {
+              // Take loan - keep all savings, borrow everything
+              expenses[y0] += totalHouseCost; // Borrow deposit + costs
+              
+              // Add mortgage payments for the term
+              const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
+              for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
+                expenses[i] += pay;
+              }
+            } else { // auto
+              // Use savings if available, borrow shortfall
+              const shortfall = Math.max(0, totalHouseCost - availableSavings);
+              savingsUsed[y0] = Math.min(availableSavings, totalHouseCost);
+              expenses[y0] += shortfall;
+              
+              // Add mortgage payments for the term
+              const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
+              for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
+                expenses[i] += pay;
+              }
             }
           }
         }
         
-        // car purchase - use savings if available
+        // car purchase
         if (state.toggles.car) {
           const P = state.car.price;
           const y0 = state.car.startYear - 1; // Convert to 0-based index
           
           if (y0 < config.career_years) {
-            // Check if we have enough savings for the car
-            const availableSavings = savingsBalance[y0];
-            const shortfall = Math.max(0, P - availableSavings);
+            const availableSavings = savingsBalance[y0] - savingsUsed[y0]; // Subtract house savings used
             
-            if (shortfall > 0) {
-              // Need a loan for the shortfall
-              const pay = annuityPayment(shortfall, config.car.loan_rate, config.car.term_years);
+            if (state.car.paymentMethod === 'cash') {
+              // Pay cash - use available savings, borrow the rest
+              const shortfall = Math.max(0, P - availableSavings);
+              savingsUsed[y0] += Math.min(availableSavings, P);
+              expenses[y0] += shortfall;
+              
+              if (shortfall > 0) {
+                // Need a loan for the shortfall
+                const pay = annuityPayment(shortfall, config.car.loan_rate, config.car.term_years);
+                for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
+                  expenses[i] += pay;
+                }
+              }
+            } else if (state.car.paymentMethod === 'loan') {
+              // Take loan - keep all savings, borrow everything
+              expenses[y0] += P;
+              
+              // Need a loan for the full amount
+              const pay = annuityPayment(P, config.car.loan_rate, config.car.term_years);
               for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
                 expenses[i] += pay;
               }
+            } else { // auto
+              // Use savings if available, borrow shortfall
+              const shortfall = Math.max(0, P - availableSavings);
+              savingsUsed[y0] += Math.min(availableSavings, P);
+              expenses[y0] += shortfall;
+              
+              if (shortfall > 0) {
+                // Need a loan for the shortfall
+                const pay = annuityPayment(shortfall, config.car.loan_rate, config.car.term_years);
+                for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
+                  expenses[i] += pay;
+                }
+              }
             }
-            // If no shortfall, car is paid from savings (no additional expenses)
           }
         }
 
@@ -1244,11 +1311,15 @@
         const locRateDisplay = document.getElementById('localizadasRateDisplay');
         const houseYear = document.getElementById('houseYear');
         const carYear = document.getElementById('carYear');
+        const housePaymentMethod = document.getElementById('housePaymentMethod');
+        const carPaymentMethod = document.getElementById('carPaymentMethod');
         // defaults
         housePrice.value = state.house.price;
         carPrice.value = state.car.price;
         if (houseYear) houseYear.value = state.house.startYear;
         if (carYear) carYear.value = state.car.startYear;
+        if (housePaymentMethod) housePaymentMethod.value = state.house.paymentMethod;
+        if (carPaymentMethod) carPaymentMethod.value = state.car.paymentMethod;
         if (livingPersons) livingPersons.value = String(state.living.persons);
         if (livingCost) livingCost.value = state.living.annual_cost;
         if (guardValue) guardValue.textContent = String(state.guardiasPerMonth);
@@ -1275,6 +1346,8 @@
         carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
         if (houseYear) houseYear.addEventListener('change', () => { const v = parseInt(houseYear.value); if (!isNaN(v)) state.house.startYear = v; updateAll(); });
         if (carYear) carYear.addEventListener('change', () => { const v = parseInt(carYear.value); if (!isNaN(v)) state.car.startYear = v; updateAll(); });
+        if (housePaymentMethod) housePaymentMethod.addEventListener('change', () => { state.house.paymentMethod = housePaymentMethod.value; updateAll(); });
+        if (carPaymentMethod) carPaymentMethod.addEventListener('change', () => { state.car.paymentMethod = carPaymentMethod.value; updateAll(); });
 
         if (livingPersons) {
           livingPersons.addEventListener('change', () => {
@@ -1470,6 +1543,20 @@
         const savingsByPurchaseYear = annualSavings * (purchaseYear - 1);
         const shortfall = Math.max(0, totalHouseInitial - savingsByPurchaseYear);
         
+        // Determine payment method display
+        let paymentMethodText = '';
+        let savingsUsedText = '';
+        if (state.house.paymentMethod === 'cash') {
+          paymentMethodText = 'Pay cash (use all savings)';
+          savingsUsedText = `Savings used: ${fmtEuro(Math.min(savingsByPurchaseYear, totalHouseInitial))}`;
+        } else if (state.house.paymentMethod === 'loan') {
+          paymentMethodText = 'Take loan (keep savings)';
+          savingsUsedText = `Savings kept: ${fmtEuro(savingsByPurchaseYear)}`;
+        } else {
+          paymentMethodText = 'Auto (use savings if available)';
+          savingsUsedText = `Savings used: ${fmtEuro(Math.min(savingsByPurchaseYear, totalHouseInitial))}`;
+        }
+        
         // Calculate mortgage payment
         const housePrincipal = state.house.price - houseDeposit;
         const housePayment = annuityPayment(housePrincipal, config.mortgage.rate, config.mortgage.term_years);
@@ -1486,6 +1573,20 @@
         // Calculate car loan payment (only for shortfall)
         const carPayment = carShortfall > 0 ? annuityPayment(carShortfall, config.car.loan_rate, config.car.term_years) : 0;
         
+        // Determine car payment method display
+        let carPaymentMethodText = '';
+        let carSavingsUsedText = '';
+        if (state.car.paymentMethod === 'cash') {
+          carPaymentMethodText = 'Pay cash (use all savings)';
+          carSavingsUsedText = `Savings used: ${fmtEuro(Math.min(carSavingsByPurchaseYear, state.car.price))}`;
+        } else if (state.car.paymentMethod === 'loan') {
+          carPaymentMethodText = 'Take loan (keep savings)';
+          carSavingsUsedText = `Savings kept: ${fmtEuro(carSavingsByPurchaseYear)}`;
+        } else {
+          carPaymentMethodText = 'Auto (use savings if available)';
+          carSavingsUsedText = `Savings used: ${fmtEuro(Math.min(carSavingsByPurchaseYear, state.car.price))}`;
+        }
+        
         // Render house timeline
         const houseTimeline = document.getElementById('houseTimeline');
         if (houseTimeline) {
@@ -1498,8 +1599,10 @@
             </div>
             <div class="mb-2">
               <strong>Purchase year:</strong> Year ${state.house.startYear}<br>
+              <strong>Payment method:</strong> ${paymentMethodText}<br>
               <strong>Years to save deposit:</strong> ${houseYearsToSave} years<br>
               <strong>Savings available:</strong> ${fmtEuro(savingsByPurchaseYear)}<br>
+              <strong>${savingsUsedText}</strong><br>
               <strong>Additional borrowing needed:</strong> ${fmtEuro(shortfall)}<br>
               <strong>Mortgage payment:</strong> ${fmtEuro(housePayment / 12)}/month<br>
               <strong>Mortgage term:</strong> ${config.mortgage.term_years} years at ${(config.mortgage.rate * 100).toFixed(1)}% interest
@@ -1517,8 +1620,10 @@
             <div class="mb-2">
               <strong>Price:</strong> ${fmtEuro(state.car.price)}<br>
               <strong>Purchase year:</strong> Year ${state.car.startYear}<br>
+              <strong>Payment method:</strong> ${carPaymentMethodText}<br>
               <strong>Years to save:</strong> ${carYearsToSave} years<br>
               <strong>Savings available:</strong> ${fmtEuro(carSavingsByPurchaseYear)}<br>
+              <strong>${carSavingsUsedText}</strong><br>
               <strong>Additional borrowing needed:</strong> ${fmtEuro(carShortfall)}<br>
               <strong>Loan payment:</strong> ${fmtEuro(carPayment / 12)}/month<br>
               <strong>Loan term:</strong> ${config.car.term_years} years at ${(config.car.loan_rate * 100).toFixed(1)}% interest
