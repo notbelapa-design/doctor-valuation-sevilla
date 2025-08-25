@@ -215,20 +215,24 @@
                 </div>
             <div class="divider"></div>
             <div class="row g-2">
-              <div class="col-md-4 input-group">
+              <div class="col-md-6 input-group">
                 <span class="input-group-text">House €</span>
                 <input type="number" id="housePrice" class="form-control" min="0">
                 <button id="toggleHouseBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
-              <div class="col-md-4 input-group">
+              <div class="col-md-6 input-group">
                 <span class="input-group-text">Car €</span>
                 <input type="number" id="carPrice" class="form-control" min="0">
                 <button id="toggleCarBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
               </div>
-              <div class="col-md-4 input-group">
-                <span class="input-group-text">Family €/yr</span>
-                <input type="number" id="familyCost" class="form-control" min="0">
-                <button id="toggleFamilyBtn" class="btn btn-outline-primary ig-btn" type="button" aria-pressed="false">Include</button>
+            </div>
+            <div class="row g-2 mt-2">
+              <div class="col-12">
+                <small class="text-muted">
+                  <strong>House:</strong> 20% deposit + 9% purchase costs. 30-year mortgage at 3% interest. 
+                  <strong>Car:</strong> 5-year loan at 5% interest. 
+                  Both reduce free cash flow and cumulative net worth during repayment period.
+                </small>
               </div>
             </div>
             <div class="row g-2 mt-2">
@@ -273,10 +277,33 @@
       <!-- Snapshot cards -->
       <section id="snapshots" class="mb-4 row reveal"></section>
 
+      <!-- Purchase Timeline & Impact -->
+      <section id="purchase-timeline" class="mb-4 reveal">
+        <h2 class="h5 mb-3">Purchase Timeline & Financial Impact</h2>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">House Purchase</h6>
+                <div id="houseTimeline"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-body">
+                <h6 class="card-title">Car Purchase</h6>
+                <div id="carTimeline"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Annual income vs free cash flow chart -->
       <section class="mb-4 reveal">
         <h2 class="h5 mb-1">Annual Income & Free Cash Flow</h2>
-        <p class="text-muted small mb-2">Net income is your take‑home pay after taxes and social security. Free cash flow subtracts any selected expenses (mortgage, car, family) from net income. The red "Living Costs" line shows an estimated baseline cost of living for a family in Madrid (about €2 945 per month), scaled to each year. The gold dashed line plots free cash flow after living costs (FCF minus living costs), highlighting how much discretionary income remains.</p>
+        <p class="text-muted small mb-2">Net income is your take‑home pay after taxes and social security. Free cash flow subtracts any selected expenses (mortgage, car) from net income. The red "Living Costs" line shows an estimated baseline cost of living for a family in Madrid (about €2 945 per month), scaled to each year. The gold dashed line plots free cash flow after living costs (FCF minus living costs), highlighting how much discretionary income remains.</p>
         <canvas id="annualChart" style="max-height: 300px;"></canvas>
       </section>
 
@@ -915,8 +942,6 @@
         career_years: 35,
         mortgage: { deposit_pct: 0.20, rate: 0.03, term_years: 30, one_off_purchase_cost_pct: 0.09 },
         car: { price: 26000, loan_rate: 0.05, term_years: 5 },
-        family: { annual_cost: 8000 }
-        ,
         // Guardias (on-call) assumptions: rate will be set per city
         guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
         ,
@@ -940,15 +965,13 @@
         specialtyKey: null,
         city: 'sevilla',
         showReal: false,
-        toggles: { house: false, car: false, family: false },
+        toggles: { house: false, car: false },
         // Key used to filter the job postings list.  Defaults to the first
         // specialty and updated via the job dropdown.
         jobSpecialtyKey: null,
         // House price will be set per city
         house: { price: 210000, startYear: 2 },
         car: { price: 26000, startYear: 0 },
-        family: { annual_cost: 8000 }
-        ,
         // Living cost selection (defaults to 4-person household) - will be set per city
         living: { persons: 4, annual_cost: 30288 }
         ,
@@ -1046,12 +1069,7 @@
             expenses[i] += pay;
           }
         }
-        // family
-        if (state.toggles.family) {
-          for (let i = 0; i < config.career_years; i++) {
-            expenses[i] += state.family.annual_cost;
-          }
-        }
+
         const fcf = net.map((n, i) => n - expenses[i]);
         const cnw = [];
         let acc = 0;
@@ -1165,13 +1183,10 @@
         const real = document.getElementById('toggleReal');
         const house = document.getElementById('toggleHouse');
         const car = document.getElementById('toggleCar');
-        const family = document.getElementById('toggleFamily');
         const housePrice = document.getElementById('housePrice');
         const carPrice = document.getElementById('carPrice');
-        const familyCost = document.getElementById('familyCost');
         const btnHouse = document.getElementById('toggleHouseBtn');
         const btnCar = document.getElementById('toggleCarBtn');
-        const btnFamily = document.getElementById('toggleFamilyBtn');
         const livingPersons = document.getElementById('livingPersons');
         const livingCost = document.getElementById('livingCost');
         const resetLivingBtn = document.getElementById('resetLivingBtn');
@@ -1204,14 +1219,12 @@
         }
         syncToggleBtn(btnHouse, state.toggles.house);
         syncToggleBtn(btnCar, state.toggles.car);
-        syncToggleBtn(btnFamily, state.toggles.family);
         if (btnHouse) btnHouse.addEventListener('click', () => { state.toggles.house = !state.toggles.house; house.checked = state.toggles.house; syncToggleBtn(btnHouse, state.toggles.house); updateAll(); });
         if (btnCar) btnCar.addEventListener('click', () => { state.toggles.car = !state.toggles.car; car.checked = state.toggles.car; syncToggleBtn(btnCar, state.toggles.car); updateAll(); });
-        if (btnFamily) btnFamily.addEventListener('click', () => { state.toggles.family = !state.toggles.family; family.checked = state.toggles.family; syncToggleBtn(btnFamily, state.toggles.family); updateAll(); });
         // inputs
         housePrice.addEventListener('input', () => { const v = parseFloat(housePrice.value); if (!isNaN(v)) state.house.price = v; updateAll(); });
         carPrice.addEventListener('input', () => { const v = parseFloat(carPrice.value); if (!isNaN(v)) state.car.price = v; updateAll(); });
-        familyCost.addEventListener('input', () => { const v = parseFloat(familyCost.value); if (!isNaN(v)) state.family.annual_cost = v; updateAll(); });
+
         if (livingPersons) {
           livingPersons.addEventListener('change', () => {
             const p = parseInt(livingPersons.value);
@@ -1379,6 +1392,71 @@
           `<p class="card-text mb-1"><strong>${baseHours} → ${totalHours.toFixed(1)}</strong></p>` +
           `<p class="small text-muted">Base vs with guardias</p>` +
           `</div></div>`;
+      }
+
+      // Render purchase timeline and financial impact
+      function renderPurchaseTimeline(spec) {
+        if (!spec) return;
+        
+        const gross = spec.gross_base;
+        const netBase = gross - incomeTax(gross) - socialSecurity(gross);
+        const guardGross = config.guardias.hours_per_guardia * config.guardias.rate * (state.guardiasPerMonth * 12);
+        const locGross = config.localizadas.hours_per_guardia * config.localizadas.rate * (state.guardiasLocalizadasPerMonth * 12);
+        const totalGross = gross + guardGross + locGross;
+        const netGuard = totalGross - incomeTax(totalGross) - socialSecurity(totalGross);
+        
+        // Calculate when you can afford house deposit
+        const houseDeposit = state.house.price * config.mortgage.deposit_pct;
+        const houseCosts = state.house.price * config.mortgage.one_off_purchase_cost_pct;
+        const totalHouseInitial = houseDeposit + houseCosts;
+        const houseYearsToSave = Math.ceil(totalHouseInitial / (netGuard * 0.3)); // Assume saving 30% of net income
+        
+        // Calculate mortgage payment
+        const housePrincipal = state.house.price - houseDeposit;
+        const housePayment = annuityPayment(housePrincipal, config.mortgage.rate, config.mortgage.term_years);
+        
+        // Calculate when you can afford car
+        const carYearsToSave = Math.ceil(state.car.price / (netGuard * 0.2)); // Assume saving 20% of net income
+        
+        // Calculate car loan payment
+        const carPayment = annuityPayment(state.car.price, config.car.loan_rate, config.car.term_years);
+        
+        // Render house timeline
+        const houseTimeline = document.getElementById('houseTimeline');
+        if (houseTimeline) {
+          houseTimeline.innerHTML = `
+            <div class="mb-2">
+              <strong>Price:</strong> ${fmtEuro(state.house.price)}<br>
+              <strong>Deposit (20%):</strong> ${fmtEuro(houseDeposit)}<br>
+              <strong>Purchase costs (9%):</strong> ${fmtEuro(houseCosts)}<br>
+              <strong>Total initial cost:</strong> ${fmtEuro(totalHouseInitial)}
+            </div>
+            <div class="mb-2">
+              <strong>Years to save deposit:</strong> ${houseYearsToSave} years<br>
+              <strong>Mortgage payment:</strong> ${fmtEuro(housePayment)}/month<br>
+              <strong>Mortgage term:</strong> ${config.mortgage.term_years} years at ${(config.mortgage.rate * 100).toFixed(1)}% interest
+            </div>
+            <div class="small text-muted">
+              Assumes saving 30% of net income. Mortgage reduces free cash flow by ${fmtEuro(housePayment * 12)}/year for ${config.mortgage.term_years} years.
+            </div>
+          `;
+        }
+        
+        // Render car timeline
+        const carTimeline = document.getElementById('carTimeline');
+        if (carTimeline) {
+          carTimeline.innerHTML = `
+            <div class="mb-2">
+              <strong>Price:</strong> ${fmtEuro(state.car.price)}<br>
+              <strong>Years to save:</strong> ${carYearsToSave} years<br>
+              <strong>Loan payment:</strong> ${fmtEuro(carPayment)}/month<br>
+              <strong>Loan term:</strong> ${config.car.term_years} years at ${(config.car.loan_rate * 100).toFixed(1)}% interest
+            </div>
+            <div class="small text-muted">
+              Assumes saving 20% of net income. Car loan reduces free cash flow by ${fmtEuro(carPayment * 12)}/year for ${config.car.term_years} years.
+            </div>
+          `;
+        }
       }
       // Render job postings
       function renderJobCards() {
@@ -1629,6 +1707,7 @@
         }
         updateSnapshots(spec, series);
         renderSummary(spec);
+        renderPurchaseTimeline(spec);
         renderJobCards();
         updateComparison();
       }
