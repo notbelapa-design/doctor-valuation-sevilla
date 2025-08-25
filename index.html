@@ -251,7 +251,7 @@
                 <button id="resetLivingBtn" class="btn btn-outline-secondary ig-btn" type="button">Reset</button>
               </div>
               <div class="col-12">
-                <small class="text-muted">Defaults per year: 1 p €8 834; 2 p €17 667; 3 p €26 501; 4 p €35 334. · Source: <a href="https://www.numbeo.com/cost-of-living/in/Madrid" target="_blank" rel="noopener">Numbeo (Madrid, 2025)</a></small>
+                <small class="text-muted" id="livingCostsDisplay"></small>
               </div>
             </div>
           </div>
@@ -917,8 +917,8 @@
         ],
         ss_rate: 0.064,
         career_years: 35,
-        mortgage: { deposit_pct: 0.20, rate: 0.03, term_years: 30, one_off_purchase_cost_pct: 0.09 },
-        car: { price: 26000, loan_rate: 0.05, term_years: 5 },
+        mortgage: { deposit_pct: 0.20, rate: 0.045, term_years: 30, one_off_purchase_cost_pct: 0.09 },
+        car: { price: 26000, loan_rate: 0.065, term_years: 5 },
         // Guardias (on-call) assumptions: rate will be set per city
         guardias: { hours_per_guardia: 24, rate: 28.56, per_year: 52 }
         ,
@@ -976,7 +976,7 @@
         if (livingCostInput) livingCostInput.value = state.living.annual_cost;
         if (livingPersonsSelect) livingPersonsSelect.value = state.living.persons;
         // Update living costs display
-        const livingCostsDisplay = document.querySelector('.col-12 small.text-muted');
+        const livingCostsDisplay = document.getElementById('livingCostsDisplay');
         if (livingCostsDisplay) {
           const costs = cityConfig.living_costs;
           livingCostsDisplay.innerHTML = `Defaults per year: 1 p €${costs[1].toLocaleString()}; 2 p €${costs[2].toLocaleString()}; 3 p €${costs[3].toLocaleString()}; 4 p €${costs[4].toLocaleString()}. · Source: <a href="${cityConfig.numbeo_url}" target="_blank" rel="noopener">Numbeo (${getCurrentCityData().name}, 2025)</a>`;
