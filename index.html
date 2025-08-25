@@ -1054,32 +1054,70 @@
         const gross = salarySeries(spec.gross_base);
         const net = gross.map(g => g - incomeTax(g) - socialSecurity(g));
         const expenses = Array(config.career_years).fill(0);
-        // house
+        const savings = Array(config.career_years).fill(0);
+        const savingsBalance = Array(config.career_years).fill(0);
+        
+        // Calculate savings balance year by year
+        let currentSavings = 0;
+        for (let i = 0; i < config.career_years; i++) {
+          // Start with previous year's savings
+          savingsBalance[i] = currentSavings;
+          
+          // Calculate this year's savings (net income minus living costs)
+          const thisYearSavings = net[i] - state.living.annual_cost * Math.pow(1 + config.inflation_cpi, i);
+          savings[i] = thisYearSavings;
+          
+          // Add this year's savings to balance
+          currentSavings = (currentSavings + thisYearSavings) * (1 + config.investment_return);
+        }
+        
+        // house purchase - use savings if available
         if (state.toggles.house) {
           const H = state.house.price;
           const dep = H * config.mortgage.deposit_pct;
           const costs = H * config.mortgage.one_off_purchase_cost_pct;
+          const totalHouseCost = dep + costs;
           const principal = H - dep;
           const pay = annuityPayment(principal, config.mortgage.rate, config.mortgage.term_years);
-          const y0 = state.house.startYear;
+          const y0 = state.house.startYear - 1; // Convert to 0-based index
+          
           if (y0 < config.career_years) {
-            expenses[y0] += dep + costs;
+            // Check if we have enough savings
+            const availableSavings = savingsBalance[y0];
+            const shortfall = Math.max(0, totalHouseCost - availableSavings);
+            
+            // Add shortfall to expenses (this represents additional borrowing needed)
+            expenses[y0] += shortfall;
+            
+            // Add mortgage payments for the term
             for (let i = y0; i < Math.min(config.career_years, y0 + config.mortgage.term_years); i++) {
               expenses[i] += pay;
             }
           }
         }
-        // car
+        
+        // car purchase - use savings if available
         if (state.toggles.car) {
           const P = state.car.price;
-          const pay = annuityPayment(P, config.car.loan_rate, config.car.term_years);
-          const y0 = state.car.startYear;
-          for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
-            expenses[i] += pay;
+          const y0 = state.car.startYear - 1; // Convert to 0-based index
+          
+          if (y0 < config.career_years) {
+            // Check if we have enough savings for the car
+            const availableSavings = savingsBalance[y0];
+            const shortfall = Math.max(0, P - availableSavings);
+            
+            if (shortfall > 0) {
+              // Need a loan for the shortfall
+              const pay = annuityPayment(shortfall, config.car.loan_rate, config.car.term_years);
+              for (let i = y0; i < Math.min(config.career_years, y0 + config.car.term_years); i++) {
+                expenses[i] += pay;
+              }
+            }
+            // If no shortfall, car is paid from savings (no additional expenses)
           }
         }
 
-        const fcf = net.map((n, i) => n - expenses[i]);
+        const fcf = net.map((n, i) => n - expenses[i] - state.living.annual_cost * Math.pow(1 + config.inflation_cpi, i));
         const cnw = [];
         let acc = 0;
         for (let i = 0; i < config.career_years; i++) {
@@ -1422,17 +1460,31 @@
         const houseDeposit = state.house.price * config.mortgage.deposit_pct;
         const houseCosts = state.house.price * config.mortgage.one_off_purchase_cost_pct;
         const totalHouseInitial = houseDeposit + houseCosts;
-        const houseYearsToSave = Math.ceil(totalHouseInitial / (netGuard * 0.3)); // Assume saving 30% of net income
+        
+        // Calculate savings needed (assuming 30% of net income saved)
+        const annualSavings = netGuard * 0.3;
+        const houseYearsToSave = Math.ceil(totalHouseInitial / annualSavings);
+        
+        // Calculate how much savings you'll have by the purchase year
+        const purchaseYear = state.house.startYear;
+        const savingsByPurchaseYear = annualSavings * (purchaseYear - 1);
+        const shortfall = Math.max(0, totalHouseInitial - savingsByPurchaseYear);
         
         // Calculate mortgage payment
         const housePrincipal = state.house.price - houseDeposit;
         const housePayment = annuityPayment(housePrincipal, config.mortgage.rate, config.mortgage.term_years);
         
         // Calculate when you can afford car
-        const carYearsToSave = Math.ceil(state.car.price / (netGuard * 0.2)); // Assume saving 20% of net income
+        const carAnnualSavings = netGuard * 0.2;
+        const carYearsToSave = Math.ceil(state.car.price / carAnnualSavings);
         
-        // Calculate car loan payment
-        const carPayment = annuityPayment(state.car.price, config.car.loan_rate, config.car.term_years);
+        // Calculate how much savings you'll have by the car purchase year
+        const carPurchaseYear = state.car.startYear;
+        const carSavingsByPurchaseYear = carAnnualSavings * (carPurchaseYear - 1);
+        const carShortfall = Math.max(0, state.car.price - carSavingsByPurchaseYear);
+        
+        // Calculate car loan payment (only for shortfall)
+        const carPayment = carShortfall > 0 ? annuityPayment(carShortfall, config.car.loan_rate, config.car.term_years) : 0;
         
         // Render house timeline
         const houseTimeline = document.getElementById('houseTimeline');
@@ -1447,11 +1499,13 @@
             <div class="mb-2">
               <strong>Purchase year:</strong> Year ${state.house.startYear}<br>
               <strong>Years to save deposit:</strong> ${houseYearsToSave} years<br>
+              <strong>Savings available:</strong> ${fmtEuro(savingsByPurchaseYear)}<br>
+              <strong>Additional borrowing needed:</strong> ${fmtEuro(shortfall)}<br>
               <strong>Mortgage payment:</strong> ${fmtEuro(housePayment / 12)}/month<br>
               <strong>Mortgage term:</strong> ${config.mortgage.term_years} years at ${(config.mortgage.rate * 100).toFixed(1)}% interest
             </div>
             <div class="small text-muted">
-              Assumes saving 30% of net income. Mortgage reduces free cash flow by ${fmtEuro(housePayment)}/year for ${config.mortgage.term_years} years.
+              Assumes saving 30% of net income. ${shortfall > 0 ? `Additional loan of ${fmtEuro(shortfall)} needed. ` : ''}Mortgage reduces free cash flow by ${fmtEuro(housePayment)}/year for ${config.mortgage.term_years} years.
             </div>
           `;
         }
@@ -1464,11 +1518,13 @@
               <strong>Price:</strong> ${fmtEuro(state.car.price)}<br>
               <strong>Purchase year:</strong> Year ${state.car.startYear}<br>
               <strong>Years to save:</strong> ${carYearsToSave} years<br>
+              <strong>Savings available:</strong> ${fmtEuro(carSavingsByPurchaseYear)}<br>
+              <strong>Additional borrowing needed:</strong> ${fmtEuro(carShortfall)}<br>
               <strong>Loan payment:</strong> ${fmtEuro(carPayment / 12)}/month<br>
               <strong>Loan term:</strong> ${config.car.term_years} years at ${(config.car.loan_rate * 100).toFixed(1)}% interest
             </div>
             <div class="small text-muted">
-              Assumes saving 20% of net income. Car loan reduces free cash flow by ${fmtEuro(carPayment)}/year for ${config.car.term_years} years.
+              Assumes saving 20% of net income. ${carShortfall > 0 ? `Additional loan of ${fmtEuro(carShortfall)} needed. ` : ''}${carPayment > 0 ? `Car loan reduces free cash flow by ${fmtEuro(carPayment)}/year for ${config.car.term_years} years.` : 'Car will be paid from savings (no loan needed).'}
             </div>
           `;
         }
